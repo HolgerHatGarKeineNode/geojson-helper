@@ -12,9 +12,9 @@
                                 <x-input wire:model.defer="search"/>
                                 <x-button type="submit">Search</x-button>
                                 <div>
-                                    @if(!$model?->simplified_geojson)
-                                        <x-badge lg positive class="whitespace-nowrap">Now select the appropriate place
-                                            below so that a geojson can be built.
+                                    @if(!$model?->simplified_geojson && $search)
+                                        <x-badge lg positive class="whitespace-nowrap">
+                                            Now select the appropriate place below so that a geojson can be built.
                                         </x-badge>
                                     @endif
                                 </div>
