@@ -67,13 +67,11 @@ class StandaloneHelperView extends Component
 
     public function selectItem($index, bool $isState = false, $isCountry = false): void
     {
-        if ($isState) {
-            $this->selectedItem = $this->osmSearchResultsState[$index];
-        } elseif ($isCountry) {
-            $this->selectedItem = $this->osmSearchResultsCountry[$index];
-        } else {
-            $this->selectedItem = $this->osmSearchResultsCity[$index];
-        }
+        match (true) {
+            $isState => $this->selectedItem = $this->osmSearchResultsState[$index],
+            $isCountry => $this->selectedItem = $this->osmSearchResultsCountry[$index],
+            default => $this->selectedItem = $this->osmSearchResultsCity[$index],
+        };
         $this->model->osm_relation = $this->selectedItem;
 
         $this->executeMapshaper(4);
@@ -114,12 +112,13 @@ class StandaloneHelperView extends Component
             $this->emit('geoJsonUpdated');
 
         } catch (\Exception $e) {
+            throw $e;
             $this->notification()
                  ->error('Error', $e->getMessage());
         }
     }
 
-    public function setPercent($percent): void
+    public function setPercentage($percent): void
     {
         $this->currentPercentage = $percent;
         $this->executeMapshaper($percent);
@@ -127,6 +126,30 @@ class StandaloneHelperView extends Component
 
     public function render()
     {
-        return view('livewire.geo-json.standalone-helper-view')->layout('layouts.guest');
+        return view('livewire.geo-json.standalone-helper-view', [
+            'percentages' => collect([
+                0.5,
+                0.75,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                15,
+                20,
+                25,
+                30,
+                40,
+                50,
+            ])
+                ->reverse()
+                ->values()
+                ->toArray(),
+        ])->layout('layouts.guest');
     }
 }

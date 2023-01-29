@@ -119,74 +119,15 @@
                                     $currentClass = 'bg-amber-500';
                                 @endphp
                                 <div class="isolate inline-flex rounded-md shadow-sm">
-                                    <button type="button" wire:click="setPercent(15)"
-                                            class="{{ $btnClassLeft }} {{ $currentPercentage === 15 ? $currentClass : ''}}">
-                                        15%
-                                    </button>
-                                    <button type="button" wire:click="setPercent(14)"
-                                            class="{{ $btnClassCenter }} {{ $currentPercentage === 14 ? $currentClass : ''}}">
-                                        14%
-                                    </button>
-                                    <button type="button" wire:click="setPercent(13)"
-                                            class="{{ $btnClassCenter }} {{ $currentPercentage === 13 ? $currentClass : ''}}">
-                                        13%
-                                    </button>
-                                    <button type="button" wire:click="setPercent(12)"
-                                            class="{{ $btnClassCenter }} {{ $currentPercentage === 12 ? $currentClass : ''}}">
-                                        12%
-                                    </button>
-                                    <button type="button" wire:click="setPercent(11)"
-                                            class="{{ $btnClassCenter }} {{ $currentPercentage === 11 ? $currentClass : ''}}">
-                                        11%
-                                    </button>
-                                    <button type="button" wire:click="setPercent(10)"
-                                            class="{{ $btnClassCenter }} {{ $currentPercentage === 10 ? $currentClass : ''}}">
-                                        10%
-                                    </button>
-                                    <button type="button" wire:click="setPercent(9)"
-                                            class="{{ $btnClassCenter }} {{ $currentPercentage === 9 ? $currentClass : ''}}">
-                                        9%
-                                    </button>
-                                    <button type="button" wire:click="setPercent(8)"
-                                            class="{{ $btnClassCenter }} {{ $currentPercentage === 8 ? $currentClass : ''}}">
-                                        8%
-                                    </button>
-                                    <button type="button" wire:click="setPercent(7)"
-                                            class="{{ $btnClassCenter }} {{ $currentPercentage === 7 ? $currentClass : ''}}">
-                                        7%
-                                    </button>
-                                    <button type="button" wire:click="setPercent(5)"
-                                            class="{{ $btnClassCenter }} {{ $currentPercentage === 6 ? $currentClass : ''}}">
-                                        6%
-                                    </button>
-                                    <button type="button" wire:click="setPercent(5)"
-                                            class="{{ $btnClassCenter }} {{ $currentPercentage === 5 ? $currentClass : ''}}">
-                                        5%
-                                    </button>
-                                    <button type="button" wire:click="setPercent(4)"
-                                            class="{{ $btnClassCenter }} {{ $currentPercentage === 4 ? $currentClass : ''}}">
-                                        4%
-                                    </button>
-                                    <button type="button" wire:click="setPercent(3)"
-                                            class="{{ $btnClassCenter }} {{ $currentPercentage === 3 ? $currentClass : ''}}">
-                                        3%
-                                    </button>
-                                    <button type="button" wire:click="setPercent(2)"
-                                            class="{{ $btnClassCenter }} {{ $currentPercentage === 2 ? $currentClass : ''}}">
-                                        2%
-                                    </button>
-                                    <button type="button" wire:click="setPercent(1)"
-                                            class="{{ $btnClassCenter }} {{ $currentPercentage === 1 ? $currentClass : ''}}">
-                                        1%
-                                    </button>
-                                    <button type="button" wire:click="setPercent(0.75)"
-                                            class="{{ $btnClassCenter }} {{ $currentPercentage === 0.75 ? $currentClass : ''}}">
-                                        0.75%
-                                    </button>
-                                    <button type="button" wire:click="setPercent(0.5)"
-                                            class="{{ $btnClassRight }} {{ $currentPercentage === 0.5 ? $currentClass : ''}}">
-                                        0.5%
-                                    </button>
+                                    @foreach($percentages as $percentage)
+                                        @php
+                                            $btnClass = $loop->first ? $btnClassLeft : ($loop->last ? $btnClassRight : $btnClassCenter);
+                                        @endphp
+                                        <button wire:key="percentage_{{ $loop->index }}" type="button" wire:click="setPercentage({{ $percentage }})"
+                                                class="{{ $btnClass }} {{ $currentPercentage === $percentage ? $currentClass : ''}}">
+                                            {{ $percentage }}%
+                                        </button>
+                                    @endforeach
                                 </div>
                             </div>
                         </div>
@@ -260,7 +201,7 @@
                                                 var map = L.map($refs.mapOriginal)
                                                 .setView([0, 0], 13);
 
-                                                L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+                                                L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png?{foo}', {foo: 'bar', attribution: '&copy; <a href=\'https://www.openstreetmap.org/copyright\'>OpenStreetMap</a> contributors'}).addTo(map);
 
                                                 var geojsonFeature = {
                                                     'type': 'Feature',
@@ -275,7 +216,7 @@
                                                     map.eachLayer((layer) => {
                                                       layer.remove();
                                                     });
-                                                    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+                                                    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png?{foo}', {foo: 'bar', attribution: '&copy; <a href=\'https://www.openstreetmap.org/copyright\'>OpenStreetMap</a> contributors'}).addTo(map);
                                                     var geojsonFeature = {
                                                         'type': 'Feature',
                                                         'geometry': this.geojson
@@ -301,7 +242,7 @@
                                                 var map = L.map($refs.map)
                                                 .setView([0, 0], 13);
 
-                                                L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+                                                L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png?{foo}', {foo: 'bar', attribution: '&copy; <a href=\'https://www.openstreetmap.org/copyright\'>OpenStreetMap</a> contributors'}).addTo(map);
 
                                                 var geojsonFeature = {
                                                     'type': 'Feature',
@@ -316,7 +257,7 @@
                                                     map.eachLayer((layer) => {
                                                       layer.remove();
                                                     });
-                                                    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+                                                    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png?{foo}', {foo: 'bar', attribution: '&copy; <a href=\'https://www.openstreetmap.org/copyright\'>OpenStreetMap</a> contributors'}).addTo(map);
                                                     var geojsonFeature = {
                                                         'type': 'Feature',
                                                         'geometry': this.simplifiedGeojson
