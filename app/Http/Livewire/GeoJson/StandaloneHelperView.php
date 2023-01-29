@@ -7,9 +7,12 @@ use Illuminate\Http\Client\Pool;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
+use WireUi\Traits\Actions;
 
 class StandaloneHelperView extends Component
 {
+    use Actions;
+
     public $model;
 
     public string $search = '';
@@ -25,7 +28,7 @@ class StandaloneHelperView extends Component
         'search' => ['except' => ''],
     ];
 
-    public function rules()
+    public function rules(): array
     {
         return [
             'search'                   => 'required|string',
@@ -33,13 +36,13 @@ class StandaloneHelperView extends Component
         ];
     }
 
-    public function mount()
+    public function mount(): void
     {
         $this->model = new CommunityModel();
         $this->getSearchResults();
     }
 
-    private function getSearchResults()
+    private function getSearchResults(): void
     {
         $responses = Http::pool(fn(Pool $pool) => [
             $pool->acceptJson()
@@ -56,13 +59,13 @@ class StandaloneHelperView extends Component
         $this->osmSearchResultsState = $responses[1]->json();
     }
 
-    public function submit()
+    public function submit(): void
     {
         $this->validate();
         $this->getSearchResults();
     }
 
-    public function selectItem($index, bool $isState = false, $isCountry = false)
+    public function selectItem($index, bool $isState = false, $isCountry = false): void
     {
         if ($isState) {
             $this->selectedItem = $this->osmSearchResultsState[$index];
@@ -76,32 +79,37 @@ class StandaloneHelperView extends Component
         $this->executeMapshaper(4);
     }
 
-    private function executeMapshaper($percentage = 4)
+    private function executeMapshaper($percentage = 4): void
     {
-        Storage::disk('geo')
-               ->put('geojson_'.$this->selectedItem['osm_id'].'.json',
-                   json_encode($this->selectedItem['geojson'], JSON_THROW_ON_ERROR));
-        $input = storage_path('app/geo/geojson_'.$this->selectedItem['osm_id'].'.json');
-        $output = storage_path('app/geo/output_'.$this->selectedItem['osm_id'].'.json');
-        $mapshaperBinary = base_path('node_modules/mapshaper/bin/mapshaper');
-        exec($mapshaperBinary.' '.$input.' -simplify dp '.$percentage.'% -o '.$output);
-        Storage::disk('geo')
-               ->put(
-                   'trimmed_'.$this->selectedItem['osm_id'].'.json',
-                   str(Storage::disk('geo')
-                              ->get('output_'.$this->selectedItem['osm_id'].'.json'))
-                       ->after('{"type":"GeometryCollection", "geometries": [')
-                       ->beforeLast(']}')
-                       ->toString()
-               );
-        $this->model->simplified_geojson = json_decode(trim(Storage::disk('geo')
-                                                                   ->get('trimmed_'.$this->selectedItem['osm_id'].'.json')),
-            false, 512, JSON_THROW_ON_ERROR);
+        try {
+            Storage::disk('geo')
+                   ->put('geojson_'.$this->selectedItem['osm_id'].'.json',
+                       json_encode($this->selectedItem['geojson'], JSON_THROW_ON_ERROR));
+            $input = storage_path('app/geo/geojson_'.$this->selectedItem['osm_id'].'.json');
+            $output = storage_path('app/geo/output_'.$this->selectedItem['osm_id'].'.json');
+            $mapshaperBinary = base_path('node_modules/mapshaper/bin/mapshaper');
+            exec($mapshaperBinary.' '.$input.' -simplify dp '.$percentage.'% -o '.$output);
+            Storage::disk('geo')
+                   ->put(
+                       'trimmed_'.$this->selectedItem['osm_id'].'.json',
+                       str(Storage::disk('geo')
+                                  ->get('output_'.$this->selectedItem['osm_id'].'.json'))
+                           ->after('{"type":"GeometryCollection", "geometries": [')
+                           ->beforeLast(']}')
+                           ->toString()
+                   );
+            $this->model->simplified_geojson = json_decode(trim(Storage::disk('geo')
+                                                                       ->get('trimmed_'.$this->selectedItem['osm_id'].'.json')),
+                false, 512, JSON_THROW_ON_ERROR);
 
-        $this->emit('geoJsonUpdated');
+            $this->emit('geoJsonUpdated');
+        } catch (\Exception $e) {
+            $this->notification()
+                 ->error('Error', $e->getMessage());
+        }
     }
 
-    public function setPercent($percent)
+    public function setPercent($percent): void
     {
         $this->currentPercentage = $percent;
         $this->executeMapshaper($percent);
