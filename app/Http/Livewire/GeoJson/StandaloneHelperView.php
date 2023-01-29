@@ -75,6 +75,8 @@ class StandaloneHelperView extends Component
             false, 512, JSON_THROW_ON_ERROR);
         $this->model->population = 0;
         $this->model->population_date = '2021-12-31';
+
+        $this->emit('geoJsonUpdated');
     }
 
     public function setPercent($percent)
