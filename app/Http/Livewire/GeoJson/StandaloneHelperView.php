@@ -19,6 +19,10 @@ class StandaloneHelperView extends Component
 
     public $selectedItem;
 
+    protected $queryString = [
+        'search' => ['except' => ''],
+    ];
+
     public function rules()
     {
         return [
@@ -30,28 +34,12 @@ class StandaloneHelperView extends Component
     public function mount()
     {
         $this->model = new CommunityModel();
+        $this->getSearchResults();
     }
 
     public function submit()
     {
         $this->validate();
-        $response = Http::acceptJson()
-                        ->get(
-                            'https://nominatim.openstreetmap.org/search?city='.$this->search.'&format=json&polygon_geojson=1'
-                        );
-        $this->osmSearchResultsCity = $response->json();
-
-        $response = Http::acceptJson()
-                        ->get(
-                            'https://nominatim.openstreetmap.org/search?state='.$this->search.'&format=json&polygon_geojson=1'
-                        );
-        $this->osmSearchResultsState = $response->json();
-
-        $response = Http::acceptJson()
-                        ->get(
-                            'https://nominatim.openstreetmap.org/search?country='.$this->search.'&format=json&polygon_geojson=1'
-                        );
-        $this->osmSearchResultsCountry = $response->json();
     }
 
     public function selectItem($index, bool $isState = false, $isCountry = false)
@@ -112,5 +100,25 @@ class StandaloneHelperView extends Component
     public function render()
     {
         return view('livewire.geo-json.standalone-helper-view')->layout('layouts.guest');
+    }
+
+    private function getSearchResults() {
+        $response = Http::acceptJson()
+                        ->get(
+                            'https://nominatim.openstreetmap.org/search?city='.$this->search.'&format=json&polygon_geojson=1'
+                        );
+        $this->osmSearchResultsCity = $response->json();
+
+        $response = Http::acceptJson()
+                        ->get(
+                            'https://nominatim.openstreetmap.org/search?state='.$this->search.'&format=json&polygon_geojson=1'
+                        );
+        $this->osmSearchResultsState = $response->json();
+
+        $response = Http::acceptJson()
+                        ->get(
+                            'https://nominatim.openstreetmap.org/search?country='.$this->search.'&format=json&polygon_geojson=1'
+                        );
+        $this->osmSearchResultsCountry = $response->json();
     }
 }
