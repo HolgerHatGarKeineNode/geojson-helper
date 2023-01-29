@@ -19,10 +19,10 @@ class StandaloneHelperView extends Component
     public array $osmSearchResultsCountry = [];
 
     public $selectedItem;
-    public $currentPercentage;
+    public $currentPercentage = 4;
 
     protected $queryString = [
-        'search'            => ['except' => ''],
+        'search' => ['except' => ''],
     ];
 
     public function rules()
@@ -71,14 +71,20 @@ class StandaloneHelperView extends Component
         } else {
             $this->selectedItem = $this->osmSearchResultsCity[$index];
         }
+        $this->model->osm_relation = $this->selectedItem;
+
+        $this->executeMapshaper(4);
+    }
+
+    private function executeMapshaper($percentage = 4)
+    {
         Storage::disk('geo')
                ->put('geojson_'.$this->selectedItem['osm_id'].'.json',
                    json_encode($this->selectedItem['geojson'], JSON_THROW_ON_ERROR));
         $input = storage_path('app/geo/geojson_'.$this->selectedItem['osm_id'].'.json');
         $output = storage_path('app/geo/output_'.$this->selectedItem['osm_id'].'.json');
         $mapshaperBinary = base_path('node_modules/mapshaper/bin/mapshaper');
-        exec($mapshaperBinary.' '.$input.' -simplify dp 4% -o '.$output);
-        $this->currentPercentage = 4;
+        exec($mapshaperBinary.' '.$input.' -simplify dp '.$percentage.'% -o '.$output);
         Storage::disk('geo')
                ->put(
                    'trimmed_'.$this->selectedItem['osm_id'].'.json',
@@ -88,12 +94,9 @@ class StandaloneHelperView extends Component
                        ->beforeLast(']}')
                        ->toString()
                );
-        $this->model->osm_relation = $this->selectedItem;
         $this->model->simplified_geojson = json_decode(trim(Storage::disk('geo')
                                                                    ->get('trimmed_'.$this->selectedItem['osm_id'].'.json')),
             false, 512, JSON_THROW_ON_ERROR);
-        $this->model->population = 0;
-        $this->model->population_date = '2021-12-31';
 
         $this->emit('geoJsonUpdated');
     }
@@ -101,24 +104,7 @@ class StandaloneHelperView extends Component
     public function setPercent($percent)
     {
         $this->currentPercentage = $percent;
-        $input = storage_path('app/geo/geojson_'.$this->selectedItem['osm_id'].'.json');
-        $output = storage_path('app/geo/output_'.$this->selectedItem['osm_id'].'.json');
-        $mapshaperBinary = base_path('node_modules/mapshaper/bin/mapshaper');
-        exec($mapshaperBinary.' '.$input.' -simplify dp '.$percent.'% -o '.$output);
-        Storage::disk('geo')
-               ->put(
-                   'trimmed_'.$this->selectedItem['osm_id'].'.json',
-                   str(Storage::disk('geo')
-                              ->get('output_'.$this->selectedItem['osm_id'].'.json'))
-                       ->after('{"type":"GeometryCollection", "geometries": [')
-                       ->beforeLast(']}')
-                       ->toString()
-               );
-        $this->model->simplified_geojson = json_decode(trim(Storage::disk('geo')
-                                                                   ->get('trimmed_'.$this->selectedItem['osm_id'].'.json')),
-            false, 512, JSON_THROW_ON_ERROR);
-
-        $this->emit('geoJsonUpdated');
+        $this->executeMapshaper($percent);
     }
 
     public function render()
