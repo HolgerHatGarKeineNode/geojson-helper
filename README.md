@@ -3,6 +3,28 @@
 With this tool you can easily find OSM relations and create simplified geojson polygons. This is a Laravel application.
 You can start the tool with Laravel Sail and Docker.
 
+## Usage
+
+Install the dependencies with composer and start the application with Laravel Sail.
+```bash
+composer install
+
+./vendor/bin/sail up
+```
+
+Install the dependencies with yarn and build the frontend.
+```bash
+./vendor/bin/sail yarn install
+
+./vendor/bin/sail yarn run dev
+```
+
+In your terminal you will see the URL to the application. Open it in your browser and start using the tool. http://localhost/
+
+Search for OSM relations and create simplified geojson polygons.
+
+Adjust the amount of points by clicking the percentage links.
+
 ## Security Vulnerabilities
 
 If you discover a security vulnerability within this software, please send an e-mail to HolgerHatGarKeineNode

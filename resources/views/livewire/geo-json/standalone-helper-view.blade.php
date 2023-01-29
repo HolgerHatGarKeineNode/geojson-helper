@@ -72,6 +72,14 @@
                 <h1>Simplified geojson</h1>
                 <pre
                     class="overflow-x-auto py-4">{{ json_encode($model->simplified_geojson, JSON_THROW_ON_ERROR) }}</pre>
+                <x-button
+                    x-data="{
+                    textToCopy: '{{ json_encode($model->simplified_geojson, JSON_THROW_ON_ERROR) }}',
+                }"
+                    @click.prevent="window.navigator.clipboard.writeText(textToCopy);window.$wireui.notify({title:'{{ __('Copied!') }}',icon:'success'});"
+                    xs black>
+                    Copy to clipboard
+                </x-button>
                 <div wire:ignore
                      class="my-4"
 
