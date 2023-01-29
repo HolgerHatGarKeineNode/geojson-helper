@@ -25,6 +25,8 @@ Search for OSM relations and create simplified geojson polygons.
 
 Adjust the amount of points by clicking the percentage links.
 
+Copy the simplified geojson to your clipboard.
+
 ## Security Vulnerabilities
 
 If you discover a security vulnerability within this software, please send an e-mail to HolgerHatGarKeineNode
