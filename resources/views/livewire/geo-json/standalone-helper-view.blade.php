@@ -1,4 +1,4 @@
-<div class="p-6 w-full" wire:loading.class="opacity-50">
+<div class="p-6 w-full" wire:loading.class="opacity-50 pointer-events-none cursor-not-allowed">
     <div class="max-w-none text-black flex flex-col space-y-4">
         <div class="bg-white shadow sm:rounded-lg">
             <div class="px-4 py-5 sm:p-6">
