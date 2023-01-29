@@ -105,7 +105,8 @@
                         <div class="flex flex-col space-y-2">
                             <h1>
                                 Current data
-                                [points: {{ is_array($model->simplified_geojson['coordinates'][0]) ? count($model->simplified_geojson['coordinates'][0] ?? []) : 0 }}]
+                                [points: {{ is_array($model->simplified_geojson['coordinates'][0]) ? count($model->simplified_geojson['coordinates'][0] ?? []) : 0 }}
+                                ]
                             </h1>
                             <h1 class="py-2">
                                 smaller percentage means fewer points
@@ -145,31 +146,62 @@
         <div>
             @if($model?->simplified_geojson)
                 <div class="bg-white shadow sm:rounded-lg">
-                    <div class="px-4 py-5 sm:p-6">
-                        <h3 class="text-lg font-medium leading-6 text-gray-900">Simplified geojson</h3>
-                        <div class="mt-2 text-sm text-gray-500">
+                    <div class="px-4 py-5 sm:p-6 grid grid-cols-2 gap-4">
+                        <div>
+                            <h3 class="text-lg font-medium leading-6 text-gray-900">OSM geojson</h3>
+                            <div class="mt-2 text-sm text-gray-500">
+                                @php
+                                    $jsonEncodedSelectedItem = json_encode($selectedItem['geojson'], JSON_THROW_ON_ERROR);
+                                @endphp
 
-                            <div class="flex flex-col space-y-2 w-full">
+                                <div class="flex flex-col space-y-2 w-full">
                                 <pre
-                                    class="overflow-x-auto py-4">{{ json_encode($model->simplified_geojson, JSON_THROW_ON_ERROR) }}</pre>
-                                <x-button
-                                    class="my-6"
-                                    x-data="{
-                                        textToCopy: '{{ json_encode($model->simplified_geojson, JSON_THROW_ON_ERROR) }}',
-                                    }"
-                                    @click.prevent="window.navigator.clipboard.writeText(textToCopy);window.$wireui.notify({title:'{{ __('Copied!') }}',icon:'success'});"
-                                    lg black>
-                                    Copy to clipboard
-                                </x-button>
-
-                                <div class="grid grid-cols-2 gap-1">
+                                    class="overflow-x-auto py-3">{{ $jsonEncodedSelectedItem }}</pre>
                                     <div>
-                                        <h1 class="font-bold">
-                                            OSM geojson
-                                        </h1>
-                                        <div wire:ignore
-                                             class="my-4"
-                                             x-data="{
+                                        <x-button
+                                            x-data="{
+                                                textToCopy: '{{ $jsonEncodedSelectedItem }}',
+                                            }"
+                                            @click.prevent="window.navigator.clipboard.writeText(textToCopy);window.$wireui.notify({title:'{{ __('Copied!') }}',icon:'success'});"
+                                            lg black>
+                                            Copy to clipboard
+                                        </x-button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-medium leading-6 text-gray-900">Simplified geojson</h3>
+                            <div class="mt-2 text-sm text-gray-500">@php
+                                    $jsonEncodedSimplifiedGeoJson = json_encode($model->simplified_geojson, JSON_THROW_ON_ERROR);
+                                @endphp
+                                <div class="flex flex-col space-y-2 w-full">
+                                <pre
+                                    class="overflow-x-auto py-3">{{ $jsonEncodedSimplifiedGeoJson }}</pre>
+                                    <div>
+                                        <x-button
+                                            x-data="{
+                                                textToCopy: '{{ $jsonEncodedSimplifiedGeoJson }}',
+                                            }"
+                                            @click.prevent="window.navigator.clipboard.writeText(textToCopy);window.$wireui.notify({title:'{{ __('Copied!') }}',icon:'success'});"
+                                            lg black>
+                                            Copy to clipboard
+                                        </x-button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="px-4 py-5 sm:p-6 flex flex-col space-y-4">
+                        <div class="grid grid-cols-2 gap-1">
+                            <div>
+                                <h1 class="font-bold">
+                                    OSM geojson
+                                </h1>
+                                <div wire:ignore
+                                     class="my-4"
+                                     x-data="{
                                             geojson: @entangle('selectedItem.geojson'),
                                             init() {
                                                 var map = L.map($refs.mapOriginal)
@@ -201,16 +233,16 @@
                                                 });
                                             }
                                         }">
-                                            <div x-ref="mapOriginal" style="height: 30vh;"></div>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <h1 class="font-bold">
-                                            Simplified geojson
-                                        </h1>
-                                        <div wire:ignore
-                                             class="my-4"
-                                             x-data="{
+                                    <div x-ref="mapOriginal" style="height: 30vh;"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <h1 class="font-bold">
+                                    Simplified geojson
+                                </h1>
+                                <div wire:ignore
+                                     class="my-4"
+                                     x-data="{
                                             simplifiedGeojson: @entangle('model.simplified_geojson'),
                                             init() {
                                                 var map = L.map($refs.map)
@@ -242,12 +274,9 @@
                                                 });
                                             }
                                         }">
-                                            <div x-ref="map" style="height: 30vh;"></div>
-                                        </div>
-                                    </div>
+                                    <div x-ref="map" style="height: 30vh;"></div>
                                 </div>
                             </div>
-
                         </div>
                     </div>
                 </div>
