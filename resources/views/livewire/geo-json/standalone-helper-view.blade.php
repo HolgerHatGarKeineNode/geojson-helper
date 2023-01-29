@@ -113,45 +113,46 @@
                             </h1>
                             <div class="flex space-x-2">
                                 @php
-                                    $btnClassLeft = 'relative inline-flex items-center rounded-l-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500';
-                                    $btnClassRight = 'relative -ml-px inline-flex items-center rounded-r-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500';
-                                    $btnClassCenter = 'relative -ml-px inline-flex items-center border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500';
+                                    $btnClassLeft = 'relative inline-flex items-center rounded-l-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500';
+                                    $btnClassRight = 'relative -ml-px inline-flex items-center rounded-r-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500';
+                                    $btnClassCenter = 'relative -ml-px inline-flex items-center border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500';
+                                    $currentClass = 'bg-amber-500';
                                 @endphp
                                 <span class="isolate inline-flex rounded-md shadow-sm">
                               <button type="button" wire:click="setPercent(15)"
-                                      class="{{ $btnClassLeft }}">15%</button>
+                                      class="{{ $btnClassLeft }} {{ $currentPercentage === 15 ? $currentClass : ''}}">15%</button>
                               <button type="button" wire:click="setPercent(14)"
-                                      class="{{ $btnClassCenter }}">14%</button>
+                                      class="{{ $btnClassCenter }} {{ $currentPercentage === 14 ? $currentClass : ''}}">14%</button>
                               <button type="button" wire:click="setPercent(13)"
-                                      class="{{ $btnClassCenter }}">13%</button>
+                                      class="{{ $btnClassCenter }} {{ $currentPercentage === 13 ? $currentClass : ''}}">13%</button>
                               <button type="button" wire:click="setPercent(12)"
-                                      class="{{ $btnClassCenter }}">12%</button>
+                                      class="{{ $btnClassCenter }} {{ $currentPercentage === 12 ? $currentClass : ''}}">12%</button>
                               <button type="button" wire:click="setPercent(11)"
-                                      class="{{ $btnClassCenter }}">11%</button>
-                              <button type="button" wire:click="setPercent(11)"
-                                      class="{{ $btnClassCenter }}">11%</button>
+                                      class="{{ $btnClassCenter }} {{ $currentPercentage === 11 ? $currentClass : ''}}">11%</button>
                               <button type="button" wire:click="setPercent(10)"
-                                      class="{{ $btnClassCenter }}">10%</button>
+                                      class="{{ $btnClassCenter }} {{ $currentPercentage === 10 ? $currentClass : ''}}">10%</button>
                               <button type="button" wire:click="setPercent(9)"
-                                      class="{{ $btnClassCenter }}">9%</button>
+                                      class="{{ $btnClassCenter }} {{ $currentPercentage === 9 ? $currentClass : ''}}">9%</button>
                               <button type="button" wire:click="setPercent(8)"
-                                      class="{{ $btnClassCenter }}">8%</button>
+                                      class="{{ $btnClassCenter }} {{ $currentPercentage === 8 ? $currentClass : ''}}">8%</button>
                               <button type="button" wire:click="setPercent(7)"
-                                      class="{{ $btnClassCenter }}">7%</button>
+                                      class="{{ $btnClassCenter }} {{ $currentPercentage === 7 ? $currentClass : ''}}">7%</button>
                               <button type="button" wire:click="setPercent(5)"
-                                      class="{{ $btnClassCenter }}">5%</button>
+                                      class="{{ $btnClassCenter }} {{ $currentPercentage === 6 ? $currentClass : ''}}">6%</button>
+                              <button type="button" wire:click="setPercent(5)"
+                                      class="{{ $btnClassCenter }} {{ $currentPercentage === 5 ? $currentClass : ''}}">5%</button>
                               <button type="button" wire:click="setPercent(4)"
-                                      class="{{ $btnClassCenter }}">4%</button>
+                                      class="{{ $btnClassCenter }} {{ $currentPercentage === 4 ? $currentClass : ''}}">4%</button>
                               <button type="button" wire:click="setPercent(3)"
-                                      class="{{ $btnClassCenter }}">3%</button>
+                                      class="{{ $btnClassCenter }} {{ $currentPercentage === 3 ? $currentClass : ''}}">3%</button>
                               <button type="button" wire:click="setPercent(2)"
-                                      class="{{ $btnClassCenter }}">2%</button>
+                                      class="{{ $btnClassCenter }} {{ $currentPercentage === 2 ? $currentClass : ''}}">2%</button>
                               <button type="button" wire:click="setPercent(1)"
-                                      class="{{ $btnClassCenter }}">1%</button>
+                                      class="{{ $btnClassCenter }} {{ $currentPercentage === 1 ? $currentClass : ''}}">1%</button>
                               <button type="button" wire:click="setPercent(0.75)"
-                                      class="{{ $btnClassCenter }}">0.75%</button>
+                                      class="{{ $btnClassCenter }} {{ $currentPercentage === 0.75 ? $currentClass : ''}}">0.75%</button>
                               <button type="button" wire:click="setPercent(0.5)"
-                                      class="{{ $btnClassRight }}">0.5%</button>
+                                      class="{{ $btnClassRight }} {{ $currentPercentage === 0.5 ? $currentClass : ''}}">0.5%</button>
                             </span>
                             </div>
                         </div>

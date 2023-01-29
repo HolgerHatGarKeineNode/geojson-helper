@@ -19,9 +19,10 @@ class StandaloneHelperView extends Component
     public array $osmSearchResultsCountry = [];
 
     public $selectedItem;
+    public $currentPercentage;
 
     protected $queryString = [
-        'search' => ['except' => ''],
+        'search'            => ['except' => ''],
     ];
 
     public function rules()
@@ -36,6 +37,23 @@ class StandaloneHelperView extends Component
     {
         $this->model = new CommunityModel();
         $this->getSearchResults();
+    }
+
+    private function getSearchResults()
+    {
+        $responses = Http::pool(fn(Pool $pool) => [
+            $pool->acceptJson()
+                 ->get(
+                     'https://nominatim.openstreetmap.org/search?city='.$this->search.'&format=json&polygon_geojson=1'
+                 ),
+            $pool->acceptJson()
+                 ->get(
+                     'https://nominatim.openstreetmap.org/search?state='.$this->search.'&format=json&polygon_geojson=1'
+                 ),
+        ]);
+
+        $this->osmSearchResultsCity = $responses[0]->json();
+        $this->osmSearchResultsState = $responses[1]->json();
     }
 
     public function submit()
@@ -60,6 +78,7 @@ class StandaloneHelperView extends Component
         $output = storage_path('app/geo/output_'.$this->selectedItem['osm_id'].'.json');
         $mapshaperBinary = base_path('node_modules/mapshaper/bin/mapshaper');
         exec($mapshaperBinary.' '.$input.' -simplify dp 4% -o '.$output);
+        $this->currentPercentage = 4;
         Storage::disk('geo')
                ->put(
                    'trimmed_'.$this->selectedItem['osm_id'].'.json',
@@ -81,6 +100,7 @@ class StandaloneHelperView extends Component
 
     public function setPercent($percent)
     {
+        $this->currentPercentage = $percent;
         $input = storage_path('app/geo/geojson_'.$this->selectedItem['osm_id'].'.json');
         $output = storage_path('app/geo/output_'.$this->selectedItem['osm_id'].'.json');
         $mapshaperBinary = base_path('node_modules/mapshaper/bin/mapshaper');
@@ -104,21 +124,5 @@ class StandaloneHelperView extends Component
     public function render()
     {
         return view('livewire.geo-json.standalone-helper-view')->layout('layouts.guest');
-    }
-
-    private function getSearchResults() {
-        $responses = Http::pool(fn (Pool $pool) => [
-            $pool->acceptJson()
-                 ->get(
-                     'https://nominatim.openstreetmap.org/search?city='.$this->search.'&format=json&polygon_geojson=1'
-                 ),
-            $pool->acceptJson()
-                 ->get(
-                     'https://nominatim.openstreetmap.org/search?state='.$this->search.'&format=json&polygon_geojson=1'
-                 ),
-        ]);
-
-        $this->osmSearchResultsCity = $responses[0]->json();
-        $this->osmSearchResultsState = $responses[1]->json();
     }
 }
