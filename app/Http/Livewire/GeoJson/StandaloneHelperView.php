@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\GeoJson;
 
 use App\Models\CommunityModel;
+use Illuminate\Http\Client\Pool;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
@@ -104,22 +105,18 @@ class StandaloneHelperView extends Component
     }
 
     private function getSearchResults() {
-        $response = Http::acceptJson()
-                        ->get(
-                            'https://nominatim.openstreetmap.org/search?city='.$this->search.'&format=json&polygon_geojson=1'
-                        );
-        $this->osmSearchResultsCity = $response->json();
+        $responses = Http::pool(fn (Pool $pool) => [
+            $pool->acceptJson()
+                 ->get(
+                     'https://nominatim.openstreetmap.org/search?city='.$this->search.'&format=json&polygon_geojson=1'
+                 ),
+            $pool->acceptJson()
+                 ->get(
+                     'https://nominatim.openstreetmap.org/search?state='.$this->search.'&format=json&polygon_geojson=1'
+                 ),
+        ]);
 
-        $response = Http::acceptJson()
-                        ->get(
-                            'https://nominatim.openstreetmap.org/search?state='.$this->search.'&format=json&polygon_geojson=1'
-                        );
-        $this->osmSearchResultsState = $response->json();
-
-        $response = Http::acceptJson()
-                        ->get(
-                            'https://nominatim.openstreetmap.org/search?country='.$this->search.'&format=json&polygon_geojson=1'
-                        );
-        $this->osmSearchResultsCountry = $response->json();
+        $this->osmSearchResultsCity = $responses[0]->json();
+        $this->osmSearchResultsState = $responses[1]->json();
     }
 }
