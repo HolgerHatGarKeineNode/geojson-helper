@@ -162,9 +162,13 @@
                                 </x-button>
 
                                 <div class="grid grid-cols-2 gap-1">
-                                    <div wire:ignore
-                                         class="my-4"
-                                         x-data="{
+                                    <div>
+                                        <h1 class="font-bold">
+                                            OSM geojson
+                                        </h1>
+                                        <div wire:ignore
+                                             class="my-4"
+                                             x-data="{
                                             geojson: @js($selectedItem['geojson']),
                                             init() {
                                                 var map = L.map($refs.mapOriginal)
@@ -182,11 +186,16 @@
                                                 map.fitBounds(geoJSON.getBounds());
                                             }
                                         }">
-                                        <div x-ref="mapOriginal" style="height: 30vh;"></div>
+                                            <div x-ref="mapOriginal" style="height: 30vh;"></div>
+                                        </div>
                                     </div>
-                                    <div wire:ignore
-                                         class="my-4"
-                                         x-data="{
+                                    <div>
+                                        <h1 class="font-bold">
+                                            Simplified geojson
+                                        </h1>
+                                        <div wire:ignore
+                                             class="my-4"
+                                             x-data="{
                                             simplifiedGeojson: @entangle('model.simplified_geojson'),
                                             init() {
                                                 var map = L.map($refs.map)
@@ -218,7 +227,8 @@
                                                 })
                                             }
                                         }">
-                                        <div x-ref="map" style="height: 30vh;"></div>
+                                            <div x-ref="map" style="height: 30vh;"></div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
