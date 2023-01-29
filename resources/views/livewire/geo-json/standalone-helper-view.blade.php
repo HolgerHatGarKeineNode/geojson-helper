@@ -164,37 +164,37 @@
                                 <div wire:ignore
                                      class="my-4"
                                      x-data="{
-                        simplifiedGeojson: @entangle('model.simplified_geojson'),
-                        init() {
-                            var map = L.map($refs.map)
-                            .setView([0, 0], 13);
+                                        simplifiedGeojson: @entangle('model.simplified_geojson'),
+                                        init() {
+                                            var map = L.map($refs.map)
+                                            .setView([0, 0], 13);
 
-                            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+                                            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
-                            var geojsonFeature = {
-                                'type': 'Feature',
-                                'geometry': this.simplifiedGeojson
-                            };
-                            console.log(geojsonFeature);
-                            L.geoJSON(geojsonFeature).addTo(map);
-                            let geoJSON = L.geoJson(geojsonFeature).addTo(map);
-                            map.fitBounds(geoJSON.getBounds());
+                                            var geojsonFeature = {
+                                                'type': 'Feature',
+                                                'geometry': this.simplifiedGeojson
+                                            };
+                                            console.log(geojsonFeature);
+                                            L.geoJSON(geojsonFeature).addTo(map);
+                                            let geoJSON = L.geoJson(geojsonFeature).addTo(map);
+                                            map.fitBounds(geoJSON.getBounds());
 
-                            $wire.on('geoJsonUpdated', () => {
-                                map.eachLayer((layer) => {
-                                  layer.remove();
-                                });
-                                L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-                                var geojsonFeature = {
-                                    'type': 'Feature',
-                                    'geometry': this.simplifiedGeojson
-                                };
-                                L.geoJSON(geojsonFeature).addTo(map);
-                                let geoJSON = L.geoJson(geojsonFeature).addTo(map);
-                                map.fitBounds(geoJSON.getBounds());
-                            })
-                        }
-                    }">
+                                            $wire.on('geoJsonUpdated', () => {
+                                                map.eachLayer((layer) => {
+                                                  layer.remove();
+                                                });
+                                                L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+                                                var geojsonFeature = {
+                                                    'type': 'Feature',
+                                                    'geometry': this.simplifiedGeojson
+                                                };
+                                                L.geoJSON(geojsonFeature).addTo(map);
+                                                let geoJSON = L.geoJson(geojsonFeature).addTo(map);
+                                                map.fitBounds(geoJSON.getBounds());
+                                            })
+                                        }
+                                    }">
                                     <div x-ref="map" style="height: 30vh;"></div>
                                 </div>
                             </div>
