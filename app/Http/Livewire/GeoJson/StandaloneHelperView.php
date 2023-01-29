@@ -40,6 +40,7 @@ class StandaloneHelperView extends Component
     public function submit()
     {
         $this->validate();
+        $this->getSearchResults();
     }
 
     public function selectItem($index, bool $isState = false, $isCountry = false)
