@@ -118,8 +118,26 @@
                                     $btnClassCenter = 'relative -ml-px inline-flex items-center border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500';
                                 @endphp
                                 <span class="isolate inline-flex rounded-md shadow-sm">
+                              <button type="button" wire:click="setPercent(15)"
+                                      class="{{ $btnClassLeft }}">15%</button>
+                              <button type="button" wire:click="setPercent(14)"
+                                      class="{{ $btnClassCenter }}">14%</button>
+                              <button type="button" wire:click="setPercent(13)"
+                                      class="{{ $btnClassCenter }}">13%</button>
+                              <button type="button" wire:click="setPercent(12)"
+                                      class="{{ $btnClassCenter }}">12%</button>
+                              <button type="button" wire:click="setPercent(11)"
+                                      class="{{ $btnClassCenter }}">11%</button>
+                              <button type="button" wire:click="setPercent(11)"
+                                      class="{{ $btnClassCenter }}">11%</button>
+                              <button type="button" wire:click="setPercent(10)"
+                                      class="{{ $btnClassCenter }}">10%</button>
+                              <button type="button" wire:click="setPercent(9)"
+                                      class="{{ $btnClassCenter }}">9%</button>
+                              <button type="button" wire:click="setPercent(8)"
+                                      class="{{ $btnClassCenter }}">8%</button>
                               <button type="button" wire:click="setPercent(7)"
-                                      class="{{ $btnClassLeft }}">7%</button>
+                                      class="{{ $btnClassCenter }}">7%</button>
                               <button type="button" wire:click="setPercent(5)"
                                       class="{{ $btnClassCenter }}">5%</button>
                               <button type="button" wire:click="setPercent(4)"
