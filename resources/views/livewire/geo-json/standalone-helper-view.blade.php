@@ -24,7 +24,7 @@
                     <h3 class="text-lg font-medium leading-6 text-gray-900">Search city: {{ $search }}</h3>
                     <div class="mt-2 max-w-xl text-sm text-gray-500">
 
-                        <div class="flex flex-col space-y-2">
+                        <div class="flex flex-col space-y-2 max-h-[200px] overflow-y-scroll">
                             @foreach($osmSearchResultsCity as $item)
                                 <code class="w-full">
                                     <div wire:key="osmItemCity_{{ $loop->index }}" class="cursor-pointer underline"
@@ -44,7 +44,7 @@
                     <h3 class="text-lg font-medium leading-6 text-gray-900">Search state: {{ $search }}</h3>
                     <div class="mt-2 max-w-xl text-sm text-gray-500">
 
-                        <div class="flex flex-col space-y-2">
+                        <div class="flex flex-col space-y-2 max-h-[200px] overflow-y-scroll">
                             @foreach($osmSearchResultsState as $item)
                                 <code class="w-full">
                                     <div wire:key="osmItemState_{{ $loop->index }}" class="cursor-pointer underline"
@@ -64,7 +64,7 @@
                     <h3 class="text-lg font-medium leading-6 text-gray-900">Search country: {{ $search }}</h3>
                     <div class="mt-2 max-w-xl text-sm text-gray-500">
 
-                        <div class="flex flex-col space-y-2">
+                        <div class="flex flex-col space-y-2 max-h-[200px] overflow-y-scroll">
                             @foreach($osmSearchResultsCountry as $item)
                                 <code class="w-full">
                                     <div wire:key="osmItemCountry_{{ $loop->index }}" class="cursor-pointer underline"
@@ -89,8 +89,12 @@
                     </h3>
                     <div class="mt-2 max-w-xl text-sm text-gray-500">
                         <div class="flex flex-col space-y-2">
-                            <h1>Current data [points: {{ count($model->simplified_geojson['coordinates'][0] ?? []) }}
-                                ]</h1>
+                            <h1>
+                                Current data [points: {{ count($model->simplified_geojson['coordinates'][0] ?? []) }}]
+                            </h1>
+                            <h1 class="py-2">
+                                smaller percentage means fewer points
+                            </h1>
                             <div class="flex space-x-2">
                                 @php
                                     $btnClassLeft = 'relative inline-flex items-center rounded-l-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500';
