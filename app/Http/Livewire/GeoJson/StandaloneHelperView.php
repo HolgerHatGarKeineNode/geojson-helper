@@ -82,13 +82,19 @@ class StandaloneHelperView extends Component
     private function executeMapshaper($percentage = 4): void
     {
         try {
+
+            // put OSM geojson to storage
             Storage::disk('geo')
                    ->put('geojson_'.$this->selectedItem['osm_id'].'.json',
                        json_encode($this->selectedItem['geojson'], JSON_THROW_ON_ERROR));
+
+            // execute mapshaper
             $input = storage_path('app/geo/geojson_'.$this->selectedItem['osm_id'].'.json');
             $output = storage_path('app/geo/output_'.$this->selectedItem['osm_id'].'.json');
             $mapshaperBinary = base_path('node_modules/mapshaper/bin/mapshaper');
             exec($mapshaperBinary.' '.$input.' -simplify dp '.$percentage.'% -o '.$output);
+
+            // trim geojson
             Storage::disk('geo')
                    ->put(
                        'trimmed_'.$this->selectedItem['osm_id'].'.json',
@@ -98,11 +104,15 @@ class StandaloneHelperView extends Component
                            ->beforeLast(']}')
                            ->toString()
                    );
+
+            // put trimmed geojson to model
             $this->model->simplified_geojson = json_decode(trim(Storage::disk('geo')
                                                                        ->get('trimmed_'.$this->selectedItem['osm_id'].'.json')),
                 false, 512, JSON_THROW_ON_ERROR);
 
+            // emit event for AlpineJS
             $this->emit('geoJsonUpdated');
+
         } catch (\Exception $e) {
             $this->notification()
                  ->error('Error', $e->getMessage());
