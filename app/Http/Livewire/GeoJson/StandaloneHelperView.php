@@ -84,7 +84,8 @@ class StandaloneHelperView extends Component
             // put OSM geojson to storage
             Storage::disk('geo')
                    ->put('geojson_'.$this->selectedItem['osm_id'].'.json',
-                       json_encode($this->selectedItem['geojson'], JSON_THROW_ON_ERROR));
+                       json_encode($this->selectedItem['geojson'], JSON_THROW_ON_ERROR)
+                   );
 
             // execute mapshaper
             $input = storage_path('app/geo/geojson_'.$this->selectedItem['osm_id'].'.json');
@@ -104,15 +105,18 @@ class StandaloneHelperView extends Component
                    );
 
             // put trimmed geojson to model
-            $this->model->simplified_geojson = json_decode(trim(Storage::disk('geo')
-                                                                       ->get('trimmed_'.$this->selectedItem['osm_id'].'.json')),
-                false, 512, JSON_THROW_ON_ERROR);
+            $this->model->simplified_geojson = json_decode(
+                trim(
+                    Storage::disk('geo')
+                           ->get('trimmed_'.$this->selectedItem['osm_id'].'.json')
+                ),
+                false, 512, JSON_THROW_ON_ERROR
+            );
 
             // emit event for AlpineJS
             $this->emit('geoJsonUpdated');
 
         } catch (\Exception $e) {
-            throw $e;
             $this->notification()
                  ->error('Error', $e->getMessage());
         }
