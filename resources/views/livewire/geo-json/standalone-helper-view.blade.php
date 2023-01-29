@@ -205,7 +205,9 @@
                 <h1>Wikipedia Search</h1>
                 <div class="flex space-x-2">
                     <a target="_blank" class="underline text-amber-500"
-                       href="https://de.wikipedia.org/wiki/{{ urlencode($search) }}">Wikipedia: {{ $search }}</a>
+                       href="https://en.wikipedia.org/wiki/{{ urlencode($search) }}">Wikipedia EN: {{ $search }}</a>
+                    <a target="_blank" class="underline text-amber-500"
+                       href="https://de.wikipedia.org/wiki/{{ urlencode($search) }}">Wikipedia DE: {{ $search }}</a>
                 </div>
             @endif
         </div>
