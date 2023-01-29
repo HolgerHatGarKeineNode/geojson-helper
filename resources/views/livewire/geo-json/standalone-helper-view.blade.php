@@ -104,7 +104,8 @@
                     <div class="mt-2 max-w-xl text-sm text-gray-500">
                         <div class="flex flex-col space-y-2">
                             <h1>
-                                Current data [points: {{ count($model->simplified_geojson['coordinates'][0] ?? []) }}]
+                                Current data
+                                [points: {{ is_array($model->simplified_geojson['coordinates'][0]) ? count($model->simplified_geojson['coordinates'][0] ?? []) : 0 }}]
                             </h1>
                             <h1 class="py-2">
                                 smaller percentage means fewer points
