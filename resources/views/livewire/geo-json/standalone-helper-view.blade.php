@@ -1,6 +1,5 @@
 <div class="p-6 w-full" wire:loading.class="opacity-50">
     <div class="max-w-none text-black flex flex-col space-y-4">
-
         <div class="bg-white shadow sm:rounded-lg">
             <div class="px-4 py-5 sm:p-6">
                 <h3 class="text-lg font-medium leading-6 text-gray-900">Search for a city, state or country</h3>
@@ -8,13 +7,24 @@
 
                     <form wire:submit.prevent="submit">
                         <div class="flex space-x-2 items-end">
-                            <x-input wire:model.defer="search"/>
-                            <x-button type="submit">Search</x-button>
-                            <div>
-                                @if(!$model?->simplified_geojson)
-                                    <x-badge positive class="whitespace-nowrap">Now select the appropriate place below so that a geojson can be built.</x-badge>
-                                @endif
-                            </div>
+
+                            @if(!$model?->simplified_geojson)
+                                <x-input wire:model.defer="search"/>
+                                <x-button type="submit">Search</x-button>
+                                <div>
+                                    @if(!$model?->simplified_geojson)
+                                        <x-badge lg positive class="whitespace-nowrap">Now select the appropriate place
+                                            below so that a geojson can be built.
+                                        </x-badge>
+                                    @endif
+                                </div>
+                            @else
+                                <a href="/">
+                                    <x-badge gray class="whitespace-nowrap">
+                                        Reset form
+                                    </x-badge>
+                                </a>
+                            @endif
                         </div>
                     </form>
 
