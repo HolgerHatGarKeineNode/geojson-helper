@@ -2,7 +2,7 @@
 
 ## Description
 
-With this tool you can easily find OSM relations and create simplified geojson polygons. This is a Laravel application.
+With this tool you can easily find OSM relations and create simplified GeoJSON polygons. This is a Laravel application.
 You can start the tool with Laravel Sail and Docker.
 
 [Hosted-Version](https://geojson.easify.de)
