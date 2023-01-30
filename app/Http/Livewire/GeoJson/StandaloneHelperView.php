@@ -97,6 +97,7 @@ class StandaloneHelperView extends Component
             $output = storage_path('app/geo/output_'.$this->selectedItem['osm_id'].'.json');
             $mapshaperBinary = base_path('node_modules/mapshaper/bin/mapshaper');
             exec($mapshaperBinary.' '.$input.' -simplify dp '.$percentage.'% -o '.$output);
+            $this->currentPercentage = $percentage;
 
             // trim geojson
             Storage::disk('geo')
@@ -129,7 +130,6 @@ class StandaloneHelperView extends Component
 
     public function setPercentage($percent): void
     {
-        $this->currentPercentage = $percent;
         $this->executeMapshaper($percent);
     }
 
