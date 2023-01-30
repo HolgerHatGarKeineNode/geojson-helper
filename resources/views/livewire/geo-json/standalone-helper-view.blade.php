@@ -114,7 +114,7 @@
                             @endphp
                             <h1>
                                 Current data
-                                [points:{{ $currentPoints }}]
+                                [points:<span class='font-bold'>{{ $currentPoints }}</span>]
                             </h1>
                             <h1 class="py-2">
                                 (smaller percentage means fewer points - aim for no more than 150)
