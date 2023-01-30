@@ -66,7 +66,14 @@ class StandaloneHelperView extends Component
 
         $this->osmSearchResultsCity = collect($responses[0]->json())
             ->filter(fn($item
-            ) => ($item['geojson']['type'] === 'Polygon' || $item['geojson']['type'] === 'MultiPolygon') && ($item['type'] === 'island' || $item['type'] === 'administrative'))
+            ) => (
+                     $item['geojson']['type'] === 'Polygon'
+                     || $item['geojson']['type'] === 'MultiPolygon'
+                 )
+                 && (
+                     $item['type'] === 'island'
+                     || $item['type'] === 'administrative')
+            )
             ->values()
             ->toArray();
         $this->osmSearchResultsState = $responses[1]->json();
@@ -156,6 +163,9 @@ class StandaloneHelperView extends Component
                 $this->notification()
                      ->warning('Warning', 'No water boundaries found');
             }
+        } else {
+            $this->selectedItemWater = null;
+            $this->emit('geoJsonUpdated');
         }
     }
 
