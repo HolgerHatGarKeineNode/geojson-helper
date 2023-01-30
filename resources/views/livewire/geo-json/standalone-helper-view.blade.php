@@ -39,7 +39,7 @@
                     <h3 class="text-lg font-medium leading-6 text-gray-900">Search city: {{ $search }}</h3>
                     <div class="mt-2 text-sm text-gray-500">
 
-                        <div class="flex max-h-[200px] flex-col space-y-2 overflow-y-scroll">
+                        <div class="flex max-h-[200px] flex-col space-y-2 overflow-y-auto">
                             @foreach ($osmSearchResultsCity as $item)
                                 <code wire:key="osmItemCity_{{ $loop->index }}" class="w-full">
                                     <div class="cursor-pointer underline" wire:click="selectItem({{ $loop->index }})">
@@ -59,7 +59,7 @@
                     <h3 class="text-lg font-medium leading-6 text-gray-900">Search state: {{ $search }}</h3>
                     <div class="mt-2 text-sm text-gray-500">
 
-                        <div class="flex max-h-[200px] flex-col space-y-2 overflow-y-scroll">
+                        <div class="flex max-h-[200px] flex-col space-y-2 overflow-y-auto">
                             @foreach ($osmSearchResultsState as $item)
                                 <code wire:key="osmItemState_{{ $loop->index }}" class="w-full">
                                     <div class="cursor-pointer underline"
@@ -80,7 +80,7 @@
                     <h3 class="text-lg font-medium leading-6 text-gray-900">Search country: {{ $search }}</h3>
                     <div class="mt-2 text-sm text-gray-500">
 
-                        <div class="flex max-h-[200px] flex-col space-y-2 overflow-y-scroll">
+                        <div class="flex max-h-[200px] flex-col space-y-2 overflow-y-auto">
                             @foreach ($osmSearchResultsCountry as $item)
                                 <code wire:key="osmItemCountry_{{ $loop->index }}" class="w-full">
                                     <div class="cursor-pointer underline"
