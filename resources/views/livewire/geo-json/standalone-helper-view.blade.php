@@ -150,7 +150,7 @@
                 <div class="bg-white shadow sm:rounded-lg">
                     <div class="px-4 py-5 sm:p-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
-                            <h3 class="text-lg font-medium leading-6 text-gray-900">OSM geojson</h3>
+                            <h3 class="text-lg font-medium leading-6 text-[#FFA500]">OSM geojson</h3>
                             <div class="mt-2 text-sm text-gray-500">
                                 @php
                                     $jsonEncodedSelectedItem = json_encode($selectedItem['geojson'], JSON_THROW_ON_ERROR);
@@ -158,14 +158,14 @@
 
                                 <div class="flex flex-col space-y-2 w-full">
                                 <pre
-                                    class="overflow-x-auto py-3">{{ $jsonEncodedSelectedItem }}</pre>
+                                    class="overflow-x-auto py-3 text-[#FFA500]">{{ $jsonEncodedSelectedItem }}</pre>
                                     <div>
                                         <x-button
                                             x-data="{
                                                 textToCopy: '{{ $jsonEncodedSelectedItem }}',
                                             }"
                                             @click.prevent="window.navigator.clipboard.writeText(textToCopy);window.$wireui.notify({title:'{{ __('Copied!') }}',icon:'success'});"
-                                            lg black>
+                                            lg amber>
                                             Copy to clipboard
                                         </x-button>
                                     </div>
@@ -173,20 +173,20 @@
                             </div>
                         </div>
                         <div>
-                            <h3 class="text-lg font-medium leading-6 text-gray-900">Simplified geojson</h3>
+                            <h3 class="text-lg font-medium leading-6 text-blue-500">Simplified geojson</h3>
                             <div class="mt-2 text-sm text-gray-500">@php
                                     $jsonEncodedSimplifiedGeoJson = json_encode($model->simplified_geojson, JSON_THROW_ON_ERROR);
                                 @endphp
                                 <div class="flex flex-col space-y-2 w-full">
                                 <pre
-                                    class="overflow-x-auto py-3">{{ $jsonEncodedSimplifiedGeoJson }}</pre>
+                                    class="overflow-x-auto py-3 text-blue-500">{{ $jsonEncodedSimplifiedGeoJson }}</pre>
                                     <div>
                                         <x-button
                                             x-data="{
                                                 textToCopy: '{{ $jsonEncodedSimplifiedGeoJson }}',
                                             }"
                                             @click.prevent="window.navigator.clipboard.writeText(textToCopy);window.$wireui.notify({title:'{{ __('Copied!') }}',icon:'success'});"
-                                            lg black>
+                                            lg blue>
                                             Copy to clipboard
                                         </x-button>
                                     </div>
@@ -196,86 +196,54 @@
                     </div>
 
                     <div class="px-4 py-5 sm:p-6 flex flex-col space-y-4">
-                        <div class="grid grid-cols-2 gap-1">
+                        <div class="w-full">
                             <div>
                                 <h1 class="font-bold">
-                                    OSM geojson
+                                    geojson preview
                                 </h1>
                                 <div wire:ignore
                                      class="my-4"
                                      x-data="{
                                             geojson: @entangle('selectedItem.geojson'),
+                                            simplifiedGeojson: @entangle('model.simplified_geojson'),
                                             init() {
-                                                var map = L.map($refs.mapOriginal)
+                                                const map = L.map($refs.map)
                                                 .setView([0, 0], 13);
 
                                                 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png?{foo}', {foo: 'bar', attribution: '&copy; <a href=\'https://www.openstreetmap.org/copyright\'>OpenStreetMap</a> contributors'}).addTo(map);
 
-                                                var geojsonFeature = {
+                                                const geojsonFeature = {
                                                     'type': 'Feature',
                                                     'geometry': this.geojson
                                                 };
-                                                L.geoJSON(geojsonFeature).addTo(map);
-                                                let geoJSON = L.geoJson(geojsonFeature).addTo(map);
-                                                map.fitBounds(geoJSON.getBounds());
-
-                                                $wire.on('geoJsonUpdated', () => {
-                                                    map.eachLayer((layer) => {
-                                                      layer.remove();
-                                                    });
-                                                    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png?{foo}', {foo: 'bar', attribution: '&copy; <a href=\'https://www.openstreetmap.org/copyright\'>OpenStreetMap</a> contributors'}).addTo(map);
-                                                    var geojsonFeature = {
-                                                        'type': 'Feature',
-                                                        'geometry': this.geojson
-                                                    };
-                                                    L.geoJSON(geojsonFeature).addTo(map);
-                                                    let geoJSON = L.geoJson(geojsonFeature).addTo(map);
-                                                    map.fitBounds(geoJSON.getBounds());
-                                                });
-                                            }
-                                        }">
-                                    <div x-ref="mapOriginal" style="height: 30vh;"></div>
-                                </div>
-                            </div>
-                            <div>
-                                <h1 class="font-bold">
-                                    Simplified geojson
-                                </h1>
-                                <div wire:ignore
-                                     class="my-4"
-                                     x-data="{
-                                            simplifiedGeojson: @entangle('model.simplified_geojson'),
-                                            init() {
-                                                var map = L.map($refs.map)
-                                                .setView([0, 0], 13);
-
-                                                L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png?{foo}', {foo: 'bar', attribution: '&copy; <a href=\'https://www.openstreetmap.org/copyright\'>OpenStreetMap</a> contributors'}).addTo(map);
-
-                                                var geojsonFeature = {
+                                                const simplifiedGeojsonFeature = {
                                                     'type': 'Feature',
                                                     'geometry': this.simplifiedGeojson
                                                 };
-                                                L.geoJSON(geojsonFeature).addTo(map);
-                                                let geoJSON = L.geoJson(geojsonFeature).addTo(map);
-                                                map.fitBounds(geoJSON.getBounds());
+                                                L.geoJson(geojsonFeature, {style:{color:'#FFA500',fillColor:'#FFA500',fillOpacity:0.3}}).addTo(map);
+                                                let simplifiedGeoJSON = L.geoJson(simplifiedGeojsonFeature, {style:{fillOpacity:0.5}}).addTo(map);
+                                                map.fitBounds(simplifiedGeoJSON.getBounds(),{padding: [50,50]});
 
                                                 $wire.on('geoJsonUpdated', () => {
                                                     map.eachLayer((layer) => {
                                                       layer.remove();
                                                     });
                                                     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png?{foo}', {foo: 'bar', attribution: '&copy; <a href=\'https://www.openstreetmap.org/copyright\'>OpenStreetMap</a> contributors'}).addTo(map);
-                                                    var geojsonFeature = {
+                                                    const geojsonFeature = {
+                                                        'type': 'Feature',
+                                                        'geometry': this.geojson
+                                                    };
+                                                    const simplifiedGeojsonFeature = {
                                                         'type': 'Feature',
                                                         'geometry': this.simplifiedGeojson
                                                     };
-                                                    L.geoJSON(geojsonFeature).addTo(map);
-                                                    let geoJSON = L.geoJson(geojsonFeature).addTo(map);
-                                                    map.fitBounds(geoJSON.getBounds());
-                                                    console.log('simplifiedGeojson updated', this.simplifiedGeojson);
+                                                    L.geoJson(geojsonFeature, {style:{color:'#FFA500',fillColor:'#FFA500',fillOpacity:0.3}}).addTo(map);
+                                                    let simplifiedGeoJSON = L.geoJson(simplifiedGeojsonFeature, {style:{fillOpacity:0.5}}).addTo(map);
+                                                    map.fitBounds(simplifiedGeoJSON.getBounds(),{padding: [50,50]});
                                                 });
                                             }
                                         }">
-                                    <div x-ref="map" style="height: 30vh;"></div>
+                                    <div x-ref="map" style="height: 50vh;"></div>
                                 </div>
                             </div>
                         </div>

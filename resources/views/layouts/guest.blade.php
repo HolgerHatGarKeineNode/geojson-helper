@@ -13,12 +13,11 @@
     <!-- Styles -->
     @mapstyles
     <livewire:styles/>
-    @vite(['resources/css/app.css'])
 
     <!-- Scripts -->
     @mapscripts
     <wireui:scripts/>
-    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="font-sans text-gray-900 antialiased">
 <x-notifications z-index="z-50" blur="md" align="center"/>
