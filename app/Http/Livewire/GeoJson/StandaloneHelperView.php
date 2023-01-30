@@ -51,7 +51,7 @@ class StandaloneHelperView extends Component
                  ),
             $pool->acceptJson()
                  ->get(
-                     'https://nominatim.openstreetmap.org/search?state='.$this->search.'&format=json&polygon_geojson=1'
+                     'https://nominatim.openstreetmap.org/search?state='.$this->search.'&format=json&polygon_geojson=1&polygon_threshold=0.001'
                  ),
         ]);
 
