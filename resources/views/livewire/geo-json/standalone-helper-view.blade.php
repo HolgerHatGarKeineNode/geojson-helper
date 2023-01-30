@@ -1,18 +1,18 @@
-<div class="p-0 sm:p-6 w-full" wire:loading.class="opacity-50 pointer-events-none cursor-not-allowed">
-    <div class="max-w-none text-black flex flex-col space-y-4">
+<div class="w-full p-0 sm:p-6" wire:loading.class="opacity-50 pointer-events-none cursor-not-allowed">
+    <div class="flex max-w-none flex-col space-y-4 text-black">
         <div class="bg-white shadow sm:rounded-lg">
             <div class="px-4 py-5 sm:p-6">
                 <h3 class="text-lg font-medium leading-6 text-gray-900">Search for a city or state</h3>
                 <div class="mt-2 text-sm text-gray-500">
 
                     <form wire:submit.prevent="submit">
-                        <div class="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2 items-end">
+                        <div class="flex flex-col items-end space-y-2 sm:flex-row sm:space-y-0 sm:space-x-2">
 
-                            @if(!$model?->simplified_geojson)
-                                <x-input wire:model.defer="search"/>
+                            @if (!$model?->simplified_geojson)
+                                <x-input wire:model.defer="search" />
                                 <x-button type="submit">Search</x-button>
                                 <div>
-                                    @if(!$model?->simplified_geojson && $search)
+                                    @if (!$model?->simplified_geojson && $search)
                                         <x-badge lg positive class="sm:whitespace-nowrap">
                                             Now select the appropriate place below so that a geojson can be built.
                                         </x-badge>
@@ -32,18 +32,18 @@
             </div>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+        <div class="grid grid-cols-1 gap-2 sm:grid-cols-3">
 
             <div class="bg-white shadow sm:rounded-lg">
                 <div class="px-4 py-5 sm:p-6">
                     <h3 class="text-lg font-medium leading-6 text-gray-900">Search city: {{ $search }}</h3>
                     <div class="mt-2 max-w-xl text-sm text-gray-500">
 
-                        <div class="flex flex-col space-y-2 max-h-[200px] overflow-y-scroll">
-                            @foreach($osmSearchResultsCity as $item)
+                        <div class="flex max-h-[200px] flex-col space-y-2 overflow-y-scroll">
+                            @foreach ($osmSearchResultsCity as $item)
                                 <code class="w-full">
                                     <div wire:key="osmItemCity_{{ $loop->index }}" class="cursor-pointer underline"
-                                         wire:click="selectItem({{ $loop->index }})">
+                                        wire:click="selectItem({{ $loop->index }})">
                                         {{ $item['display_name'] }} [{{ $item['type'] }}]
                                     </div>
                                 </code>
@@ -59,11 +59,11 @@
                     <h3 class="text-lg font-medium leading-6 text-gray-900">Search state: {{ $search }}</h3>
                     <div class="mt-2 max-w-xl text-sm text-gray-500">
 
-                        <div class="flex flex-col space-y-2 max-h-[200px] overflow-y-scroll">
-                            @foreach($osmSearchResultsState as $item)
+                        <div class="flex max-h-[200px] flex-col space-y-2 overflow-y-scroll">
+                            @foreach ($osmSearchResultsState as $item)
                                 <code class="w-full">
                                     <div wire:key="osmItemState_{{ $loop->index }}" class="cursor-pointer underline"
-                                         wire:click="selectItem({{ $loop->index }}, true)">
+                                        wire:click="selectItem({{ $loop->index }}, true)">
                                         {{ $item['display_name'] }}
                                     </div>
                                 </code>
@@ -79,11 +79,11 @@
                     <h3 class="text-lg font-medium leading-6 text-gray-900">Search country: {{ $search }}</h3>
                     <div class="mt-2 max-w-xl text-sm text-gray-500">
 
-                        <div class="flex flex-col space-y-2 max-h-[200px] overflow-y-scroll">
-                            @foreach($osmSearchResultsCountry as $item)
+                        <div class="flex max-h-[200px] flex-col space-y-2 overflow-y-scroll">
+                            @foreach ($osmSearchResultsCountry as $item)
                                 <code class="w-full">
                                     <div wire:key="osmItemCountry_{{ $loop->index }}" class="cursor-pointer underline"
-                                         wire:click="selectItem({{ $loop->index }}, false, true)">
+                                        wire:click="selectItem({{ $loop->index }}, false, true)">
                                         {{ $item['display_name'] }}
                                     </div>
                                 </code>
@@ -95,26 +95,29 @@
             </div>
 
         </div>
-        @if($selectedItem)
+        @if ($selectedItem)
             <div class="bg-white shadow sm:rounded-lg">
                 <div class="px-4 py-5 sm:p-6">
                     <div class="flex items-center space-x-4">
                         <h3 class="text-lg font-medium leading-6 text-green-800">
                             geojson created
                         </h3>
-                        <x-toggle lg label="fetch water boundaries" wire:model="water"/>
+                        <x-toggle lg label="fetch water boundaries from https://osm-boundaries.com"
+                            wire:model="water" />
                     </div>
                     <div class="mt-2 max-w-xl text-sm text-gray-500">
                         <div class="flex flex-col space-y-2">
+                            @php
+                                $currentPoints = is_array($model->simplified_geojson['coordinates'][0]) ? count($model->simplified_geojson['coordinates'][0] ?? []) : 0;
+                            @endphp
                             <h1>
                                 Current data
-                                [points: {{ is_array($model->simplified_geojson['coordinates'][0]) ? count($model->simplified_geojson['coordinates'][0] ?? []) : 0 }}
-                                ]
+                                [points:{{ $currentPoints }}]
                             </h1>
                             <h1 class="py-2">
                                 smaller percentage means fewer points
                             </h1>
-                            <div class="hidden sm:block flex space-x-2">
+                            <div class="flex hidden space-x-2 sm:block">
                                 @php
                                     $btnClassLeft = 'relative inline-flex items-center rounded-l-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-amber-400 focus:z-10 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500';
                                     $btnClassRight = 'relative -ml-px inline-flex items-center rounded-r-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-amber-400 focus:z-10 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500';
@@ -122,25 +125,21 @@
                                     $currentClass = 'bg-amber-500';
                                 @endphp
                                 <div class="isolate inline-flex rounded-md shadow-sm">
-                                    @foreach($percentages as $percentage)
+                                    @foreach ($percentages as $percentage)
                                         @php
                                             $btnClass = $loop->first ? $btnClassLeft : ($loop->last ? $btnClassRight : $btnClassCenter);
                                         @endphp
                                         <button wire:key="percentage_{{ $loop->index }}" type="button"
-                                                wire:click="setPercentage({{ $percentage }})"
-                                                class="{{ $btnClass }} {{ $currentPercentage === $percentage ? $currentClass : ''}}">
+                                            wire:click="setPercentage({{ $percentage }})"
+                                            class="{{ $btnClass }} {{ $currentPercentage === $percentage ? $currentClass : '' }}">
                                             {{ $percentage }}%
                                         </button>
                                     @endforeach
                                 </div>
                             </div>
                             <div class="block sm:hidden">
-                                <x-native-select
-                                    label="Select percentage"
-                                    placeholder="Select percentage"
-                                    :options="$percentages"
-                                    wire:model="currentPercentage"
-                                />
+                                <x-native-select label="Select percentage" placeholder="Select percentage"
+                                    :options="$percentages" wire:model="currentPercentage" />
                             </div>
                         </div>
 
@@ -150,9 +149,9 @@
         @endif
 
         <div>
-            @if($model?->simplified_geojson)
+            @if ($model?->simplified_geojson)
                 <div class="bg-white shadow sm:rounded-lg">
-                    <div class="px-4 py-5 sm:p-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="grid grid-cols-1 gap-4 px-4 py-5 sm:grid-cols-2 sm:p-6">
                         <div>
                             <h3 class="text-lg font-medium leading-6 text-[#FFA500]">OSM geojson</h3>
                             <div class="mt-2 text-sm text-gray-500">
@@ -160,14 +159,12 @@
                                     $jsonEncodedSelectedItem = json_encode($selectedItem['geojson'], JSON_THROW_ON_ERROR);
                                 @endphp
 
-                                <div class="flex flex-col space-y-2 w-full">
-                                <pre
-                                    class="overflow-x-auto py-3 text-[#FFA500]">{{ $jsonEncodedSelectedItem }}</pre>
+                                <div class="flex w-full flex-col space-y-2">
+                                    <pre class="overflow-x-auto py-3 text-[#FFA500]">{{ $jsonEncodedSelectedItem }}</pre>
                                     <div>
-                                        <x-button
-                                            x-data="{
-                                                textToCopy: '{{ $jsonEncodedSelectedItem }}',
-                                            }"
+                                        <x-button x-data="{
+                                            textToCopy: '{{ $jsonEncodedSelectedItem }}',
+                                        }"
                                             @click.prevent="window.navigator.clipboard.writeText(textToCopy);window.$wireui.notify({title:'{{ __('Copied!') }}',icon:'success'});"
                                             lg amber>
                                             Copy to clipboard
@@ -182,14 +179,12 @@
                                 @php
                                     $jsonEncodedSimplifiedGeoJson = json_encode($model->simplified_geojson, JSON_THROW_ON_ERROR);
                                 @endphp
-                                <div class="flex flex-col space-y-2 w-full">
-                                <pre
-                                    class="overflow-x-auto py-3 text-blue-500">{{ $jsonEncodedSimplifiedGeoJson }}</pre>
+                                <div class="flex w-full flex-col space-y-2">
+                                    <pre class="overflow-x-auto py-3 text-blue-500">{{ $jsonEncodedSimplifiedGeoJson }}</pre>
                                     <div>
-                                        <x-button
-                                            x-data="{
-                                                textToCopy: '{{ $jsonEncodedSimplifiedGeoJson }}',
-                                            }"
+                                        <x-button x-data="{
+                                            textToCopy: '{{ $jsonEncodedSimplifiedGeoJson }}',
+                                        }"
                                             @click.prevent="window.navigator.clipboard.writeText(textToCopy);window.$wireui.notify({title:'{{ __('Copied!') }}',icon:'success'});"
                                             lg blue>
                                             Copy to clipboard
@@ -198,19 +193,17 @@
                                 </div>
                             </div>
                         </div>
-                        @if($selectedItemWater)
+                        @if ($selectedItemWater)
                             <div class="cols-span-2">
                                 <h3 class="text-lg font-medium leading-6 text-[#FF0084]">Water geojson</h3>
                                 <div class="mt-2 text-sm text-gray-500">
                                     @php
                                         $jsonEncodedGeoJsonWater = json_encode($selectedItemWater, JSON_THROW_ON_ERROR);
                                     @endphp
-                                    <div class="flex flex-col space-y-2 w-full">
-                                <pre
-                                    class="overflow-x-auto py-3 text-[#FF0084]">{{ $jsonEncodedGeoJsonWater }}</pre>
+                                    <div class="flex w-full flex-col space-y-2">
+                                        <pre class="overflow-x-auto py-3 text-[#FF0084]">{{ $jsonEncodedGeoJsonWater }}</pre>
                                         <div>
-                                            <x-button
-                                                x-data="{
+                                            <x-button x-data="{
                                                 textToCopy: '{{ $jsonEncodedGeoJsonWater }}',
                                             }"
                                                 @click.prevent="window.navigator.clipboard.writeText(textToCopy);window.$wireui.notify({title:'{{ __('Copied!') }}',icon:'success'});"
@@ -224,60 +217,58 @@
                         @endif
                     </div>
 
-                    <div class="px-4 py-5 sm:p-6 flex flex-col space-y-4">
+                    <div class="flex flex-col space-y-4 px-4 py-5 sm:p-6">
                         <div class="w-full">
                             <div>
                                 <h1 class="font-bold">
                                     geojson preview
                                 </h1>
-                                <div wire:ignore
-                                     class="my-4"
-                                     x-data="{
-                                            geojson: @entangle('selectedItem.geojson'),
-                                            simplifiedGeojson: @entangle('model.simplified_geojson'),
-                                            geojsonWater: @entangle('selectedItemWater'),
-                                            init() {
-                                                const map = L.map($refs.map)
-                                                .setView([0, 0], 13);
-
-                                                L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png?{foo}', {foo: 'bar', attribution: '&copy; <a href=\'https://www.openstreetmap.org/copyright\'>OpenStreetMap</a> contributors'}).addTo(map);
-
-                                                const geojsonFeature = {
-                                                    'type': 'Feature',
-                                                    'geometry': this.geojson
-                                                };
-                                                const simplifiedGeojsonFeature = {
-                                                    'type': 'Feature',
-                                                    'geometry': this.simplifiedGeojson
-                                                };
-                                                L.geoJson(geojsonFeature, {style:{color:'#FFA500',fillColor:'#FFA500',fillOpacity:0.3}}).addTo(map);
-                                                let simplifiedGeoJSON = L.geoJson(simplifiedGeojsonFeature, {style:{fillOpacity:0.5}}).addTo(map);
-                                                map.fitBounds(simplifiedGeoJSON.getBounds(),{padding: [50,50]});
-
-                                                $wire.on('geoJsonUpdated', () => {
-                                                    map.eachLayer((layer) => {
-                                                      layer.remove();
-                                                    });
-                                                    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png?{foo}', {foo: 'bar', attribution: '&copy; <a href=\'https://www.openstreetmap.org/copyright\'>OpenStreetMap</a> contributors'}).addTo(map);
-                                                    const geojsonFeature = {
-                                                        'type': 'Feature',
-                                                        'geometry': this.geojson
-                                                    };
-                                                    const simplifiedGeojsonFeature = {
-                                                        'type': 'Feature',
-                                                        'geometry': this.simplifiedGeojson
-                                                    };
-                                                    const geojsonWaterFeature = {
-                                                        'type': 'Feature',
-                                                        'geometry': this.geojsonWater
-                                                    };
-                                                    L.geoJson(geojsonFeature, {style:{color:'#FFA500',fillColor:'#FFA500',fillOpacity:0.3}}).addTo(map);
-                                                    L.geoJson(geojsonWaterFeature, {style:{color:'#FF0084',fillColor:'#FF0084',fillOpacity:0.2}}).addTo(map);
-                                                    let simplifiedGeoJSON = L.geoJson(simplifiedGeojsonFeature, {style:{fillOpacity:0.5}}).addTo(map);
-                                                    map.fitBounds(simplifiedGeoJSON.getBounds(),{padding: [50,50]});
-                                                });
-                                            }
-                                        }">
+                                <div wire:ignore class="my-4" x-data="{
+                                    geojson: @entangle('selectedItem.geojson'),
+                                    simplifiedGeojson: @entangle('model.simplified_geojson'),
+                                    geojsonWater: @entangle('selectedItemWater'),
+                                    init() {
+                                        const map = L.map($refs.map)
+                                            .setView([0, 0], 13);
+                                
+                                        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png?{foo}', { foo: 'bar', attribution: '&copy; <a href=\'https://www.openstreetmap.org/copyright\'>OpenStreetMap</a> contributors' }).addTo(map);
+                                
+                                        const geojsonFeature = {
+                                            'type': 'Feature',
+                                            'geometry': this.geojson
+                                        };
+                                        const simplifiedGeojsonFeature = {
+                                            'type': 'Feature',
+                                            'geometry': this.simplifiedGeojson
+                                        };
+                                        L.geoJson(geojsonFeature, { style: { color: '#FFA500', fillColor: '#FFA500', fillOpacity: 0.3 } }).addTo(map);
+                                        let simplifiedGeoJSON = L.geoJson(simplifiedGeojsonFeature, { style: { fillOpacity: 0.5 } }).addTo(map);
+                                        map.fitBounds(simplifiedGeoJSON.getBounds(), { padding: [50, 50] });
+                                
+                                        $wire.on('geoJsonUpdated', () => {
+                                            map.eachLayer((layer) => {
+                                                layer.remove();
+                                            });
+                                            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png?{foo}', { foo: 'bar', attribution: '&copy; <a href=\'https://www.openstreetmap.org/copyright\'>OpenStreetMap</a> contributors' }).addTo(map);
+                                            const geojsonFeature = {
+                                                'type': 'Feature',
+                                                'geometry': this.geojson
+                                            };
+                                            const simplifiedGeojsonFeature = {
+                                                'type': 'Feature',
+                                                'geometry': this.simplifiedGeojson
+                                            };
+                                            const geojsonWaterFeature = {
+                                                'type': 'Feature',
+                                                'geometry': this.geojsonWater
+                                            };
+                                            L.geoJson(geojsonFeature, { style: { color: '#FFA500', fillColor: '#FFA500', fillOpacity: 0.3 } }).addTo(map);
+                                            L.geoJson(geojsonWaterFeature, { style: { color: '#FF0084', fillColor: '#FF0084', fillOpacity: 0.2 } }).addTo(map);
+                                            let simplifiedGeoJSON = L.geoJson(simplifiedGeojsonFeature, { style: { fillOpacity: 0.5 } }).addTo(map);
+                                            map.fitBounds(simplifiedGeoJSON.getBounds(), { padding: [50, 50] });
+                                        });
+                                    }
+                                }">
                                     <div x-ref="map" style="height: 50vh;"></div>
                                 </div>
                             </div>
@@ -287,7 +278,7 @@
             @endif
         </div>
         <div class="flex flex-col">
-            @if($model?->osm_relation)
+            @if ($model?->osm_relation)
                 <code>
                     osm_id: {{ $model->osm_relation['osm_id'] }}
                 </code>
@@ -297,13 +288,15 @@
             @endif
         </div>
         <div>
-            @if($search)
+            @if ($search)
                 <h1>Wikipedia Search</h1>
                 <div class="flex space-x-2">
-                    <a target="_blank" class="underline text-amber-500"
-                       href="https://en.wikipedia.org/wiki/{{ urlencode($search) }}">Wikipedia EN: {{ $search }}</a>
-                    <a target="_blank" class="underline text-amber-500"
-                       href="https://de.wikipedia.org/wiki/{{ urlencode($search) }}">Wikipedia DE: {{ $search }}</a>
+                    <a target="_blank" class="text-amber-500 underline"
+                        href="https://en.wikipedia.org/wiki/{{ urlencode($search) }}">Wikipedia EN:
+                        {{ $search }}</a>
+                    <a target="_blank" class="text-amber-500 underline"
+                        href="https://de.wikipedia.org/wiki/{{ urlencode($search) }}">Wikipedia DE:
+                        {{ $search }}</a>
                 </div>
             @endif
         </div>

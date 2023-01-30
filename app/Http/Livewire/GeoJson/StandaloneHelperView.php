@@ -18,11 +18,15 @@ class StandaloneHelperView extends Component
     public string $search = '';
 
     public array $osmSearchResultsCity = [];
+
     public array $osmSearchResultsState = [];
+
     public array $osmSearchResultsCountry = [];
 
     public $selectedItem;
+
     public $selectedItemWater;
+
     public $currentPercentage = 4;
 
     public bool $water = false;
@@ -34,22 +38,22 @@ class StandaloneHelperView extends Component
     public function rules(): array
     {
         return [
-            'search'                   => 'required|string',
-            'currentPercentage'        => 'required|numeric',
+            'search' => 'required|string',
+            'currentPercentage' => 'required|numeric',
             'model.simplified_geojson' => 'nullable',
-            'water'                    => 'bool',
+            'water' => 'bool',
         ];
     }
 
     public function mount(): void
     {
-        $this->model = new CommunityModel();
+        $this->model = new CommunityModel;
         $this->getSearchResults();
     }
 
     private function getSearchResults(): void
     {
-        $responses = Http::pool(fn(Pool $pool) => [
+        $responses = Http::pool(fn (Pool $pool) => [
             $pool->acceptJson()
                  ->get(
                      'https://nominatim.openstreetmap.org/search?q='.$this->search.'&format=json&polygon_geojson=1'
@@ -65,7 +69,7 @@ class StandaloneHelperView extends Component
         ]);
 
         $this->osmSearchResultsCity = collect($responses[0]->json())
-            ->filter(fn($item
+            ->filter(fn ($item
             ) => (
                      $item['geojson']['type'] === 'Polygon'
                      || $item['geojson']['type'] === 'MultiPolygon'
@@ -152,9 +156,9 @@ class StandaloneHelperView extends Component
             $response = Http::acceptJson()
                             ->asForm()
                             ->post('https://osm-boundaries.com/Ajax/GetBoundary', [
-                                'db'          => 'osm20221205',
+                                'db' => 'osm20221205',
                                 'waterOrLand' => 'water',
-                                'osmId'       => '-'.$this->selectedItem['osm_id'],
+                                'osmId' => '-'.$this->selectedItem['osm_id'],
                             ]);
             if ($response->json()) {
                 $this->selectedItemWater = $response->json();

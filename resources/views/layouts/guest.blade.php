@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -12,22 +13,24 @@
 
     <!-- Styles -->
     @mapstyles
-    <livewire:styles/>
+    <livewire:styles />
 
     <!-- Scripts -->
     @mapscripts
-    <wireui:scripts/>
+    <wireui:scripts />
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
+
 <body class="font-sans text-gray-900 antialiased">
-<x-notifications z-index="z-50" blur="md" align="center"/>
-<div
-    class="min-h-screen flex flex-col sm:justify-center items-center pt-2 sm:pt-6 sm:pt-0 bg-gray-100 dark:bg-gray-900">
+    <x-notifications z-index="z-50" blur="md" align="center" />
     <div
-        class="w-full max-w-screen-2xl mt-2 sm:mt-6 px-1 sm:px-6 py-4 bg-white dark:bg-gray-800 shadow-md sm:rounded-lg">
-        {{ $slot }}
+        class="flex min-h-screen flex-col items-center bg-gray-100 pt-2 dark:bg-gray-900 sm:justify-center sm:pt-6 sm:pt-0">
+        <div
+            class="mt-2 w-full max-w-screen-2xl bg-white px-1 py-4 shadow-md dark:bg-gray-800 sm:mt-6 sm:rounded-lg sm:px-6">
+            {{ $slot }}
+        </div>
     </div>
-</div>
-<livewire:scripts/>
+    <livewire:scripts />
 </body>
+
 </html>
