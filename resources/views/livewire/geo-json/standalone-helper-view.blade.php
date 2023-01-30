@@ -9,7 +9,7 @@
                         <div class="flex flex-col items-end space-y-2 sm:flex-row sm:space-y-0 sm:space-x-2">
 
                             @if (!$model?->simplified_geojson)
-                                <x-input wire:model.defer="search" />
+                                <x-input wire:model.defer="search"/>
                                 <x-button type="submit">Search</x-button>
                                 <div>
                                     @if (!$model?->simplified_geojson && $search)
@@ -41,10 +41,11 @@
 
                         <div class="flex max-h-[200px] flex-col space-y-2 overflow-y-scroll">
                             @foreach ($osmSearchResultsCity as $item)
-                                <code class="w-full">
-                                    <div wire:key="osmItemCity_{{ $loop->index }}" class="cursor-pointer underline"
-                                        wire:click="selectItem({{ $loop->index }})">
-                                        {{ $item['display_name'] }} [{{ $item['type'] }}]
+                                <code wire:key="osmItemCity_{{ $loop->index }}" class="w-full">
+                                    <div class="cursor-pointer underline"
+                                         wire:click="selectItem({{ $loop->index }})">
+                                        {{ $item['display_name'] }} [{{ $item['type'] }}
+                                        with {{ count($item['geojson']['coordinates'], COUNT_RECURSIVE) }} points]
                                     </div>
                                 </code>
                             @endforeach
@@ -61,10 +62,11 @@
 
                         <div class="flex max-h-[200px] flex-col space-y-2 overflow-y-scroll">
                             @foreach ($osmSearchResultsState as $item)
-                                <code class="w-full">
-                                    <div wire:key="osmItemState_{{ $loop->index }}" class="cursor-pointer underline"
-                                        wire:click="selectItem({{ $loop->index }}, true)">
+                                <code wire:key="osmItemState_{{ $loop->index }}" class="w-full">
+                                    <div class="cursor-pointer underline"
+                                         wire:click="selectItem({{ $loop->index }}, true)">
                                         {{ $item['display_name'] }}
+                                        [with {{ count($item['geojson']['coordinates'], COUNT_RECURSIVE) }} points]
                                     </div>
                                 </code>
                             @endforeach
@@ -81,10 +83,11 @@
 
                         <div class="flex max-h-[200px] flex-col space-y-2 overflow-y-scroll">
                             @foreach ($osmSearchResultsCountry as $item)
-                                <code class="w-full">
-                                    <div wire:key="osmItemCountry_{{ $loop->index }}" class="cursor-pointer underline"
-                                        wire:click="selectItem({{ $loop->index }}, false, true)">
+                                <code wire:key="osmItemCountry_{{ $loop->index }}" class="w-full">
+                                    <div class="cursor-pointer underline"
+                                         wire:click="selectItem({{ $loop->index }}, false, true)">
                                         {{ $item['display_name'] }}
+                                        [with {{ count($item['geojson']['coordinates'], COUNT_RECURSIVE) }} points]
                                     </div>
                                 </code>
                             @endforeach
@@ -103,7 +106,7 @@
                             geojson created
                         </h3>
                         <x-toggle lg label="fetch water boundaries from https://osm-boundaries.com"
-                            wire:model="water" />
+                                  wire:model="water"/>
                     </div>
                     <div class="mt-2 max-w-xl text-sm text-gray-500">
                         <div class="flex flex-col space-y-2">
@@ -130,8 +133,8 @@
                                             $btnClass = $loop->first ? $btnClassLeft : ($loop->last ? $btnClassRight : $btnClassCenter);
                                         @endphp
                                         <button wire:key="percentage_{{ $loop->index }}" type="button"
-                                            wire:click="setPercentage({{ $percentage }})"
-                                            class="{{ $btnClass }} {{ $currentPercentage === $percentage ? $currentClass : '' }}">
+                                                wire:click="setPercentage({{ $percentage }})"
+                                                class="{{ $btnClass }} {{ $currentPercentage === $percentage ? $currentClass : '' }}">
                                             {{ $percentage }}%
                                         </button>
                                     @endforeach
@@ -139,7 +142,7 @@
                             </div>
                             <div class="block sm:hidden">
                                 <x-native-select label="Select percentage" placeholder="Select percentage"
-                                    :options="$percentages" wire:model="currentPercentage" />
+                                                 :options="$percentages" wire:model="currentPercentage"/>
                             </div>
                         </div>
 
@@ -160,13 +163,14 @@
                                 @endphp
 
                                 <div class="flex w-full flex-col space-y-2">
-                                    <pre class="overflow-x-auto py-3 text-[#FFA500]">{{ $jsonEncodedSelectedItem }}</pre>
+                                    <pre
+                                        class="overflow-x-auto py-3 text-[#FFA500]">{{ $jsonEncodedSelectedItem }}</pre>
                                     <div>
                                         <x-button x-data="{
                                             textToCopy: '{{ $jsonEncodedSelectedItem }}',
                                         }"
-                                            @click.prevent="window.navigator.clipboard.writeText(textToCopy);window.$wireui.notify({title:'{{ __('Copied!') }}',icon:'success'});"
-                                            lg amber>
+                                                  @click.prevent="window.navigator.clipboard.writeText(textToCopy);window.$wireui.notify({title:'{{ __('Copied!') }}',icon:'success'});"
+                                                  lg amber>
                                             Copy to clipboard
                                         </x-button>
                                     </div>
@@ -180,13 +184,14 @@
                                     $jsonEncodedSimplifiedGeoJson = json_encode($model->simplified_geojson, JSON_THROW_ON_ERROR);
                                 @endphp
                                 <div class="flex w-full flex-col space-y-2">
-                                    <pre class="overflow-x-auto py-3 text-blue-500">{{ $jsonEncodedSimplifiedGeoJson }}</pre>
+                                    <pre
+                                        class="overflow-x-auto py-3 text-blue-500">{{ $jsonEncodedSimplifiedGeoJson }}</pre>
                                     <div>
                                         <x-button x-data="{
                                             textToCopy: '{{ $jsonEncodedSimplifiedGeoJson }}',
                                         }"
-                                            @click.prevent="window.navigator.clipboard.writeText(textToCopy);window.$wireui.notify({title:'{{ __('Copied!') }}',icon:'success'});"
-                                            lg blue>
+                                                  @click.prevent="window.navigator.clipboard.writeText(textToCopy);window.$wireui.notify({title:'{{ __('Copied!') }}',icon:'success'});"
+                                                  lg blue>
                                             Copy to clipboard
                                         </x-button>
                                     </div>
@@ -201,13 +206,14 @@
                                         $jsonEncodedGeoJsonWater = json_encode($selectedItemWater, JSON_THROW_ON_ERROR);
                                     @endphp
                                     <div class="flex w-full flex-col space-y-2">
-                                        <pre class="overflow-x-auto py-3 text-[#FF0084]">{{ $jsonEncodedGeoJsonWater }}</pre>
+                                        <pre
+                                            class="overflow-x-auto py-3 text-[#FF0084]">{{ $jsonEncodedGeoJsonWater }}</pre>
                                         <div>
                                             <x-button x-data="{
                                                 textToCopy: '{{ $jsonEncodedGeoJsonWater }}',
                                             }"
-                                                @click.prevent="window.navigator.clipboard.writeText(textToCopy);window.$wireui.notify({title:'{{ __('Copied!') }}',icon:'success'});"
-                                                lg pink>
+                                                      @click.prevent="window.navigator.clipboard.writeText(textToCopy);window.$wireui.notify({title:'{{ __('Copied!') }}',icon:'success'});"
+                                                      lg pink>
                                                 Copy to clipboard
                                             </x-button>
                                         </div>
@@ -292,10 +298,10 @@
                 <h1>Wikipedia Search</h1>
                 <div class="flex space-x-2">
                     <a target="_blank" class="text-amber-500 underline"
-                        href="https://en.wikipedia.org/wiki/{{ urlencode($search) }}">Wikipedia EN:
+                       href="https://en.wikipedia.org/wiki/{{ urlencode($search) }}">Wikipedia EN:
                         {{ $search }}</a>
                     <a target="_blank" class="text-amber-500 underline"
-                        href="https://de.wikipedia.org/wiki/{{ urlencode($search) }}">Wikipedia DE:
+                       href="https://de.wikipedia.org/wiki/{{ urlencode($search) }}">Wikipedia DE:
                         {{ $search }}</a>
                 </div>
             @endif
