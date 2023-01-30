@@ -100,7 +100,7 @@
                 <div class="px-4 py-5 sm:p-6">
                     <div class="flex items-center space-x-4">
                         <h3 class="text-lg font-medium leading-6 text-green-800">
-                            geojson created test
+                            geojson created
                         </h3>
                         <x-toggle lg label="fetch water boundaries from https://osm-boundaries.com"
                             wire:model="water" />
