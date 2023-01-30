@@ -22,7 +22,10 @@ class StandaloneHelperView extends Component
     public array $osmSearchResultsCountry = [];
 
     public $selectedItem;
+    public $selectedItemWater;
     public $currentPercentage = 4;
+
+    public bool $water = false;
 
     protected $queryString = [
         'search' => ['except' => ''],
@@ -34,6 +37,7 @@ class StandaloneHelperView extends Component
             'search'                   => 'required|string',
             'currentPercentage'        => 'required|numeric',
             'model.simplified_geojson' => 'nullable',
+            'water'                    => 'bool',
         ];
     }
 
@@ -48,7 +52,7 @@ class StandaloneHelperView extends Component
         $responses = Http::pool(fn(Pool $pool) => [
             $pool->acceptJson()
                  ->get(
-                     'https://nominatim.openstreetmap.org/search?city='.$this->search.'&format=json&polygon_geojson=1'
+                     'https://nominatim.openstreetmap.org/search?q='.$this->search.'&format=json&polygon_geojson=1'
                  ),
             $pool->acceptJson()
                  ->get(
@@ -60,7 +64,11 @@ class StandaloneHelperView extends Component
                  ),
         ]);
 
-        $this->osmSearchResultsCity = $responses[0]->json();
+        $this->osmSearchResultsCity = collect($responses[0]->json())
+            ->filter(fn($item
+            ) => ($item['geojson']['type'] === 'Polygon' || $item['geojson']['type'] === 'MultiPolygon') && ($item['type'] === 'island' || $item['type'] === 'administrative'))
+            ->values()
+            ->toArray();
         $this->osmSearchResultsState = $responses[1]->json();
         $this->osmSearchResultsCountry = $responses[2]->json();
     }
@@ -73,6 +81,8 @@ class StandaloneHelperView extends Component
 
     public function selectItem($index, bool $isState = false, $isCountry = false): void
     {
+        $this->water = false;
+        $this->selectedItemWater = null;
         match (true) {
             $isState => $this->selectedItem = $this->osmSearchResultsState[$index],
             $isCountry => $this->selectedItem = $this->osmSearchResultsCountry[$index],
@@ -126,6 +136,26 @@ class StandaloneHelperView extends Component
         } catch (\Exception $e) {
             $this->notification()
                  ->error('Error', $e->getMessage());
+        }
+    }
+
+    public function updatedWater($value)
+    {
+        if ($value) {
+            $response = Http::acceptJson()
+                            ->asForm()
+                            ->post('https://osm-boundaries.com/Ajax/GetBoundary', [
+                                'db'          => 'osm20221205',
+                                'waterOrLand' => 'water',
+                                'osmId'       => '-'.$this->selectedItem['osm_id'],
+                            ]);
+            if ($response->json()) {
+                $this->selectedItemWater = $response->json();
+                $this->emit('geoJsonUpdated');
+            } else {
+                $this->notification()
+                     ->warning('Warning', 'No water boundaries found');
+            }
         }
     }
 

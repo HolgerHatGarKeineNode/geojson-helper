@@ -44,7 +44,7 @@
                                 <code class="w-full">
                                     <div wire:key="osmItemCity_{{ $loop->index }}" class="cursor-pointer underline"
                                          wire:click="selectItem({{ $loop->index }})">
-                                        {{ $item['display_name'] }}
+                                        {{ $item['display_name'] }} [{{ $item['type'] }}]
                                     </div>
                                 </code>
                             @endforeach
@@ -98,9 +98,12 @@
         @if($selectedItem)
             <div class="bg-white shadow sm:rounded-lg">
                 <div class="px-4 py-5 sm:p-6">
-                    <h3 class="text-lg font-medium leading-6 text-green-800">
-                        geojson created
-                    </h3>
+                    <div class="flex items-center space-x-4">
+                        <h3 class="text-lg font-medium leading-6 text-green-800">
+                            geojson created
+                        </h3>
+                        <x-toggle lg label="fetch water boundaries" wire:model="water"/>
+                    </div>
                     <div class="mt-2 max-w-xl text-sm text-gray-500">
                         <div class="flex flex-col space-y-2">
                             <h1>
@@ -123,7 +126,8 @@
                                         @php
                                             $btnClass = $loop->first ? $btnClassLeft : ($loop->last ? $btnClassRight : $btnClassCenter);
                                         @endphp
-                                        <button wire:key="percentage_{{ $loop->index }}" type="button" wire:click="setPercentage({{ $percentage }})"
+                                        <button wire:key="percentage_{{ $loop->index }}" type="button"
+                                                wire:click="setPercentage({{ $percentage }})"
                                                 class="{{ $btnClass }} {{ $currentPercentage === $percentage ? $currentClass : ''}}">
                                             {{ $percentage }}%
                                         </button>
@@ -174,7 +178,8 @@
                         </div>
                         <div>
                             <h3 class="text-lg font-medium leading-6 text-blue-500">Simplified geojson</h3>
-                            <div class="mt-2 text-sm text-gray-500">@php
+                            <div class="mt-2 text-sm text-gray-500">
+                                @php
                                     $jsonEncodedSimplifiedGeoJson = json_encode($model->simplified_geojson, JSON_THROW_ON_ERROR);
                                 @endphp
                                 <div class="flex flex-col space-y-2 w-full">
@@ -193,6 +198,30 @@
                                 </div>
                             </div>
                         </div>
+                        @if($selectedItemWater)
+                            <div class="cols-span-2">
+                                <h3 class="text-lg font-medium leading-6 text-[#FF0084]">Water geojson</h3>
+                                <div class="mt-2 text-sm text-gray-500">
+                                    @php
+                                        $jsonEncodedGeoJsonWater = json_encode($selectedItemWater, JSON_THROW_ON_ERROR);
+                                    @endphp
+                                    <div class="flex flex-col space-y-2 w-full">
+                                <pre
+                                    class="overflow-x-auto py-3 text-[#FF0084]">{{ $jsonEncodedGeoJsonWater }}</pre>
+                                        <div>
+                                            <x-button
+                                                x-data="{
+                                                textToCopy: '{{ $jsonEncodedGeoJsonWater }}',
+                                            }"
+                                                @click.prevent="window.navigator.clipboard.writeText(textToCopy);window.$wireui.notify({title:'{{ __('Copied!') }}',icon:'success'});"
+                                                lg pink>
+                                                Copy to clipboard
+                                            </x-button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
                     </div>
 
                     <div class="px-4 py-5 sm:p-6 flex flex-col space-y-4">
@@ -206,6 +235,7 @@
                                      x-data="{
                                             geojson: @entangle('selectedItem.geojson'),
                                             simplifiedGeojson: @entangle('model.simplified_geojson'),
+                                            geojsonWater: @entangle('selectedItemWater'),
                                             init() {
                                                 const map = L.map($refs.map)
                                                 .setView([0, 0], 13);
@@ -237,7 +267,12 @@
                                                         'type': 'Feature',
                                                         'geometry': this.simplifiedGeojson
                                                     };
+                                                    const geojsonWaterFeature = {
+                                                        'type': 'Feature',
+                                                        'geometry': this.geojsonWater
+                                                    };
                                                     L.geoJson(geojsonFeature, {style:{color:'#FFA500',fillColor:'#FFA500',fillOpacity:0.3}}).addTo(map);
+                                                    L.geoJson(geojsonWaterFeature, {style:{color:'#FF0084',fillColor:'#FF0084',fillOpacity:0.2}}).addTo(map);
                                                     let simplifiedGeoJSON = L.geoJson(simplifiedGeojsonFeature, {style:{fillOpacity:0.5}}).addTo(map);
                                                     map.fitBounds(simplifiedGeoJSON.getBounds(),{padding: [50,50]});
                                                 });
