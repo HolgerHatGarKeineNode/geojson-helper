@@ -53,10 +53,15 @@ class StandaloneHelperView extends Component
                  ->get(
                      'https://nominatim.openstreetmap.org/search?state='.$this->search.'&format=json&polygon_geojson=1&polygon_threshold=0.001'
                  ),
+            $pool->acceptJson()
+                 ->get(
+                     'https://nominatim.openstreetmap.org/search?country='.$this->search.'&format=json&polygon_geojson=1&polygon_threshold=0.01'
+                 ),
         ]);
 
         $this->osmSearchResultsCity = $responses[0]->json();
         $this->osmSearchResultsState = $responses[1]->json();
+        $this->osmSearchResultsCountry = $responses[2]->json();
     }
 
     public function submit(): void
