@@ -4,7 +4,7 @@ import laravel, { refreshPaths } from "laravel-vite-plugin";
 export default defineConfig({
     server: {
         watch: {
-            ignored: ['**/storage'],
+            ignored: ["**/storage"],
         },
     },
     plugins: [
