@@ -2,7 +2,7 @@
     <div class="flex max-w-none flex-col space-y-4 text-black">
         <div class="bg-white shadow sm:rounded-lg">
             <div class="px-4 py-5 sm:p-6">
-                <h3 class="text-lg font-medium leading-6 text-gray-900">Search for a city or state</h3>
+                <h3 class="text-lg font-medium leading-6 text-gray-900">Search for an area</h3>
                 <div class="mt-2 text-sm text-gray-500">
 
                     <form wire:submit.prevent="submit">
@@ -14,7 +14,7 @@
                                 <div>
                                     @if (!$model?->simplified_geojson && $search)
                                         <x-badge lg positive class="sm:whitespace-nowrap">
-                                            Now select the appropriate place below so that a geojson can be built.
+                                            Now select the appropriate place below so that a GeoJSON can be built.
                                         </x-badge>
                                     @endif
                                 </div>
@@ -100,9 +100,9 @@
                 <div class="px-4 py-5 sm:p-6">
                     <div class="flex items-center space-x-4">
                         <h3 class="text-lg font-medium leading-6 text-green-800">
-                            geojson created
+                            GeoJSON created
                         </h3>
-                        <x-toggle lg label="fetch water boundaries from https://osm-boundaries.com"
+                        <x-toggle lg label="Fetch water boundaries from https://osm-boundaries.com"
                             wire:model="water" />
                     </div>
                     <div class="mt-2 max-w-xl text-sm text-gray-500">
@@ -115,7 +115,7 @@
                                 [points:{{ $currentPoints }}]
                             </h1>
                             <h1 class="py-2">
-                                smaller percentage means fewer points
+                                (smaller percentage means fewer points - aim for no more than 150)
                             </h1>
                             <div class="flex hidden space-x-2 sm:block">
                                 @php
@@ -153,7 +153,7 @@
                 <div class="bg-white shadow sm:rounded-lg">
                     <div class="grid grid-cols-1 gap-4 px-4 py-5 sm:grid-cols-2 sm:p-6">
                         <div>
-                            <h3 class="text-lg font-medium leading-6 text-[#FFA500]">OSM geojson</h3>
+                            <h3 class="text-lg font-medium leading-6 text-[#FFA500]">OSM GeoJSON</h3>
                             <div class="mt-2 text-sm text-gray-500">
                                 @php
                                     $jsonEncodedSelectedItem = json_encode($selectedItem['geojson'], JSON_THROW_ON_ERROR);
@@ -174,7 +174,7 @@
                             </div>
                         </div>
                         <div>
-                            <h3 class="text-lg font-medium leading-6 text-blue-500">Simplified geojson</h3>
+                            <h3 class="text-lg font-medium leading-6 text-blue-500">Simplified GeoJSON</h3>
                             <div class="mt-2 text-sm text-gray-500">
                                 @php
                                     $jsonEncodedSimplifiedGeoJson = json_encode($model->simplified_geojson, JSON_THROW_ON_ERROR);
@@ -195,7 +195,7 @@
                         </div>
                         @if ($selectedItemWater)
                             <div class="cols-span-2">
-                                <h3 class="text-lg font-medium leading-6 text-[#FF0084]">Water geojson</h3>
+                                <h3 class="text-lg font-medium leading-6 text-[#FF0084]">Water GeoJSON</h3>
                                 <div class="mt-2 text-sm text-gray-500">
                                     @php
                                         $jsonEncodedGeoJsonWater = json_encode($selectedItemWater, JSON_THROW_ON_ERROR);
@@ -221,7 +221,7 @@
                         <div class="w-full">
                             <div>
                                 <h1 class="font-bold">
-                                    geojson preview
+                                    GeoJSON preview
                                 </h1>
                                 <div wire:ignore class="my-4" x-data="{
                                     geojson: @entangle('selectedItem.geojson'),
@@ -289,7 +289,7 @@
         </div>
         <div>
             @if ($search)
-                <h1>Wikipedia Search</h1>
+                <h1>Wikipedia Search <span class='text-sm text-gray-500'>(for population data)</span></h1>
                 <div class="flex space-x-2">
                     <a target="_blank" class="text-amber-500 underline"
                         href="https://en.wikipedia.org/wiki/{{ urlencode($search) }}">Wikipedia EN:
