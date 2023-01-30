@@ -1,6 +1,6 @@
 <div class="w-full p-0 lg:p-6" wire:loading.class="opacity-50 pointer-events-none cursor-not-allowed">
     <div class="flex max-w-none flex-col space-y-4 text-black">
-        <div class="bg-white shadow rounded-lg">
+        <div class="rounded-lg bg-white shadow">
             <div class="px-4 py-5 lg:p-6">
                 <h3 class="text-lg font-medium leading-6 text-gray-900">Search for an area</h3>
                 <div class="mt-2 text-sm text-gray-500">
@@ -34,7 +34,7 @@
 
         <div class="grid grid-cols-1 gap-2 lg:grid-cols-3">
 
-            <div class="bg-white shadow rounded-lg">
+            <div class="rounded-lg bg-white shadow">
                 <div class="px-4 py-5 lg:p-6">
                     <h3 class="text-lg font-medium leading-6 text-gray-900">Search city: {{ $search }}</h3>
                     <div class="mt-2 text-sm text-gray-500">
@@ -54,7 +54,7 @@
                 </div>
             </div>
 
-            <div class="bg-white shadow rounded-lg">
+            <div class="rounded-lg bg-white shadow">
                 <div class="px-4 py-5 lg:p-6">
                     <h3 class="text-lg font-medium leading-6 text-gray-900">Search state: {{ $search }}</h3>
                     <div class="mt-2 text-sm text-gray-500">
@@ -74,7 +74,7 @@
                 </div>
             </div>
 
-            <div class="bg-white shadow rounded-lg">
+            <div class="rounded-lg bg-white shadow">
                 <div class="px-4 py-5 lg:p-6">
                     <h3 class="text-lg font-medium leading-6 text-gray-900">Search country: {{ $search }}</h3>
                     <div class="mt-2 text-sm text-gray-500">
@@ -96,7 +96,7 @@
 
         </div>
         @if ($selectedItem)
-            <div class="bg-white shadow rounded-lg">
+            <div class="rounded-lg bg-white shadow">
                 <div class="px-4 py-5 lg:p-6">
                     <div class="flex items-center space-x-4">
                         <h3 class="text-lg font-medium leading-6 text-green-800">
@@ -150,7 +150,7 @@
 
         <div>
             @if ($model?->simplified_geojson)
-                <div class="bg-white shadow rounded-lg">
+                <div class="rounded-lg bg-white shadow">
                     <div class="grid grid-cols-1 gap-4 px-4 py-5 lg:grid-cols-2 lg:p-6">
                         <div>
                             <h3 class="text-lg font-medium leading-6 text-[#FFA500]">OSM GeoJSON</h3>
@@ -230,9 +230,9 @@
                                     init() {
                                         const map = L.map($refs.map)
                                             .setView([0, 0], 13);
-
+                                
                                         L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png?{foo}', { foo: 'bar', attribution: '&copy; <a href=\'https://www.openstreetmap.org/copyright\'>OpenStreetMap</a> contributors' }).addTo(map);
-
+                                
                                         const geojsonFeature = {
                                             'type': 'Feature',
                                             'geometry': this.geojson
@@ -244,7 +244,7 @@
                                         L.geoJson(geojsonFeature, { style: { color: '#FFA500', fillColor: '#FFA500', fillOpacity: 0.3 } }).addTo(map);
                                         let simplifiedGeoJSON = L.geoJson(simplifiedGeojsonFeature, { style: { fillOpacity: 0.5 } }).addTo(map);
                                         map.fitBounds(simplifiedGeoJSON.getBounds(), { padding: [50, 50] });
-
+                                
                                         $wire.on('geoJsonUpdated', () => {
                                             map.eachLayer((layer) => {
                                                 layer.remove();
@@ -278,7 +278,7 @@
             @endif
         </div>
         @if ($model?->osm_relation)
-            <div class="flex flex-col bg-white px-4 py-5 shadow rounded-lg lg:p-6">
+            <div class="flex flex-col rounded-lg bg-white px-4 py-5 shadow lg:p-6">
                 <code>
                     osm_id: {{ $model->osm_relation['osm_id'] }}
                 </code>
@@ -288,7 +288,7 @@
             </div>
         @endif
         @if ($search)
-            <div class='bg-white px-4 py-5 shadow rounded-lg lg:p-6'>
+            <div class='rounded-lg bg-white px-4 py-5 shadow lg:p-6'>
                 <h1>Wikipedia search <span class='text-sm text-gray-500'>(for population data)</span></h1>
                 <div class="flex space-x-2">
                     <a target="_blank" class="text-amber-500 underline"
