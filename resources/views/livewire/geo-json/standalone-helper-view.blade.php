@@ -1,19 +1,19 @@
-<div class="w-full p-0 sm:p-6" wire:loading.class="opacity-50 pointer-events-none cursor-not-allowed">
+<div class="w-full p-0 lg:p-6" wire:loading.class="opacity-50 pointer-events-none cursor-not-allowed">
     <div class="flex max-w-none flex-col space-y-4 text-black">
-        <div class="bg-white shadow sm:rounded-lg">
-            <div class="px-4 py-5 sm:p-6">
+        <div class="bg-white shadow rounded-lg">
+            <div class="px-4 py-5 lg:p-6">
                 <h3 class="text-lg font-medium leading-6 text-gray-900">Search for an area</h3>
                 <div class="mt-2 text-sm text-gray-500">
 
                     <form wire:submit.prevent="submit">
-                        <div class="flex flex-col items-end space-y-2 sm:flex-row sm:space-y-0 sm:space-x-2">
+                        <div class="flex flex-col space-y-2 lg:flex-row lg:space-y-0 lg:space-x-2">
 
                             @if (!$model?->simplified_geojson)
                                 <x-input wire:model.defer="search" />
                                 <x-button type="submit">Search</x-button>
                                 <div>
                                     @if (!$model?->simplified_geojson && $search)
-                                        <x-badge lg positive class="sm:whitespace-nowrap">
+                                        <x-badge lg positive class="md:h-[38px] lg:whitespace-nowrap">
                                             Now select the appropriate place below so that a GeoJSON can be built.
                                         </x-badge>
                                     @endif
@@ -32,12 +32,12 @@
             </div>
         </div>
 
-        <div class="grid grid-cols-1 gap-2 sm:grid-cols-3">
+        <div class="grid grid-cols-1 gap-2 lg:grid-cols-3">
 
-            <div class="bg-white shadow sm:rounded-lg">
-                <div class="px-4 py-5 sm:p-6">
+            <div class="bg-white shadow rounded-lg">
+                <div class="px-4 py-5 lg:p-6">
                     <h3 class="text-lg font-medium leading-6 text-gray-900">Search city: {{ $search }}</h3>
-                    <div class="mt-2 max-w-xl text-sm text-gray-500">
+                    <div class="mt-2 text-sm text-gray-500">
 
                         <div class="flex max-h-[200px] flex-col space-y-2 overflow-y-scroll">
                             @foreach ($osmSearchResultsCity as $item)
@@ -54,10 +54,10 @@
                 </div>
             </div>
 
-            <div class="bg-white shadow sm:rounded-lg">
-                <div class="px-4 py-5 sm:p-6">
+            <div class="bg-white shadow rounded-lg">
+                <div class="px-4 py-5 lg:p-6">
                     <h3 class="text-lg font-medium leading-6 text-gray-900">Search state: {{ $search }}</h3>
-                    <div class="mt-2 max-w-xl text-sm text-gray-500">
+                    <div class="mt-2 text-sm text-gray-500">
 
                         <div class="flex max-h-[200px] flex-col space-y-2 overflow-y-scroll">
                             @foreach ($osmSearchResultsState as $item)
@@ -74,10 +74,10 @@
                 </div>
             </div>
 
-            <div class="bg-white shadow sm:rounded-lg">
-                <div class="px-4 py-5 sm:p-6">
+            <div class="bg-white shadow rounded-lg">
+                <div class="px-4 py-5 lg:p-6">
                     <h3 class="text-lg font-medium leading-6 text-gray-900">Search country: {{ $search }}</h3>
-                    <div class="mt-2 max-w-xl text-sm text-gray-500">
+                    <div class="mt-2 text-sm text-gray-500">
 
                         <div class="flex max-h-[200px] flex-col space-y-2 overflow-y-scroll">
                             @foreach ($osmSearchResultsCountry as $item)
@@ -96,8 +96,8 @@
 
         </div>
         @if ($selectedItem)
-            <div class="bg-white shadow sm:rounded-lg">
-                <div class="px-4 py-5 sm:p-6">
+            <div class="bg-white shadow rounded-lg">
+                <div class="px-4 py-5 lg:p-6">
                     <div class="flex items-center space-x-4">
                         <h3 class="text-lg font-medium leading-6 text-green-800">
                             GeoJSON created
@@ -105,7 +105,7 @@
                         <x-toggle lg label="Fetch water boundaries from https://osm-boundaries.com"
                             wire:model="water" />
                     </div>
-                    <div class="mt-2 max-w-xl text-sm text-gray-500">
+                    <div class="mt-2 text-sm text-gray-500">
                         <div class="flex flex-col space-y-2">
                             @php
                                 $currentPoints = is_array($model->simplified_geojson['coordinates'][0]) ? count($model->simplified_geojson['coordinates'][0] ?? []) : 0;
@@ -117,7 +117,7 @@
                             <h1 class="py-2">
                                 (smaller percentage means fewer points - aim for no more than 150)
                             </h1>
-                            <div class="flex hidden space-x-2 sm:block">
+                            <div class="flex hidden space-x-2 overflow-auto lg:block">
                                 @php
                                     $btnClassLeft = 'relative inline-flex items-center rounded-l-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-amber-400 focus:z-10 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500';
                                     $btnClassRight = 'relative -ml-px inline-flex items-center rounded-r-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-amber-400 focus:z-10 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500';
@@ -137,7 +137,7 @@
                                     @endforeach
                                 </div>
                             </div>
-                            <div class="block sm:hidden">
+                            <div class="block lg:hidden">
                                 <x-native-select label="Select percentage" placeholder="Select percentage"
                                     :options="$percentages" wire:model="currentPercentage" />
                             </div>
@@ -150,8 +150,8 @@
 
         <div>
             @if ($model?->simplified_geojson)
-                <div class="bg-white shadow sm:rounded-lg">
-                    <div class="grid grid-cols-1 gap-4 px-4 py-5 sm:grid-cols-2 sm:p-6">
+                <div class="bg-white shadow rounded-lg">
+                    <div class="grid grid-cols-1 gap-4 px-4 py-5 lg:grid-cols-2 lg:p-6">
                         <div>
                             <h3 class="text-lg font-medium leading-6 text-[#FFA500]">OSM GeoJSON</h3>
                             <div class="mt-2 text-sm text-gray-500">
@@ -217,7 +217,7 @@
                         @endif
                     </div>
 
-                    <div class="flex flex-col space-y-4 px-4 py-5 sm:p-6">
+                    <div class="flex flex-col space-y-4 px-4 py-5 lg:p-6">
                         <div class="w-full">
                             <div>
                                 <h1 class="font-bold">
@@ -269,7 +269,7 @@
                                         });
                                     }
                                 }">
-                                    <div x-ref="map" style="height: 50vh;"></div>
+                                    <div id='map' x-ref="map" style="height: 50vh;"></div>
                                 </div>
                             </div>
                         </div>
@@ -277,19 +277,19 @@
                 </div>
             @endif
         </div>
-        <div class="flex flex-col">
-            @if ($model?->osm_relation)
+        @if ($model?->osm_relation)
+            <div class="flex flex-col bg-white px-4 py-5 shadow rounded-lg lg:p-6">
                 <code>
                     osm_id: {{ $model->osm_relation['osm_id'] }}
                 </code>
                 <code>
                     display_name: {{ $model->osm_relation['display_name'] }}
                 </code>
-            @endif
-        </div>
-        <div>
-            @if ($search)
-                <h1>Wikipedia Search <span class='text-sm text-gray-500'>(for population data)</span></h1>
+            </div>
+        @endif
+        @if ($search)
+            <div class='bg-white px-4 py-5 shadow rounded-lg lg:p-6'>
+                <h1>Wikipedia search <span class='text-sm text-gray-500'>(for population data)</span></h1>
                 <div class="flex space-x-2">
                     <a target="_blank" class="text-amber-500 underline"
                         href="https://en.wikipedia.org/wiki/{{ urlencode($search) }}">Wikipedia EN:
@@ -298,7 +298,13 @@
                         href="https://de.wikipedia.org/wiki/{{ urlencode($search) }}">Wikipedia DE:
                         {{ $search }}</a>
                 </div>
-            @endif
-        </div>
+            </div>
+        @endif
     </div>
 </div>
+
+<style>
+    #map svg {
+        display: inline;
+    }
+</style>
