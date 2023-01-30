@@ -9,7 +9,7 @@
                         <div class="flex flex-col space-y-2 lg:flex-row lg:space-y-0 lg:space-x-2">
 
                             @if (!$model?->simplified_geojson)
-                                <x-input wire:model.defer="search"/>
+                                <x-input wire:model.defer="search" />
                                 <x-button type="submit">Search</x-button>
                                 <div>
                                     @if (!$model?->simplified_geojson && $search)
@@ -42,8 +42,7 @@
                         <div class="flex max-h-[200px] flex-col space-y-2 overflow-y-scroll">
                             @foreach ($osmSearchResultsCity as $item)
                                 <code wire:key="osmItemCity_{{ $loop->index }}" class="w-full">
-                                    <div class="cursor-pointer underline"
-                                         wire:click="selectItem({{ $loop->index }})">
+                                    <div class="cursor-pointer underline" wire:click="selectItem({{ $loop->index }})">
                                         {{ $item['display_name'] }} [{{ $item['type'] }}
                                         with {{ count($item['geojson']['coordinates'], COUNT_RECURSIVE) }} points]
                                     </div>
@@ -64,7 +63,7 @@
                             @foreach ($osmSearchResultsState as $item)
                                 <code wire:key="osmItemState_{{ $loop->index }}" class="w-full">
                                     <div class="cursor-pointer underline"
-                                         wire:click="selectItem({{ $loop->index }}, true)">
+                                        wire:click="selectItem({{ $loop->index }}, true)">
                                         {{ $item['display_name'] }}
                                         [with {{ count($item['geojson']['coordinates'], COUNT_RECURSIVE) }} points]
                                     </div>
@@ -85,7 +84,7 @@
                             @foreach ($osmSearchResultsCountry as $item)
                                 <code wire:key="osmItemCountry_{{ $loop->index }}" class="w-full">
                                     <div class="cursor-pointer underline"
-                                         wire:click="selectItem({{ $loop->index }}, false, true)">
+                                        wire:click="selectItem({{ $loop->index }}, false, true)">
                                         {{ $item['display_name'] }}
                                         [with {{ count($item['geojson']['coordinates'], COUNT_RECURSIVE) }} points]
                                     </div>
@@ -133,8 +132,8 @@
                                             $btnClass = $loop->first ? $btnClassLeft : ($loop->last ? $btnClassRight : $btnClassCenter);
                                         @endphp
                                         <button wire:key="percentage_{{ $loop->index }}" type="button"
-                                                wire:click="setPercentage({{ $percentage }})"
-                                                class="{{ $btnClass }} {{ $currentPercentage === $percentage ? $currentClass : '' }}">
+                                            wire:click="setPercentage({{ $percentage }})"
+                                            class="{{ $btnClass }} {{ $currentPercentage === $percentage ? $currentClass : '' }}">
                                             {{ $percentage }}%
                                         </button>
                                     @endforeach
@@ -142,7 +141,7 @@
                             </div>
                             <div class="block lg:hidden">
                                 <x-native-select label="Select percentage" placeholder="Select percentage"
-                                                 :options="$percentages" wire:model="currentPercentage"/>
+                                    :options="$percentages" wire:model="currentPercentage" />
                             </div>
                         </div>
 
@@ -163,14 +162,13 @@
                                 @endphp
 
                                 <div class="flex w-full flex-col space-y-2">
-                                    <pre
-                                        class="overflow-x-auto py-3 text-[#FFA500]">{{ $jsonEncodedSelectedItem }}</pre>
+                                    <pre class="overflow-x-auto py-3 text-[#FFA500]">{{ $jsonEncodedSelectedItem }}</pre>
                                     <div>
                                         <x-button x-data="{
                                             textToCopy: '{{ $jsonEncodedSelectedItem }}',
                                         }"
-                                                  @click.prevent="window.navigator.clipboard.writeText(textToCopy);window.$wireui.notify({title:'{{ __('Copied!') }}',icon:'success'});"
-                                                  lg amber>
+                                            @click.prevent="window.navigator.clipboard.writeText(textToCopy);window.$wireui.notify({title:'{{ __('Copied!') }}',icon:'success'});"
+                                            lg amber>
                                             Copy to clipboard
                                         </x-button>
                                     </div>
@@ -184,14 +182,13 @@
                                     $jsonEncodedSimplifiedGeoJson = json_encode($model->simplified_geojson, JSON_THROW_ON_ERROR);
                                 @endphp
                                 <div class="flex w-full flex-col space-y-2">
-                                    <pre
-                                        class="overflow-x-auto py-3 text-blue-500">{{ $jsonEncodedSimplifiedGeoJson }}</pre>
+                                    <pre class="overflow-x-auto py-3 text-blue-500">{{ $jsonEncodedSimplifiedGeoJson }}</pre>
                                     <div>
                                         <x-button x-data="{
                                             textToCopy: '{{ $jsonEncodedSimplifiedGeoJson }}',
                                         }"
-                                                  @click.prevent="window.navigator.clipboard.writeText(textToCopy);window.$wireui.notify({title:'{{ __('Copied!') }}',icon:'success'});"
-                                                  lg blue>
+                                            @click.prevent="window.navigator.clipboard.writeText(textToCopy);window.$wireui.notify({title:'{{ __('Copied!') }}',icon:'success'});"
+                                            lg blue>
                                             Copy to clipboard
                                         </x-button>
                                     </div>
@@ -206,14 +203,13 @@
                                         $jsonEncodedGeoJsonWater = json_encode($selectedItemWater, JSON_THROW_ON_ERROR);
                                     @endphp
                                     <div class="flex w-full flex-col space-y-2">
-                                        <pre
-                                            class="overflow-x-auto py-3 text-[#FF0084]">{{ $jsonEncodedGeoJsonWater }}</pre>
+                                        <pre class="overflow-x-auto py-3 text-[#FF0084]">{{ $jsonEncodedGeoJsonWater }}</pre>
                                         <div>
                                             <x-button x-data="{
                                                 textToCopy: '{{ $jsonEncodedGeoJsonWater }}',
                                             }"
-                                                      @click.prevent="window.navigator.clipboard.writeText(textToCopy);window.$wireui.notify({title:'{{ __('Copied!') }}',icon:'success'});"
-                                                      lg pink>
+                                                @click.prevent="window.navigator.clipboard.writeText(textToCopy);window.$wireui.notify({title:'{{ __('Copied!') }}',icon:'success'});"
+                                                lg pink>
                                                 Copy to clipboard
                                             </x-button>
                                         </div>
@@ -236,9 +232,9 @@
                                     init() {
                                         const map = L.map($refs.map)
                                             .setView([0, 0], 13);
-
+                                
                                         L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png?{foo}', { foo: 'bar', attribution: '&copy; <a href=\'https://www.openstreetmap.org/copyright\'>OpenStreetMap</a> contributors' }).addTo(map);
-
+                                
                                         const geojsonFeature = {
                                             'type': 'Feature',
                                             'geometry': this.geojson
@@ -250,7 +246,7 @@
                                         L.geoJson(geojsonFeature, { style: { color: '#FFA500', fillColor: '#FFA500', fillOpacity: 0.3 } }).addTo(map);
                                         let simplifiedGeoJSON = L.geoJson(simplifiedGeojsonFeature, { style: { fillOpacity: 0.5 } }).addTo(map);
                                         map.fitBounds(simplifiedGeoJSON.getBounds(), { padding: [50, 50] });
-
+                                
                                         $wire.on('geoJsonUpdated', () => {
                                             map.eachLayer((layer) => {
                                                 layer.remove();
@@ -275,7 +271,7 @@
                                         });
                                     }
                                 }">
-                                    <div id='map' x-ref="map" style="height: 50vh;"></div>
+                                    <div x-ref="map" style="height: 50vh;"></div>
                                 </div>
                             </div>
                         </div>
@@ -298,10 +294,10 @@
                 <h1>Wikipedia search <span class='text-sm text-gray-500'>(for population data)</span></h1>
                 <div class="flex space-x-2">
                     <a target="_blank" class="text-amber-500 underline"
-                       href="https://en.wikipedia.org/wiki/{{ urlencode($search) }}">Wikipedia EN:
+                        href="https://en.wikipedia.org/wiki/{{ urlencode($search) }}">Wikipedia EN:
                         {{ $search }}</a>
                     <a target="_blank" class="text-amber-500 underline"
-                       href="https://de.wikipedia.org/wiki/{{ urlencode($search) }}">Wikipedia DE:
+                        href="https://de.wikipedia.org/wiki/{{ urlencode($search) }}">Wikipedia DE:
                         {{ $search }}</a>
                 </div>
             </div>
@@ -310,7 +306,7 @@
 </div>
 
 <style>
-    #map svg {
+    .leaflet-attribution-flag {
         display: inline;
     }
 </style>

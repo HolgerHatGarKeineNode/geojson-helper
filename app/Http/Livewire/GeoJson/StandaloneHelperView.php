@@ -38,10 +38,10 @@ class StandaloneHelperView extends Component
     public function rules(): array
     {
         return [
-            'search'                   => 'required|string',
-            'currentPercentage'        => 'required|numeric',
+            'search' => 'required|string',
+            'currentPercentage' => 'required|numeric',
             'model.simplified_geojson' => 'nullable',
-            'water'                    => 'bool',
+            'water' => 'bool',
         ];
     }
 
@@ -53,7 +53,7 @@ class StandaloneHelperView extends Component
 
     private function getSearchResults(): void
     {
-        $responses = Http::pool(fn(Pool $pool) => [
+        $responses = Http::pool(fn (Pool $pool) => [
             $pool->acceptJson()
                  ->get(
                      'https://nominatim.openstreetmap.org/search?q='.$this->search.'&format=json&polygon_geojson=1'
@@ -69,7 +69,7 @@ class StandaloneHelperView extends Component
         ]);
 
         $this->osmSearchResultsCity = collect($responses[0]->json())
-            ->filter(fn($item
+            ->filter(fn ($item
             ) => (
                      $item['geojson']['type'] === 'Polygon'
                      || $item['geojson']['type'] === 'MultiPolygon'
@@ -83,11 +83,11 @@ class StandaloneHelperView extends Component
             ->values()
             ->toArray();
         $this->osmSearchResultsState = collect($responses[1]->json())
-            ->filter(fn($item) => count($item['geojson']['coordinates'], COUNT_RECURSIVE) < 100000)
+            ->filter(fn ($item) => count($item['geojson']['coordinates'], COUNT_RECURSIVE) < 100000)
             ->values()
             ->toArray();
         $this->osmSearchResultsCountry = collect($responses[2]->json())
-            ->filter(fn($item) => count($item['geojson']['coordinates'], COUNT_RECURSIVE) < 100000)
+            ->filter(fn ($item) => count($item['geojson']['coordinates'], COUNT_RECURSIVE) < 100000)
             ->values()
             ->toArray();
     }
@@ -164,14 +164,15 @@ class StandaloneHelperView extends Component
             $response = Http::acceptJson()
                             ->asForm()
                             ->post('https://osm-boundaries.com/Ajax/GetBoundary', [
-                                'db'          => 'osm20221205',
+                                'db' => 'osm20221205',
                                 'waterOrLand' => 'water',
-                                'osmId'       => '-'.$this->selectedItem['osm_id'],
+                                'osmId' => '-'.$this->selectedItem['osm_id'],
                             ]);
             if ($response->json()) {
                 if (count($response->json()['coordinates'], COUNT_RECURSIVE) > 100000) {
                     $this->notification()
                          ->warning('Warning', 'Water boundaries are too big');
+
                     return;
                 }
 
