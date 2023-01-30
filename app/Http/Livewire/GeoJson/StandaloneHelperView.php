@@ -32,6 +32,7 @@ class StandaloneHelperView extends Component
     {
         return [
             'search'                   => 'required|string',
+            'currentPercentage'        => 'required|numeric',
             'model.simplified_geojson' => 'nullable',
         ];
     }
@@ -126,6 +127,11 @@ class StandaloneHelperView extends Component
             $this->notification()
                  ->error('Error', $e->getMessage());
         }
+    }
+
+    public function updatedCurrentPercentage($value)
+    {
+        $this->executeMapshaper((float) $value);
     }
 
     public function setPercentage($percent): void

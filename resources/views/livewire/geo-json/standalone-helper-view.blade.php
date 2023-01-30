@@ -1,4 +1,4 @@
-<div class="p-6 w-full" wire:loading.class="opacity-50 pointer-events-none cursor-not-allowed">
+<div class="p-0 sm:p-6 w-full" wire:loading.class="opacity-50 pointer-events-none cursor-not-allowed">
     <div class="max-w-none text-black flex flex-col space-y-4">
         <div class="bg-white shadow sm:rounded-lg">
             <div class="px-4 py-5 sm:p-6">
@@ -6,14 +6,14 @@
                 <div class="mt-2 text-sm text-gray-500">
 
                     <form wire:submit.prevent="submit">
-                        <div class="flex space-x-2 items-end">
+                        <div class="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2 items-end">
 
                             @if(!$model?->simplified_geojson)
                                 <x-input wire:model.defer="search"/>
                                 <x-button type="submit">Search</x-button>
                                 <div>
                                     @if(!$model?->simplified_geojson && $search)
-                                        <x-badge lg positive class="whitespace-nowrap">
+                                        <x-badge lg positive class="sm:whitespace-nowrap">
                                             Now select the appropriate place below so that a geojson can be built.
                                         </x-badge>
                                     @endif
@@ -32,7 +32,7 @@
             </div>
         </div>
 
-        <div class="grid grid-cols-3 gap-2">
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
 
             <div class="bg-white shadow sm:rounded-lg">
                 <div class="px-4 py-5 sm:p-6">
@@ -111,7 +111,7 @@
                             <h1 class="py-2">
                                 smaller percentage means fewer points
                             </h1>
-                            <div class="flex space-x-2">
+                            <div class="hidden sm:block flex space-x-2">
                                 @php
                                     $btnClassLeft = 'relative inline-flex items-center rounded-l-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-amber-400 focus:z-10 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500';
                                     $btnClassRight = 'relative -ml-px inline-flex items-center rounded-r-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-amber-400 focus:z-10 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500';
@@ -130,6 +130,14 @@
                                     @endforeach
                                 </div>
                             </div>
+                            <div class="block sm:hidden">
+                                <x-native-select
+                                    label="Select percentage"
+                                    placeholder="Select percentage"
+                                    :options="$percentages"
+                                    wire:model="currentPercentage"
+                                />
+                            </div>
                         </div>
 
                     </div>
@@ -140,7 +148,7 @@
         <div>
             @if($model?->simplified_geojson)
                 <div class="bg-white shadow sm:rounded-lg">
-                    <div class="px-4 py-5 sm:p-6 grid grid-cols-2 gap-4">
+                    <div class="px-4 py-5 sm:p-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                             <h3 class="text-lg font-medium leading-6 text-gray-900">OSM geojson</h3>
                             <div class="mt-2 text-sm text-gray-500">
@@ -207,7 +215,6 @@
                                                     'type': 'Feature',
                                                     'geometry': this.geojson
                                                 };
-                                                console.log(geojsonFeature);
                                                 L.geoJSON(geojsonFeature).addTo(map);
                                                 let geoJSON = L.geoJson(geojsonFeature).addTo(map);
                                                 map.fitBounds(geoJSON.getBounds());
@@ -248,7 +255,6 @@
                                                     'type': 'Feature',
                                                     'geometry': this.simplifiedGeojson
                                                 };
-                                                console.log(geojsonFeature);
                                                 L.geoJSON(geojsonFeature).addTo(map);
                                                 let geoJSON = L.geoJson(geojsonFeature).addTo(map);
                                                 map.fitBounds(geoJSON.getBounds());
@@ -265,6 +271,7 @@
                                                     L.geoJSON(geojsonFeature).addTo(map);
                                                     let geoJSON = L.geoJson(geojsonFeature).addTo(map);
                                                     map.fitBounds(geoJSON.getBounds());
+                                                    console.log('simplifiedGeojson updated', this.simplifiedGeojson);
                                                 });
                                             }
                                         }">

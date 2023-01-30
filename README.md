@@ -19,7 +19,7 @@ composer install
 ./vendor/bin/sail up
 ```
 
-Install the dependencies with yarn and build the frontend.
+Start the frontend.
 
 ```bash
 ./vendor/bin/sail yarn install
