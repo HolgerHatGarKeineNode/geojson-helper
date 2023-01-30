@@ -77,6 +77,7 @@ class StandaloneHelperView extends Component
                  && (
                      $item['type'] === 'island'
                      || $item['type'] === 'administrative'
+                     || $item['type'] === 'city'
                  )
                  && count($item['geojson']['coordinates'], COUNT_RECURSIVE) < 100000
             )
