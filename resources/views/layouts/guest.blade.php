@@ -5,6 +5,17 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="keywords" content="geojson, open source, map, openstreetmap, polygon, relation, mapshaper, simplify" />
+    <meta name="author" content="HolgerHatGarKeineNode" />
+    <meta property="og:type" content="website" />
+    <meta name="description"
+        content="With this tool you can easily find OSM relations and create simplified geojson polygons." />
+    <meta property="og:image" content="https://geojson.easify.de/favicon.ico" />
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:title" content="GeoJSON Helper" />
+    <meta property="twitter:description"
+        content="With this tool you can easily find OSM relations and create simplified geojson polygons." />
+    <meta property="twitter:image" content="https://geojson.easify.de/favicon.ico" />
 
     <title>GeoJSON Helper</title>
 
