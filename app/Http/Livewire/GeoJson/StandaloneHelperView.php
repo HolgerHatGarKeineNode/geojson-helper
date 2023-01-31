@@ -17,11 +17,7 @@ class StandaloneHelperView extends Component
 
     public string $search = '';
 
-    public array $osmSearchResultsCity = [];
-
-    public array $osmSearchResultsState = [];
-
-    public array $osmSearchResultsCountry = [];
+    public array $osmSearchResults = [];
 
     public $selectedItem;
 
@@ -56,34 +52,19 @@ class StandaloneHelperView extends Component
         $responses = Http::pool(fn (Pool $pool) => [
             $pool->acceptJson()
                  ->get(
-                     'https://nominatim.openstreetmap.org/search?q='.$this->search.'&format=json&polygon_geojson=1'
-                 ),
-            $pool->acceptJson()
-                 ->get(
-                     'https://nominatim.openstreetmap.org/search?state='.$this->search.'&format=json&polygon_geojson=1&polygon_threshold=0.001'
-                 ),
-            $pool->acceptJson()
-                 ->get(
-                     'https://nominatim.openstreetmap.org/search?country='.$this->search.'&format=json&polygon_geojson=1&polygon_threshold=0.001'
+                     'https://nominatim.openstreetmap.org/search?q='.$this->search.'&format=json&polygon_geojson=1&polygon_threshold=0.001'
                  ),
         ]);
 
-        $this->osmSearchResultsCity = collect($responses[0]->json())
+        $this->osmSearchResults = collect($responses[0]->json())
             ->filter(fn ($item
             ) => (
                      $item['geojson']['type'] === 'Polygon'
                      || $item['geojson']['type'] === 'MultiPolygon'
                  )
+                 && $item['osm_id']
                  && count($item['geojson']['coordinates'], COUNT_RECURSIVE) < 100000
             )
-            ->values()
-            ->toArray();
-        $this->osmSearchResultsState = collect($responses[1]->json())
-            ->filter(fn ($item) => count($item['geojson']['coordinates'], COUNT_RECURSIVE) < 100000)
-            ->values()
-            ->toArray();
-        $this->osmSearchResultsCountry = collect($responses[2]->json())
-            ->filter(fn ($item) => count($item['geojson']['coordinates'], COUNT_RECURSIVE) < 100000)
             ->values()
             ->toArray();
     }
@@ -94,15 +75,11 @@ class StandaloneHelperView extends Component
         $this->getSearchResults();
     }
 
-    public function selectItem($index, bool $isState = false, $isCountry = false): void
+    public function selectItem($index): void
     {
         $this->water = false;
         $this->selectedItemWater = null;
-        match (true) {
-            $isState => $this->selectedItem = $this->osmSearchResultsState[$index],
-            $isCountry => $this->selectedItem = $this->osmSearchResultsCountry[$index],
-            default => $this->selectedItem = $this->osmSearchResultsCity[$index],
-        };
+        $this->selectedItem = $this->osmSearchResults[$index];
         $this->model->osm_relation = $this->selectedItem;
 
         $this->executeMapshaper(4);
@@ -111,7 +88,6 @@ class StandaloneHelperView extends Component
     private function executeMapshaper($percentage = 4): void
     {
         try {
-
             // put OSM geojson to storage
             Storage::disk('geo')
                    ->put('geojson_'.$this->selectedItem['osm_id'].'.json',
@@ -149,6 +125,7 @@ class StandaloneHelperView extends Component
             $this->emit('geoJsonUpdated');
 
         } catch (\Exception $e) {
+            throw $e;
             $this->notification()
                  ->error('Error', $e->getMessage());
         }
