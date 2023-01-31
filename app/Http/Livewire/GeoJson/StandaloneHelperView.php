@@ -204,7 +204,9 @@ class StandaloneHelperView extends Component
                 30,
                 40,
                 50,
+                60,
                 75,
+                80,
                 100,
             ])
                 ->reverse()
