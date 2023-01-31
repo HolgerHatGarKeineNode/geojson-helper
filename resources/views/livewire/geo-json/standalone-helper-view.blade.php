@@ -24,9 +24,9 @@
     </div>
     <div class="w-full p-0 lg:p-6" wire:loading.class="opacity-50 pointer-events-none cursor-not-allowed">
         <div class="flex max-w-none flex-col space-y-4 text-black">
-            <div class="rounded-lg bg-white shadow">
+            <div class="rounded-lg bg-white shadow dark:bg-gray-700">
 
-                <div class="grid grid-cols-1 dark:bg-gray-700 lg:grid-cols-2">
+                <div class="grid grid-cols-1 lg:grid-cols-2">
 
                     <div class="px-4 py-5 lg:p-6">
                         <h3 class="text-lg font-medium leading-6 text-gray-900 dark:text-gray-100">Search for an area
