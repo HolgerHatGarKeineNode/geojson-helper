@@ -6,17 +6,17 @@
                 }
             },
             darkMode() {
-                return window.localStorage.getItem('theme') === 'dark' ? 'switch to light mode' : 'switch to dark mode';
+                return window.localStorage.getItem('theme') === 'dark' ? 'light mode' : 'dark mode';
             },
             toggleDark() {
                 if (window.localStorage.getItem('theme') === 'dark') {
                     window.localStorage.setItem('theme', 'light');
                     document.body.classList.remove('dark');
-                    this.darkMode = 'switch to dark mode';
+                    this.darkMode = 'dark mode';
                 } else {
                     window.localStorage.setItem('theme', 'dark');
                     document.body.classList.add('dark');
-                    this.darkMode = 'switch to light mode';
+                    this.darkMode = 'light mode';
                 }
             }
     }">
@@ -26,10 +26,11 @@
         <div class="flex max-w-none flex-col space-y-4 text-black">
             <div class="rounded-lg bg-white shadow">
 
-                <div class="grid grid-cols-1 lg:grid-cols-2">
+                <div class="grid grid-cols-1 dark:bg-gray-700 lg:grid-cols-2">
 
                     <div class="px-4 py-5 lg:p-6">
-                        <h3 class="text-lg font-medium leading-6 text-gray-900">Search for an area</h3>
+                        <h3 class="text-lg font-medium leading-6 text-gray-900 dark:text-gray-100">Search for an area
+                        </h3>
                         <div class="mt-2 text-sm text-gray-500">
 
                             <form wire:submit.prevent="submit" class="space-y-2">
@@ -40,7 +41,7 @@
                                         <x-button type="submit">Search</x-button>
                                     @else
                                         <a href="/">
-                                            <x-badge gray class="whitespace-nowrap">
+                                            <x-badge gray class="whitespace-nowrap dark:bg-gray-200 dark:text-black">
                                                 Reset form
                                             </x-badge>
                                         </a>
@@ -59,7 +60,8 @@
                     </div>
                     <div class="px-4 py-5 lg:p-6">
                         @if ($search)
-                            <h3 class="text-lg font-medium leading-6 text-gray-900">Search: {{ $search }}</h3>
+                            <h3 class="text-lg font-medium leading-6 text-gray-900 dark:text-gray-100">Search:
+                                {{ $search }}</h3>
                         @endif
                         <div class="mt-2 text-sm text-gray-500">
 
@@ -70,12 +72,13 @@
                                         <ul role="list" class="-my-5 divide-y divide-gray-200">
 
                                             @foreach ($osmSearchResults as $item)
-                                                <li class="cursor-pointer py-4 px-2 hover:bg-amber-400"
+                                                <li class="cursor-pointer py-4 px-2 hover:bg-amber-400 dark:hover:bg-amber-800"
                                                     wire:key="osmItem_{{ $loop->index }}"
                                                     wire:click="selectItem({{ $loop->index }})">
                                                     <div class="flex items-center space-x-4">
                                                         <div class="min-w-0 flex-1">
-                                                            <p class="truncate text-sm font-medium text-gray-900">
+                                                            <p
+                                                                class="truncate text-sm font-medium text-gray-900 dark:text-gray-200">
                                                                 {{ $item['display_name'] }}</p>
                                                             <p class="truncate text-sm text-gray-500">
                                                                 <x-badge
@@ -101,25 +104,25 @@
                 </div>
             </div>
             @if ($selectedItem)
-                <div class="rounded-lg bg-white shadow">
+                <div class="rounded-lg bg-white shadow dark:bg-gray-700">
                     <div class="px-4 py-5 lg:p-6">
                         <div class="flex items-center space-x-4">
-                            <h3 class="text-lg font-medium leading-6 text-green-800">
+                            <h3 class="text-lg font-medium leading-6 text-green-800 dark:text-green-400">
                                 GeoJSON created
                             </h3>
                             <x-toggle lg label="Fetch water boundaries from https://osm-boundaries.com"
                                 wire:model="water" />
                         </div>
-                        <div class="mt-2 text-sm text-gray-500">
+                        <div class="mt-2 text-sm text-gray-500 dark:text-gray-200">
                             <div class="flex flex-col space-y-2">
                                 <h1 class="py-2">
                                     (smaller percentage means fewer points - aim for no more than 150)
                                 </h1>
                                 <div class="flex hidden space-x-2 overflow-auto lg:block">
                                     @php
-                                        $btnClassLeft = 'relative inline-flex items-center rounded-l-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-amber-400 focus:z-10 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500';
-                                        $btnClassRight = 'relative -ml-px inline-flex items-center rounded-r-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-amber-400 focus:z-10 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500';
-                                        $btnClassCenter = 'relative -ml-px inline-flex items-center border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-amber-400 focus:z-10 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500';
+                                        $btnClassLeft = 'relative inline-flex items-center rounded-l-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 dark:bg-gray-600 dark:hover:bg-amber-800 hover:bg-amber-400 focus:z-10 focus:border-amber-500 dark:focus:border-amber-700 focus:outline-none focus:ring-1 focus:ring-amber-500 dark:focus:ring-amber-700';
+                                        $btnClassRight = 'relative -ml-px inline-flex items-center rounded-r-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 dark:bg-gray-600 dark:hover:bg-amber-800 hover:bg-amber-400 focus:z-10 focus:border-amber-500 dark:focus:border-amber-700 focus:outline-none focus:ring-1 focus:ring-amber-500 dark:focus:ring-amber-700';
+                                        $btnClassCenter = 'relative -ml-px inline-flex items-center border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 dark:bg-gray-600 dark:hover:bg-amber-800 hover:bg-amber-400 focus:z-10 focus:border-amber-500 dark:focus:border-amber-700 focus:outline-none focus:ring-1 focus:ring-amber-500 dark:focus:ring-amber-700';
                                         $currentClass = 'bg-amber-500';
                                     @endphp
                                     <div class="isolate inline-flex rounded-md shadow-sm">
@@ -148,7 +151,7 @@
 
             <div>
                 @if ($model?->simplified_geojson)
-                    <div class="rounded-lg bg-white shadow">
+                    <div class="rounded-lg bg-white shadow dark:bg-gray-700">
                         <div class="grid grid-cols-1 gap-4 px-4 py-5 lg:grid-cols-2 lg:p-6">
                             <div>
                                 <h3 class="text-lg font-medium leading-6 text-[#FFA500]">OSM GeoJSON</h3>
@@ -218,7 +221,7 @@
                         <div class="flex flex-col space-y-4 px-4 py-5 lg:p-6">
                             <div class="w-full">
                                 <div>
-                                    <h1 class="font-bold">
+                                    <h1 class="font-bold dark:text-white">
                                         GeoJSON preview
                                     </h1>
                                     <div wire:ignore class="my-4" x-data="{
@@ -276,7 +279,8 @@
                 @endif
             </div>
             @if ($model?->osm_relation)
-                <div class="flex flex-col rounded-lg bg-white px-4 py-5 shadow lg:p-6">
+                <div
+                    class="flex flex-col rounded-lg bg-white px-4 py-5 shadow dark:bg-gray-700 dark:text-gray-100 lg:p-6">
                     <code>
                         osm_id: {{ $model->osm_relation['osm_id'] }}
                     </code>
@@ -286,8 +290,9 @@
                 </div>
             @endif
             @if ($search)
-                <div class='rounded-lg bg-white px-4 py-5 shadow lg:p-6'>
-                    <h1>Wikipedia search <span class='text-sm text-gray-500'>(for population data)</span></h1>
+                <div class='rounded-lg bg-white px-4 py-5 shadow dark:bg-gray-700 lg:p-6'>
+                    <h1 class='dark:text-gray-100'>Wikipedia search <span
+                            class='text-sm text-gray-500 dark:text-gray-400'>(for population data)</span></h1>
                     <div class="flex space-x-2">
                         <a target="_blank" class="text-amber-500 underline"
                             href="https://en.wikipedia.org/wiki/{{ urlencode($search) }}">Wikipedia EN:
