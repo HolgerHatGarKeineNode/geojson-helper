@@ -1,6 +1,7 @@
 {
     "private": true,
     "scripts": {
+        "serve": "concurrently --kill-others \"yarn dev\" \"php artisan serve\"",
         "dev": "vite",
         "build": "vite build",
         "format": "yarn prettier --write . && ./vendor/bin/pint"
@@ -11,11 +12,10 @@
         "@alpinejs/intersect": "^3.11.1",
         "@shufo/prettier-plugin-blade": "^1.8.6",
         "@tailwindcss/forms": "^0.5.2",
-        "@tailwindcss/line-clamp": "^0.4.2",
-        "@tailwindcss/typography": "^0.5.0",
         "alpinejs": "^3.0.6",
         "autoprefixer": "^10.4.7",
         "chokidar": "^3.5.3",
+        "concurrently": "^7.6.0",
         "laravel-vite-plugin": "^0.7.2",
         "postcss": "^8.4.14",
         "prettier": "^2.8.3",

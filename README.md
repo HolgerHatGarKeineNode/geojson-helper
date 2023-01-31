@@ -15,28 +15,21 @@ You can start the tool with Laravel Sail and Docker.
 
 -   PHP >= 8.0 ([Ubuntu](https://www.digitalocean.com/community/tutorials/how-to-install-php-8-1-and-set-up-a-local-development-environment-on-ubuntu-22-04), [Windows](https://php.tutorials24x7.com/blog/how-to-install-php-8-on-windows))
 -   Composer ([Website](https://getcomposer.org/download/))
--   Docker ([Website](https://docs.docker.com/get-docker/))
+- port 8000 free
 
 ### Starting the application
 
-Install the dependencies with composer and start the application with Laravel Sail.
+Install the dependencies with composer and start the dev server.
 
 ```bash
 composer install
 
-./vendor/bin/sail up
+yarn install
+
+yarn serve
 ```
 
-Start the frontend.
-
-```bash
-./vendor/bin/sail yarn install
-
-./vendor/bin/sail yarn run dev
-```
-
-In your terminal you will see the URL to the application. Open it in your browser and start using the
-tool. http://localhost/
+In your terminal you will see the URL to the application. Open it in your browser and start using the tool http://localhost:8000
 
 ## Security Vulnerabilities
 
