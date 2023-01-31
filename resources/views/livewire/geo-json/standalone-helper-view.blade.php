@@ -1,6 +1,9 @@
 <div>
     <div class="fixed top-1 right-1 sm:top-10 sm:right-10" x-data="{
         init() {
+                if (window.localStorage.getItem('theme') === null) {
+                    window.localStorage.setItem('theme', 'dark');
+                }
                 if (window.localStorage.getItem('theme') === 'dark') {
                     document.body.classList.add('dark');
                 }
@@ -127,7 +130,7 @@
                                         $btnClassLeft = 'relative inline-flex items-center rounded-l-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 dark:bg-gray-600 dark:hover:bg-amber-800 hover:bg-amber-400 focus:z-10 focus:border-amber-500 dark:focus:border-amber-700 focus:outline-none focus:ring-1 focus:ring-amber-500 dark:focus:ring-amber-700';
                                         $btnClassRight = 'relative -ml-px inline-flex items-center rounded-r-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 dark:bg-gray-600 dark:hover:bg-amber-800 hover:bg-amber-400 focus:z-10 focus:border-amber-500 dark:focus:border-amber-700 focus:outline-none focus:ring-1 focus:ring-amber-500 dark:focus:ring-amber-700';
                                         $btnClassCenter = 'relative -ml-px inline-flex items-center border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 dark:bg-gray-600 dark:hover:bg-amber-800 hover:bg-amber-400 focus:z-10 focus:border-amber-500 dark:focus:border-amber-700 focus:outline-none focus:ring-1 focus:ring-amber-500 dark:focus:ring-amber-700';
-                                        $currentClass = 'bg-amber-500';
+                                        $currentClass = 'bg-amber-500 dark:bg-amber-700 text-white dark:text-gray-900';
                                     @endphp
                                     <div class="isolate inline-flex rounded-md shadow-sm">
                                         @foreach ($percentages as $percentage)
