@@ -10,12 +10,12 @@
     <meta property="og:type" content="website" />
     <meta name="description"
         content="With this tool you can easily find OSM relations and create simplified geojson polygons." />
-    <meta property="og:image" content="https://geojson.easify.de/favicon.ico" />
+    <meta property="og:image" content="https://geojson.easify.de/images/screenshot-1.png" />
     <meta property="twitter:card" content="summary_large_image" />
     <meta property="twitter:title" content="GeoJSON Helper" />
     <meta property="twitter:description"
         content="With this tool you can easily find OSM relations and create simplified geojson polygons." />
-    <meta property="twitter:image" content="https://geojson.easify.de/favicon.ico" />
+    <meta property="twitter:image" content="https://geojson.easify.de/images/screenshot-1.png" />
 
     <title>GeoJSON Helper</title>
 
@@ -35,7 +35,7 @@
 <body class="font-sans text-gray-900 antialiased">
     <x-notifications z-index="z-50" blur="md" align="center" />
     <div
-        class="flex min-h-screen flex-col items-center bg-gray-100 pt-2 dark:bg-gray-900 sm:justify-center sm:pt-6 sm:pt-0">
+        class="flex min-h-screen flex-col items-center justify-center bg-gray-100 pt-2 dark:bg-gray-900 sm:pt-6 sm:pt-0">
         <div
             class="my-2 w-full max-w-screen-2xl bg-white px-1 py-4 shadow-md dark:bg-gray-800 sm:my-6 sm:rounded-lg sm:px-6">
             {{ $slot }}
