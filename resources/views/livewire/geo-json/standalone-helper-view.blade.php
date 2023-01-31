@@ -1,5 +1,5 @@
 <div>
-    <div class="fixed top-10 right-10" x-data="{
+    <div class="fixed top-1 right-1 sm:top-10 sm:right-10" x-data="{
         init() {
                 if (window.localStorage.getItem('theme') === 'dark') {
                     document.body.classList.add('dark');
@@ -37,19 +37,23 @@
                                 <div class="flex flex-col space-y-2 lg:flex-row lg:space-y-0 lg:space-x-2">
 
                                     @if (!$model?->simplified_geojson)
-                                        <x-input wire:model.defer="search" />
-                                        <x-button type="submit">Search</x-button>
+                                        <div>
+                                            <x-input wire:model.defer="search" />
+                                        </div>
+                                        <div>
+                                            <x-button type="submit">Search</x-button>
+                                        </div>
                                     @else
                                         <a href="/">
                                             <x-badge gray class="whitespace-nowrap dark:bg-gray-200 dark:text-black">
-                                                Reset form
+                                                Reset
                                             </x-badge>
                                         </a>
                                     @endif
                                 </div>
                                 <div>
                                     @if (!$model?->simplified_geojson && $search)
-                                        <x-badge lg positive class="md:h-[38px] lg:whitespace-nowrap">
+                                        <x-badge lg positive class="xl:whitespace-nowrap">
                                             Now select the appropriate place so that a GeoJSON can be built.
                                         </x-badge>
                                     @endif
@@ -231,9 +235,9 @@
                                         init() {
                                             const map = L.map($refs.map)
                                                 .setView([0, 0], 13);
-                                    
+
                                             L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png?{foo}', { foo: 'bar', attribution: '&copy; <a href=\'https://www.openstreetmap.org/copyright\'>OpenStreetMap</a> contributors' }).addTo(map);
-                                    
+
                                             const geojsonFeature = {
                                                 'type': 'Feature',
                                                 'geometry': this.geojson
@@ -245,7 +249,7 @@
                                             L.geoJson(geojsonFeature, { style: { color: '#FFA500', fillColor: '#FFA500', fillOpacity: 0.3 } }).addTo(map);
                                             let simplifiedGeoJSON = L.geoJson(simplifiedGeojsonFeature, { style: { fillOpacity: 0.5 } }).addTo(map);
                                             map.fitBounds(simplifiedGeoJSON.getBounds(), { padding: [50, 50] });
-                                    
+
                                             $wire.on('geoJsonUpdated', () => {
                                                 map.eachLayer((layer) => {
                                                     layer.remove();
