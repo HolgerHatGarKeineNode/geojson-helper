@@ -34,10 +34,10 @@ class StandaloneHelperView extends Component
     public function rules(): array
     {
         return [
-            'search'                   => 'required|string',
-            'currentPercentage'        => 'required|numeric',
+            'search' => 'required|string',
+            'currentPercentage' => 'required|numeric',
             'model.simplified_geojson' => 'nullable',
-            'water'                    => 'bool',
+            'water' => 'bool',
         ];
     }
 
@@ -49,7 +49,7 @@ class StandaloneHelperView extends Component
 
     private function getSearchResults(): void
     {
-        $responses = Http::pool(fn(Pool $pool) => [
+        $responses = Http::pool(fn (Pool $pool) => [
             $pool->acceptJson()
                  ->get(
                      'https://nominatim.openstreetmap.org/search?q='.$this->search.'&format=json&polygon_geojson=1&polygon_threshold=0.001'
@@ -57,7 +57,7 @@ class StandaloneHelperView extends Component
         ]);
 
         $this->osmSearchResults = collect($responses[0]->json())
-            ->filter(fn($item
+            ->filter(fn ($item
             ) => (
                      $item['geojson']['type'] === 'Polygon'
                      || $item['geojson']['type'] === 'MultiPolygon'
@@ -97,32 +97,43 @@ class StandaloneHelperView extends Component
             // execute mapshaper
             $input = storage_path('app/geo/geojson_'.$this->selectedItem['osm_id'].'.json');
             $output = storage_path('app/geo/output_'.$this->selectedItem['osm_id'].'.json');
-            $mapshaperBinary = base_path('node_modules/mapshaper/bin/mapshaper');
-            exec($mapshaperBinary.' '.$input.' -simplify dp '.$percentage.'% -o '.$output);
+            $mapShaperBinary = base_path('node_modules/mapshaper/bin/mapshaper');
+            exec($mapShaperBinary.' '.$input.' -simplify dp '.$percentage.'% -o '.$output);
             $this->currentPercentage = $percentage;
 
-            // trim geojson
-            Storage::disk('geo')
-                   ->put(
-                       'trimmed_'.$this->selectedItem['osm_id'].'.json',
-                       str(Storage::disk('geo')
-                                  ->get('output_'.$this->selectedItem['osm_id'].'.json'))
-                           ->after('{"type":"GeometryCollection", "geometries": [')
-                           ->beforeLast(']}')
-                           ->toString()
-                   );
-
-            // put trimmed geojson to model
-            $this->model->simplified_geojson = json_decode(
-                trim(
-                    Storage::disk('geo')
-                           ->get('trimmed_'.$this->selectedItem['osm_id'].'.json')
-                ),
-                false, 512, JSON_THROW_ON_ERROR
+            $mapShaperOutput = str(
+                Storage::disk('geo')
+                       ->get('output_'.$this->selectedItem['osm_id'].'.json')
             );
+            if ($mapShaperOutput->contains(['Polygon', 'MultiPolygon'])) {
+                // trim geojson
+                Storage::disk('geo')
+                       ->put(
+                           'trimmed_'.$this->selectedItem['osm_id'].'.json',
+                           $mapShaperOutput
+                               ->after('{"type":"GeometryCollection", "geometries": [')
+                               ->beforeLast(']}')
+                               ->toString()
+                       );
 
-            // emit event for AlpineJS
-            $this->emit('geoJsonUpdated');
+                // put trimmed geojson to model
+                $this->model->simplified_geojson = json_decode(
+                    trim(
+                        Storage::disk('geo')
+                               ->get('trimmed_'.$this->selectedItem['osm_id'].'.json')
+                    ),
+                    false, 512, JSON_THROW_ON_ERROR
+                );
+
+                // emit event for AlpineJS
+                $this->emit('geoJsonUpdated');
+            } else {
+                $this->notification()
+                     ->warning('Warning',
+                         sprintf('Geojson is not valid. After simplification, it contains no polygons. Instead it contains: %s',
+                             $mapShaperOutput->after('{"type":')
+                                             ->before(',')));
+            }
 
         } catch (\Exception $e) {
             $this->notification()
@@ -136,9 +147,9 @@ class StandaloneHelperView extends Component
             $response = Http::acceptJson()
                             ->asForm()
                             ->post('https://osm-boundaries.com/Ajax/GetBoundary', [
-                                'db'          => 'osm20221205',
+                                'db' => 'osm20221205',
                                 'waterOrLand' => 'water',
-                                'osmId'       => '-'.$this->selectedItem['osm_id'],
+                                'osmId' => '-'.$this->selectedItem['osm_id'],
                             ]);
             if ($response->json()) {
                 if (count($response->json()['coordinates'], COUNT_RECURSIVE) > 100000) {
