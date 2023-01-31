@@ -44,7 +44,7 @@
                                             <x-input wire:model.defer="search" />
                                         </div>
                                         <div>
-                                            <x-button type="submit">Search</x-button>
+                                            <x-button type="submit" class='w-full'>Search</x-button>
                                         </div>
                                     @else
                                         <a href="/">
@@ -165,7 +165,8 @@
                                     $jsonEncodedSelectedItem = json_encode($selectedItem['geojson'], JSON_THROW_ON_ERROR);
                                 @endphp
                                 <h3 class="text-lg font-medium leading-6 text-[#FFA500]">
-                                    OSM GeoJSON [{{ count($selectedItem['geojson']['coordinates'], COUNT_RECURSIVE) }} points]
+                                    OSM GeoJSON [{{ count($selectedItem['geojson']['coordinates'], COUNT_RECURSIVE) }}
+                                    points]
                                 </h3>
                                 <div class="mt-2 text-sm text-gray-500">
                                     <div class="flex w-full flex-col space-y-2">
@@ -187,7 +188,8 @@
                                     $jsonEncodedSimplifiedGeoJson = json_encode($model->simplified_geojson, JSON_THROW_ON_ERROR);
                                 @endphp
                                 <h3 class="text-lg font-medium leading-6 text-blue-500">
-                                    Simplified GeoJSON [{{ count($model->simplified_geojson['coordinates'], COUNT_RECURSIVE) }} points]
+                                    Simplified GeoJSON
+                                    [{{ count($model->simplified_geojson['coordinates'], COUNT_RECURSIVE) }} points]
                                 </h3>
                                 <div class="mt-2 text-sm text-gray-500">
                                     <div class="flex w-full flex-col space-y-2">
@@ -205,12 +207,13 @@
                                 </div>
                             </div>
                             @if ($selectedItemWater)
-                                <div class="col-span-2">
+                                <div>
                                     @php
                                         $jsonEncodedGeoJsonWater = json_encode($selectedItemWater, JSON_THROW_ON_ERROR);
                                     @endphp
                                     <h3 class="text-lg font-medium leading-6 text-[#FF0084]">
-                                        Water GeoJSON [{{ count($selectedItemWater['coordinates'], COUNT_RECURSIVE) }} points]
+                                        Water GeoJSON [{{ count($selectedItemWater['coordinates'], COUNT_RECURSIVE) }}
+                                        points]
                                     </h3>
                                     <div class="mt-2 text-sm text-gray-500">
                                         <div class="flex w-full flex-col space-y-2">
@@ -243,9 +246,9 @@
                                         init() {
                                             const map = L.map($refs.map)
                                                 .setView([0, 0], 13);
-
+                                    
                                             L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png?{foo}', { foo: 'bar', attribution: '&copy; <a href=\'https://www.openstreetmap.org/copyright\'>OpenStreetMap</a> contributors' }).addTo(map);
-
+                                    
                                             const geojsonFeature = {
                                                 'type': 'Feature',
                                                 'geometry': this.geojson
@@ -257,7 +260,7 @@
                                             L.geoJson(geojsonFeature, { style: { color: '#FFA500', fillColor: '#FFA500', fillOpacity: 0.3 } }).addTo(map);
                                             let simplifiedGeoJSON = L.geoJson(simplifiedGeojsonFeature, { style: { fillOpacity: 0.5 } }).addTo(map);
                                             map.fitBounds(simplifiedGeoJSON.getBounds(), { padding: [50, 50] });
-
+                                    
                                             $wire.on('geoJsonUpdated', () => {
                                                 map.eachLayer((layer) => {
                                                     layer.remove();
@@ -305,7 +308,7 @@
                 <div class='rounded-lg bg-white px-4 py-5 shadow dark:bg-gray-700 lg:p-6'>
                     <h1 class='dark:text-gray-100'>Wikipedia search <span
                             class='text-sm text-gray-500 dark:text-gray-400'>(for population data)</span></h1>
-                    <div class="flex space-x-2">
+                    <div class="flex flex-wrap gap-2">
                         <a target="_blank" class="text-amber-500 underline"
                             href="https://en.wikipedia.org/wiki/{{ urlencode($search) }}">Wikipedia EN:
                             {{ $search }}</a>
