@@ -15,9 +15,9 @@ You can start the tool with Laravel Sail and Docker.
 
 -   PHP >= 8.0 ([Ubuntu](https://www.digitalocean.com/community/tutorials/how-to-install-php-8-1-and-set-up-a-local-development-environment-on-ubuntu-22-04), [Windows](https://php.tutorials24x7.com/blog/how-to-install-php-8-on-windows))
 -   Composer ([Website](https://getcomposer.org/download/))
-- port 8000 free
-- Node.js >= 16.0 ([Website](https://nodejs.org/en/download/))
-- Yarn ([Website](https://classic.yarnpkg.com/en/docs/install/#debian-stable))
+-   port 8000 free
+-   Node.js >= 16.0 ([Website](https://nodejs.org/en/download/))
+-   Yarn ([Website](https://classic.yarnpkg.com/en/docs/install/#debian-stable))
 
 ### Starting the application
 
