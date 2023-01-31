@@ -23,7 +23,7 @@ class StandaloneHelperView extends Component
 
     public $selectedItemWater;
 
-    public $currentPercentage = 4;
+    public $currentPercentage = 100;
 
     public bool $water = false;
 
@@ -34,10 +34,10 @@ class StandaloneHelperView extends Component
     public function rules(): array
     {
         return [
-            'search' => 'required|string',
-            'currentPercentage' => 'required|numeric',
+            'search'                   => 'required|string',
+            'currentPercentage'        => 'required|numeric',
             'model.simplified_geojson' => 'nullable',
-            'water' => 'bool',
+            'water'                    => 'bool',
         ];
     }
 
@@ -49,7 +49,7 @@ class StandaloneHelperView extends Component
 
     private function getSearchResults(): void
     {
-        $responses = Http::pool(fn (Pool $pool) => [
+        $responses = Http::pool(fn(Pool $pool) => [
             $pool->acceptJson()
                  ->get(
                      'https://nominatim.openstreetmap.org/search?q='.$this->search.'&format=json&polygon_geojson=1&polygon_threshold=0.001'
@@ -57,7 +57,7 @@ class StandaloneHelperView extends Component
         ]);
 
         $this->osmSearchResults = collect($responses[0]->json())
-            ->filter(fn ($item
+            ->filter(fn($item
             ) => (
                      $item['geojson']['type'] === 'Polygon'
                      || $item['geojson']['type'] === 'MultiPolygon'
@@ -82,10 +82,10 @@ class StandaloneHelperView extends Component
         $this->selectedItem = $this->osmSearchResults[$index];
         $this->model->osm_relation = $this->selectedItem;
 
-        $this->executeMapshaper(4);
+        $this->executeMapshaper(100);
     }
 
-    private function executeMapshaper($percentage = 4): void
+    private function executeMapshaper($percentage = 100): void
     {
         try {
             // put OSM geojson to storage
@@ -115,25 +115,26 @@ class StandaloneHelperView extends Component
                                ->beforeLast(']}')
                                ->toString()
                        );
-
-                // put trimmed geojson to model
-                $this->model->simplified_geojson = json_decode(
-                    trim(
-                        Storage::disk('geo')
-                               ->get('trimmed_'.$this->selectedItem['osm_id'].'.json')
-                    ),
-                    false, 512, JSON_THROW_ON_ERROR
-                );
-
-                // emit event for AlpineJS
-                $this->emit('geoJsonUpdated');
             } else {
                 $this->notification()
                      ->warning('Warning',
                          sprintf('Geojson is not valid. After simplification, it contains no polygons. Instead it contains: %s',
                              $mapShaperOutput->after('{"type":')
                                              ->before(',')));
+                return;
             }
+
+            // put trimmed geojson to model
+            $this->model->simplified_geojson = json_decode(
+                trim(
+                    Storage::disk('geo')
+                           ->get('trimmed_'.$this->selectedItem['osm_id'].'.json')
+                ),
+                false, 512, JSON_THROW_ON_ERROR
+            );
+
+            // emit event for AlpineJS
+            $this->emit('geoJsonUpdated');
 
         } catch (\Exception $e) {
             $this->notification()
@@ -147,9 +148,9 @@ class StandaloneHelperView extends Component
             $response = Http::acceptJson()
                             ->asForm()
                             ->post('https://osm-boundaries.com/Ajax/GetBoundary', [
-                                'db' => 'osm20221205',
+                                'db'          => 'osm20221205',
                                 'waterOrLand' => 'water',
-                                'osmId' => '-'.$this->selectedItem['osm_id'],
+                                'osmId'       => '-'.$this->selectedItem['osm_id'],
                             ]);
             if ($response->json()) {
                 if (count($response->json()['coordinates'], COUNT_RECURSIVE) > 100000) {
@@ -203,6 +204,7 @@ class StandaloneHelperView extends Component
                 30,
                 40,
                 50,
+                100,
             ])
                 ->reverse()
                 ->values()
