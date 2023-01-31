@@ -30,7 +30,6 @@
     @mapscripts
     <wireui:scripts />
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    @include('layouts.dark-mode-switch')
 </head>
 
 <body class="font-sans text-gray-900 antialiased">
