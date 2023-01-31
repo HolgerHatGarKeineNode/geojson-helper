@@ -1,6 +1,9 @@
 <div>
     <div class="fixed top-1 right-1 sm:top-10 sm:right-10" x-data="{
         init() {
+                if (window.localStorage.getItem('theme') === null) {
+                    window.localStorage.setItem('theme', 'dark');
+                }
                 if (window.localStorage.getItem('theme') === 'dark') {
                     document.body.classList.add('dark');
                 }
@@ -127,7 +130,7 @@
                                         $btnClassLeft = 'relative inline-flex items-center rounded-l-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 dark:bg-gray-600 dark:hover:bg-amber-800 hover:bg-amber-400 focus:z-10 focus:border-amber-500 dark:focus:border-amber-700 focus:outline-none focus:ring-1 focus:ring-amber-500 dark:focus:ring-amber-700';
                                         $btnClassRight = 'relative -ml-px inline-flex items-center rounded-r-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 dark:bg-gray-600 dark:hover:bg-amber-800 hover:bg-amber-400 focus:z-10 focus:border-amber-500 dark:focus:border-amber-700 focus:outline-none focus:ring-1 focus:ring-amber-500 dark:focus:ring-amber-700';
                                         $btnClassCenter = 'relative -ml-px inline-flex items-center border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 dark:bg-gray-600 dark:hover:bg-amber-800 hover:bg-amber-400 focus:z-10 focus:border-amber-500 dark:focus:border-amber-700 focus:outline-none focus:ring-1 focus:ring-amber-500 dark:focus:ring-amber-700';
-                                        $currentClass = 'bg-amber-500 dark:bg-amber-900';
+                                        $currentClass = 'bg-amber-500 dark:bg-amber-700 text-white dark:text-gray-900';
                                     @endphp
                                     <div class="isolate inline-flex rounded-md shadow-sm">
                                         @foreach ($percentages as $percentage)
@@ -158,12 +161,13 @@
                     <div class="rounded-lg bg-white shadow dark:bg-gray-700">
                         <div class="grid grid-cols-1 gap-4 px-4 py-5 lg:grid-cols-2 lg:p-6">
                             <div>
-                                <h3 class="text-lg font-medium leading-6 text-[#FFA500]">OSM GeoJSON</h3>
+                                @php
+                                    $jsonEncodedSelectedItem = json_encode($selectedItem['geojson'], JSON_THROW_ON_ERROR);
+                                @endphp
+                                <h3 class="text-lg font-medium leading-6 text-[#FFA500]">
+                                    OSM GeoJSON [{{ count($selectedItem['geojson']['coordinates'], COUNT_RECURSIVE) }} points]
+                                </h3>
                                 <div class="mt-2 text-sm text-gray-500">
-                                    @php
-                                        $jsonEncodedSelectedItem = json_encode($selectedItem['geojson'], JSON_THROW_ON_ERROR);
-                                    @endphp
-
                                     <div class="flex w-full flex-col space-y-2">
                                         <pre class="overflow-x-auto py-3 text-[#FFA500]">{{ $jsonEncodedSelectedItem }}</pre>
                                         <div>
@@ -179,11 +183,13 @@
                                 </div>
                             </div>
                             <div>
-                                <h3 class="text-lg font-medium leading-6 text-blue-500">Simplified GeoJSON</h3>
+                                @php
+                                    $jsonEncodedSimplifiedGeoJson = json_encode($model->simplified_geojson, JSON_THROW_ON_ERROR);
+                                @endphp
+                                <h3 class="text-lg font-medium leading-6 text-blue-500">
+                                    Simplified GeoJSON [{{ count($model->simplified_geojson['coordinates'], COUNT_RECURSIVE) }} points]
+                                </h3>
                                 <div class="mt-2 text-sm text-gray-500">
-                                    @php
-                                        $jsonEncodedSimplifiedGeoJson = json_encode($model->simplified_geojson, JSON_THROW_ON_ERROR);
-                                    @endphp
                                     <div class="flex w-full flex-col space-y-2">
                                         <pre class="overflow-x-auto py-3 text-blue-500">{{ $jsonEncodedSimplifiedGeoJson }}</pre>
                                         <div>
@@ -199,12 +205,14 @@
                                 </div>
                             </div>
                             @if ($selectedItemWater)
-                                <div class="cols-span-2">
-                                    <h3 class="text-lg font-medium leading-6 text-[#FF0084]">Water GeoJSON</h3>
+                                <div class="col-span-2">
+                                    @php
+                                        $jsonEncodedGeoJsonWater = json_encode($selectedItemWater, JSON_THROW_ON_ERROR);
+                                    @endphp
+                                    <h3 class="text-lg font-medium leading-6 text-[#FF0084]">
+                                        Water GeoJSON [{{ count($selectedItemWater['coordinates'], COUNT_RECURSIVE) }} points]
+                                    </h3>
                                     <div class="mt-2 text-sm text-gray-500">
-                                        @php
-                                            $jsonEncodedGeoJsonWater = json_encode($selectedItemWater, JSON_THROW_ON_ERROR);
-                                        @endphp
                                         <div class="flex w-full flex-col space-y-2">
                                             <pre class="overflow-x-auto py-3 text-[#FF0084]">{{ $jsonEncodedGeoJsonWater }}</pre>
                                             <div>
@@ -235,9 +243,9 @@
                                         init() {
                                             const map = L.map($refs.map)
                                                 .setView([0, 0], 13);
-                                    
+
                                             L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png?{foo}', { foo: 'bar', attribution: '&copy; <a href=\'https://www.openstreetmap.org/copyright\'>OpenStreetMap</a> contributors' }).addTo(map);
-                                    
+
                                             const geojsonFeature = {
                                                 'type': 'Feature',
                                                 'geometry': this.geojson
@@ -249,7 +257,7 @@
                                             L.geoJson(geojsonFeature, { style: { color: '#FFA500', fillColor: '#FFA500', fillOpacity: 0.3 } }).addTo(map);
                                             let simplifiedGeoJSON = L.geoJson(simplifiedGeojsonFeature, { style: { fillOpacity: 0.5 } }).addTo(map);
                                             map.fitBounds(simplifiedGeoJSON.getBounds(), { padding: [50, 50] });
-                                    
+
                                             $wire.on('geoJsonUpdated', () => {
                                                 map.eachLayer((layer) => {
                                                     layer.remove();
@@ -303,6 +311,12 @@
                             {{ $search }}</a>
                         <a target="_blank" class="text-amber-500 underline"
                             href="https://de.wikipedia.org/wiki/{{ urlencode($search) }}">Wikipedia DE:
+                            {{ $search }}</a>
+                        <a target="_blank" class="text-amber-500 underline"
+                            href="https://fr.wikipedia.org/wiki/{{ urlencode($search) }}">Wikipedia FR:
+                            {{ $search }}</a>
+                        <a target="_blank" class="text-amber-500 underline"
+                            href="https://es.wikipedia.org/wiki/{{ urlencode($search) }}">Wikipedia ES:
                             {{ $search }}</a>
                     </div>
                 </div>
