@@ -31,7 +31,11 @@ yarn install
 yarn serve
 ```
 
-In your terminal you will see the URL to the application. Open it in your browser and start using the tool http://localhost:8000
+In your terminal you will see the URL to the application. Open it in your browser and start using the tool http://localhost:8000.
+
+#### Other commands
+
+`yarn format` will run Prettier and Pint for code formatting.
 
 ## Security Vulnerabilities
 
