@@ -161,12 +161,13 @@
                     <div class="rounded-lg bg-white shadow dark:bg-gray-700">
                         <div class="grid grid-cols-1 gap-4 px-4 py-5 lg:grid-cols-2 lg:p-6">
                             <div>
-                                <h3 class="text-lg font-medium leading-6 text-[#FFA500]">OSM GeoJSON</h3>
+                                @php
+                                    $jsonEncodedSelectedItem = json_encode($selectedItem['geojson'], JSON_THROW_ON_ERROR);
+                                @endphp
+                                <h3 class="text-lg font-medium leading-6 text-[#FFA500]">
+                                    OSM GeoJSON [{{ count($selectedItem['geojson']['coordinates'], COUNT_RECURSIVE) }} points]
+                                </h3>
                                 <div class="mt-2 text-sm text-gray-500">
-                                    @php
-                                        $jsonEncodedSelectedItem = json_encode($selectedItem['geojson'], JSON_THROW_ON_ERROR);
-                                    @endphp
-
                                     <div class="flex w-full flex-col space-y-2">
                                         <pre class="overflow-x-auto py-3 text-[#FFA500]">{{ $jsonEncodedSelectedItem }}</pre>
                                         <div>
@@ -182,11 +183,13 @@
                                 </div>
                             </div>
                             <div>
-                                <h3 class="text-lg font-medium leading-6 text-blue-500">Simplified GeoJSON</h3>
+                                @php
+                                    $jsonEncodedSimplifiedGeoJson = json_encode($model->simplified_geojson, JSON_THROW_ON_ERROR);
+                                @endphp
+                                <h3 class="text-lg font-medium leading-6 text-blue-500">
+                                    Simplified GeoJSON [{{ count($model->simplified_geojson['coordinates'], COUNT_RECURSIVE) }} points]
+                                </h3>
                                 <div class="mt-2 text-sm text-gray-500">
-                                    @php
-                                        $jsonEncodedSimplifiedGeoJson = json_encode($model->simplified_geojson, JSON_THROW_ON_ERROR);
-                                    @endphp
                                     <div class="flex w-full flex-col space-y-2">
                                         <pre class="overflow-x-auto py-3 text-blue-500">{{ $jsonEncodedSimplifiedGeoJson }}</pre>
                                         <div>
@@ -202,12 +205,14 @@
                                 </div>
                             </div>
                             @if ($selectedItemWater)
-                                <div class="cols-span-2">
-                                    <h3 class="text-lg font-medium leading-6 text-[#FF0084]">Water GeoJSON</h3>
+                                <div class="col-span-2">
+                                    @php
+                                        $jsonEncodedGeoJsonWater = json_encode($selectedItemWater, JSON_THROW_ON_ERROR);
+                                    @endphp
+                                    <h3 class="text-lg font-medium leading-6 text-[#FF0084]">
+                                        Water GeoJSON [{{ count($selectedItemWater['coordinates'], COUNT_RECURSIVE) }} points]
+                                    </h3>
                                     <div class="mt-2 text-sm text-gray-500">
-                                        @php
-                                            $jsonEncodedGeoJsonWater = json_encode($selectedItemWater, JSON_THROW_ON_ERROR);
-                                        @endphp
                                         <div class="flex w-full flex-col space-y-2">
                                             <pre class="overflow-x-auto py-3 text-[#FF0084]">{{ $jsonEncodedGeoJsonWater }}</pre>
                                             <div>
