@@ -7,7 +7,8 @@ You can start the tool with Laravel Sail and Docker.
 
 [Hosted-Version](https://geojson.easify.de)
 
-![Screenshot](https://i.imgur.com/41lOnKl.png)
+![Screenshot](/images/screenshot-1.png)
+![Screenshot](/images/screenshot-2.png)
 
 ## Development
 
