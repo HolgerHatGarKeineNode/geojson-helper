@@ -297,7 +297,7 @@
                                     @php
                                         $jsonEncodedGeoJsonOSMFr = json_encode($selectedItemPolygonsOSMfr, JSON_THROW_ON_ERROR);
                                     @endphp
-                                    <h3 class="text-lg font-medium leading-6 text-rose-500">
+                                    <h3 class="text-lg font-medium leading-6 text-emerald-500">
                                         https://polygons.openstreetmap.fr GeoJSON
                                         <div>
                                             @if ($selectedItemPolygonsOSMfr['type'] !== 'GeometryCollection')
@@ -308,13 +308,13 @@
                                     </h3>
                                     <div class="mt-2 text-sm text-gray-500">
                                         <div class="flex w-full flex-col space-y-2">
-                                            <pre class="overflow-x-auto py-3 text-rose-500">{{ $jsonEncodedGeoJsonOSMFr }}</pre>
+                                            <pre class="overflow-x-auto py-3 text-emerald-500">{{ $jsonEncodedGeoJsonOSMFr }}</pre>
                                             <div>
                                                 <x-button x-data="{
                                                     textToCopy: @entangle('selectedItemPolygonsOSMfr')
                                                 }"
                                                     @click.prevent="window.navigator.clipboard.writeText(JSON.stringify(textToCopy));window.$wireui.notify({title:'{{ __('Copied!') }}',icon:'success'});"
-                                                    lg rose>
+                                                    lg emerald>
                                                     Copy to clipboard
                                                 </x-button>
                                             </div>
@@ -338,9 +338,9 @@
                                         init() {
                                             const map = L.map($refs.map)
                                                 .setView([0, 0], 13);
-                                    
+
                                             L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png?{foo}', { foo: 'bar', attribution: '&copy; <a href=\'https://www.openstreetmap.org/copyright\'>OpenStreetMap</a> contributors' }).addTo(map);
-                                    
+
                                             const geojsonFeature = {
                                                 'type': 'Feature',
                                                 'geometry': this.geojson
@@ -352,7 +352,7 @@
                                             L.geoJson(geojsonFeature, { style: { color: '#FFA500', fillColor: '#FFA500', fillOpacity: 0.3 } }).addTo(map);
                                             let simplifiedGeoJSON = L.geoJson(simplifiedGeojsonFeature, { style: { fillOpacity: 0.5 } }).addTo(map);
                                             map.fitBounds(simplifiedGeoJSON.getBounds(), { padding: [50, 50] });
-                                    
+
                                             $wire.on('geoJsonUpdated', () => {
                                                 map.eachLayer((layer) => {
                                                     layer.remove();
@@ -376,7 +376,7 @@
                                                 };
                                                 L.geoJson(geojsonFeature, { style: { color: '#FFA500', fillColor: '#FFA500', fillOpacity: 0.3 } }).addTo(map);
                                                 L.geoJson(geojsonWaterFeature, { style: { color: '#FF0084', fillColor: '#FF0084', fillOpacity: 0.2 } }).addTo(map);
-                                                L.geoJson(geojsonOSMfrFeature, { style: { color: '#F43F5E', fillColor: '#F43F5E', fillOpacity: 0.2 } }).addTo(map);
+                                                L.geoJson(geojsonOSMfrFeature, { style: { color: '#10b981', fillColor: '#10b981', fillOpacity: 0.3 } }).addTo(map);
                                                 let simplifiedGeoJSON = L.geoJson(simplifiedGeojsonFeature, { style: { fillOpacity: 0.5 } }).addTo(map);
                                                 map.fitBounds(simplifiedGeoJSON.getBounds(), { padding: [50, 50] });
                                             });
