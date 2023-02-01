@@ -12,9 +12,9 @@ With this tool you can easily find OSM relations and create simplified GeoJSON p
 
 ### Requirements
 
-- PHP >= 8.0 ([Ubuntu](https://www.digitalocean.com/community/tutorials/how-to-install-php-8-1-and-set-up-a-local-development-environment-on-ubuntu-22-04), [Windows](https://php.tutorials24x7.com/blog/how-to-install-php-8-on-windows))
-- Composer ([Website](https://getcomposer.org/download/))
-- Docker ([Website](https://docs.docker.com/get-docker/))
+-   PHP >= 8.0 ([Ubuntu](https://www.digitalocean.com/community/tutorials/how-to-install-php-8-1-and-set-up-a-local-development-environment-on-ubuntu-22-04), [Windows](https://php.tutorials24x7.com/blog/how-to-install-php-8-on-windows))
+-   Composer ([Website](https://getcomposer.org/download/))
+-   Docker ([Website](https://docs.docker.com/get-docker/))
 
 ### Starting the application
 
@@ -38,11 +38,11 @@ Open it in your browser and start using the tool http://localhost
 
 #### Used software
 
-- [Mapshaper](https://github.com/mbloch/mapshaper)
-- [OpenStreetMap](https://www.openstreetmap.org/)
-- [Nominatim](https://nominatim.org/)
-- [osm-boundaries.com](https://osm-boundaries.com/)
-- [polygons.openstreetmap.fr](https://polygons.openstreetmap.fr/)
+-   [Mapshaper](https://github.com/mbloch/mapshaper)
+-   [OpenStreetMap](https://www.openstreetmap.org/)
+-   [Nominatim](https://nominatim.org/)
+-   [osm-boundaries.com](https://osm-boundaries.com/)
+-   [polygons.openstreetmap.fr](https://polygons.openstreetmap.fr/)
 
 ## Security Vulnerabilities
 

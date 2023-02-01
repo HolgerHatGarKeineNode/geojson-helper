@@ -9,14 +9,15 @@
     "license": "MIT",
     "require": {
         "php": "^8.0.2",
+        "gonoware/laravel-maps": "^2.0",
         "guzzlehttp/guzzle": "^7.2",
         "laravel/framework": "^9.19",
         "laravel/sanctum": "^3.0",
         "laravel/tinker": "^2.7",
-        "gonoware/laravel-maps": "^2.0",
         "livewire/livewire": "^2.11",
         "pestphp/pest": "^1.16",
         "pestphp/pest-plugin-laravel": "^1.1",
+        "spatie/laravel-google-fonts": "^1.2",
         "wireui/wireui": "^1.17"
     },
     "require-dev": {
