@@ -416,6 +416,19 @@
                     </div>
                 </div>
             @endif
+
+            <div class='rounded-lg bg-white px-4 py-5 shadow dark:bg-gray-800 lg:p-6'>
+                <p class="mt-8 text-xs leading-5 text-gray-400 md:order-1 md:mt-0">
+                    <a class="text-blue-500" href="https://github.com/HolgerHatGarKeineNode/geojson-helper"
+                        target="_blank">GeoJSON helper</a> is maintained by <a
+                        href="https://github.com/HolgerHatGarKeineNode" target="_blank"
+                        class="text-amber-500">HolgerHatGarKeineNode</a> [<span
+                        class="font-mono">npub1pt0kw36ue3w2g4haxq3wgm6a2fhtptmzsjlc2j2vphtcgle72qesgpjyc6</span>]. This
+                    software is open-sourced software
+                    licensed under the <a href="https://opensource.org/licenses/MIT" target="_blank"
+                        class="underline">MIT license</a>.
+                </p>
+            </div>
         </div>
     </div>
 
