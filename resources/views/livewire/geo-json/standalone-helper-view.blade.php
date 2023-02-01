@@ -99,7 +99,7 @@
                                                                 geometry, and guaranteed to be smaller. </p>
                                                     </div>
                                                     <div x-show="show" class="mt-2">
-                                                        <x-button primary xs
+                                                        <x-button emerald xs
                                                             label="Submit and load polygons.openstreetmap.fr polygons"
                                                             wire:click="submitPolygonsOSM" />
                                                     </div>
