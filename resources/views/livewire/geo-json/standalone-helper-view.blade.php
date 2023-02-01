@@ -1,5 +1,5 @@
 <div>
-    <div class="fixed top-1 right-1 sm:top-10 sm:right-10" x-data="{
+    <div class="fixed top-1 right-1 z-50 sm:top-10 sm:right-10" x-data="{
         init() {
                 if (window.localStorage.getItem('theme') === null) {
                     window.localStorage.setItem('theme', 'dark');
@@ -37,23 +37,50 @@
                         <div class="mt-2 text-sm text-gray-500">
 
                             <form wire:submit.prevent="submit" class="space-y-2">
-                                <div class="flex flex-col space-y-2 lg:flex-row lg:space-y-0 lg:space-x-2">
-
-                                    @if (!$model?->simplified_geojson)
+                                @if (!$model?->simplified_geojson)
+                                    <div class="flex flex-col space-y-2 lg:flex-row lg:space-y-0 lg:space-x-2">
                                         <div>
                                             <x-input wire:model.defer="search" />
                                         </div>
                                         <div>
                                             <x-button type="submit" class='w-full'>Search</x-button>
                                         </div>
-                                    @else
+                                    </div>
+                                @else
+                                    <div class="flex flex-col space-y-2">
                                         <a href="/">
                                             <x-badge gray class="whitespace-nowrap dark:bg-gray-200 dark:text-black">
                                                 Reset
                                             </x-badge>
                                         </a>
-                                    @endif
-                                </div>
+                                        <div class="overflow-hidden bg-white shadow dark:bg-gray-900 sm:rounded-lg">
+                                            <div class="px-2 py-2 sm:px-4 sm:py-5 sm:px-6">
+                                                <h3
+                                                    class="text-lg font-medium leading-6 text-gray-900 dark:text-gray-200">
+                                                    {{ $selectedItem['display_name'] }}
+                                                </h3>
+                                                <p class="mt-1 max-w-2xl text-sm text-gray-500 dark:text-gray-300">
+
+                                                </p>
+                                            </div>
+                                            <div class="border-t border-gray-200 px-2 py-2 sm:p-0 sm:px-4 sm:py-5">
+                                                <dl class="sm:divide-y sm:divide-gray-200">
+                                                    <div
+                                                        class="py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-4 sm:py-5 sm:px-6">
+                                                        <dt
+                                                            class="text-sm font-medium text-gray-500 dark:text-gray-300">
+                                                            <x-badge blue>{{ $selectedItem['type'] }}</x-badge>
+                                                        </dt>
+                                                        <dd
+                                                            class="mt-1 text-sm text-gray-900 dark:text-gray-300 sm:col-span-2 sm:mt-0">
+                                                            OSM ID: {{ $selectedItem['osm_id'] }}
+                                                        </dd>
+                                                    </div>
+                                                </dl>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endif
                                 <div>
                                     @if (!$model?->simplified_geojson && $search)
                                         <x-badge lg positive class="xl:whitespace-nowrap">
@@ -67,8 +94,9 @@
                     </div>
                     <div class="px-4 py-5 lg:p-6">
                         @if ($search)
-                            <h3 class="text-lg font-medium leading-6 text-gray-900 dark:text-gray-100">Search:
-                                {{ $search }}</h3>
+                            <h3 class="text-lg font-medium leading-6 text-gray-900 dark:text-gray-100">
+                                Search: {{ $search }}
+                            </h3>
                         @endif
                         <div class="mt-2 text-sm text-gray-500">
 
@@ -79,7 +107,11 @@
                                         <ul role="list" class="-my-5 divide-y divide-gray-200">
 
                                             @foreach ($osmSearchResults as $item)
-                                                <li class="cursor-pointer py-4 px-2 hover:bg-amber-400 dark:hover:bg-amber-800"
+                                                @php
+                                                    $currentClass = $item['osm_id'] === $osm_id ? 'bg-amber-400 dark:bg-amber-900' : '';
+                                                @endphp
+
+                                                <li class="{{ $currentClass }} cursor-pointer py-4 px-2 hover:bg-amber-400 dark:hover:bg-amber-800"
                                                     wire:key="osmItem_{{ $loop->index }}"
                                                     wire:click="selectItem({{ $loop->index }})">
                                                     <div class="flex items-center space-x-4">
@@ -293,33 +325,26 @@
                     </div>
                 @endif
             </div>
-            @if ($model?->osm_relation)
-                <div
-                    class="flex flex-col rounded-lg bg-white px-4 py-5 shadow dark:bg-gray-700 dark:text-gray-100 lg:p-6">
-                    <code>
-                        osm_id: {{ $model->osm_relation['osm_id'] }}
-                    </code>
-                    <code>
-                        display_name: {{ $model->osm_relation['display_name'] }}
-                    </code>
-                </div>
-            @endif
             @if ($search)
                 <div class='rounded-lg bg-white px-4 py-5 shadow dark:bg-gray-700 lg:p-6'>
                     <h1 class='dark:text-gray-100'>Wikipedia search <span
                             class='text-sm text-gray-500 dark:text-gray-400'>(for population data)</span></h1>
                     <div class="flex flex-wrap gap-2">
                         <a target="_blank" class="text-amber-500 underline"
-                            href="https://en.wikipedia.org/wiki/{{ urlencode($search) }}">Wikipedia EN:
+                            href="https://en.wikipedia.org/wiki/{{ urlencode(str($search)->replace(' ', '_')->toString()) }}">Wikipedia
+                            EN:
                             {{ $search }}</a>
                         <a target="_blank" class="text-amber-500 underline"
-                            href="https://de.wikipedia.org/wiki/{{ urlencode($search) }}">Wikipedia DE:
+                            href="https://de.wikipedia.org/wiki/{{ urlencode(str($search)->replace(' ', '_')->toString()) }}">Wikipedia
+                            DE:
                             {{ $search }}</a>
                         <a target="_blank" class="text-amber-500 underline"
-                            href="https://fr.wikipedia.org/wiki/{{ urlencode($search) }}">Wikipedia FR:
+                            href="https://fr.wikipedia.org/wiki/{{ urlencode(str($search)->replace(' ', '_')->toString()) }}">Wikipedia
+                            FR:
                             {{ $search }}</a>
                         <a target="_blank" class="text-amber-500 underline"
-                            href="https://es.wikipedia.org/wiki/{{ urlencode($search) }}">Wikipedia ES:
+                            href="https://es.wikipedia.org/wiki/{{ urlencode(str($search)->replace(' ', '_')->toString()) }}">Wikipedia
+                            ES:
                             {{ $search }}</a>
                     </div>
                 </div>

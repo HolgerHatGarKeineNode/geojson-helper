@@ -17,6 +17,8 @@ class StandaloneHelperView extends Component
 
     public string $search = '';
 
+    public ?int $osm_id = null;
+
     public array $osmSearchResults = [];
 
     public $selectedItem;
@@ -29,6 +31,7 @@ class StandaloneHelperView extends Component
 
     protected $queryString = [
         'search' => ['except' => ''],
+        'osm_id' => ['except' => null],
     ];
 
     public function rules(): array
@@ -45,6 +48,11 @@ class StandaloneHelperView extends Component
     {
         $this->model = new CommunityModel;
         $this->getSearchResults();
+        if ($this->osm_id) {
+            $this->selectedItem = collect($this->osmSearchResults)
+                ->firstWhere('osm_id', $this->osm_id);
+            $this->executeMapshaper($this->currentPercentage);
+        }
     }
 
     private function getSearchResults(): void
@@ -80,6 +88,7 @@ class StandaloneHelperView extends Component
         $this->water = false;
         $this->selectedItemWater = null;
         $this->selectedItem = $this->osmSearchResults[$index];
+        $this->osm_id = $this->selectedItem['osm_id'];
         $this->model->osm_relation = $this->selectedItem;
 
         $this->executeMapshaper(100);
