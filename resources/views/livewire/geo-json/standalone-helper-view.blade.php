@@ -338,9 +338,9 @@
                                         init() {
                                             const map = L.map($refs.map)
                                                 .setView([0, 0], 13);
-
+                                    
                                             L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png?{foo}', { foo: 'bar', attribution: '&copy; <a href=\'https://www.openstreetmap.org/copyright\'>OpenStreetMap</a> contributors' }).addTo(map);
-
+                                    
                                             const geojsonFeature = {
                                                 'type': 'Feature',
                                                 'geometry': this.geojson
@@ -352,7 +352,7 @@
                                             L.geoJson(geojsonFeature, { style: { color: '#FFA500', fillColor: '#FFA500', fillOpacity: 0.3 } }).addTo(map);
                                             let simplifiedGeoJSON = L.geoJson(simplifiedGeojsonFeature, { style: { fillOpacity: 0.5 } }).addTo(map);
                                             map.fitBounds(simplifiedGeoJSON.getBounds(), { padding: [50, 50] });
-
+                                    
                                             $wire.on('geoJsonUpdated', () => {
                                                 map.eachLayer((layer) => {
                                                     layer.remove();
