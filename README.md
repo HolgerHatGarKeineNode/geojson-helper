@@ -12,7 +12,9 @@ With this tool you can easily find OSM relations and create simplified GeoJSON p
 
 ### Requirements
 
--   PHP >= 8.0 ([Ubuntu](https://www.digitalocean.com/community/tutorials/how-to-install-php-8-1-and-set-up-a-local-development-environment-on-ubuntu-22-04), [Windows](https://php.tutorials24x7.com/blog/how-to-install-php-8-on-windows))
+-   PHP >=
+    8.0 ([Ubuntu](https://www.digitalocean.com/community/tutorials/how-to-install-php-8-1-and-set-up-a-local-development-environment-on-ubuntu-22-04), [Windows](https://php.tutorials24x7.com/blog/how-to-install-php-8-on-windows))
+-   PHP extensions: `php-xml`, `php-mbstring`, `php-zip`, `php-curl`, `php-gd`, `php-bcmath`
 -   Composer ([Website](https://getcomposer.org/download/))
 -   Docker ([Website](https://docs.docker.com/get-docker/))
 
@@ -29,6 +31,8 @@ composer install
 
 ./vendor/bin/sail yarn dev
 ```
+
+Configure `NOMINATIM_EMAIL` in `.env` to use the Nominatim API.
 
 Open it in your browser and start using the tool http://localhost
 

@@ -77,7 +77,7 @@ class StandaloneHelperView extends Component
         $responses = Http::pool(fn (Pool $pool) => [
             $pool->acceptJson()
                  ->get(
-                     sprintf('https://nominatim.openstreetmap.org/search?q=%s&format=json&polygon_geojson=1&polygon_threshold=0.0003',
+                     sprintf('https://nominatim.openstreetmap.org/search?q=%s&format=json&polygon_geojson=1&polygon_threshold=0.0003&email='.config('services.nominatim.email'),
                          $this->search)
                  ),
         ]);

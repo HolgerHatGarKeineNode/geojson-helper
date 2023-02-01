@@ -14,6 +14,10 @@ return [
     |
     */
 
+    'nominatim' => [
+        'email' => env('NOMINATIM_EMAIL', null),
+    ],
+
     'mailgun' => [
         'domain' => env('MAILGUN_DOMAIN'),
         'secret' => env('MAILGUN_SECRET'),
