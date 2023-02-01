@@ -299,8 +299,12 @@
                                     @endphp
                                     <h3 class="text-lg font-medium leading-6 text-rose-500">
                                         https://polygons.openstreetmap.fr GeoJSON
-                                        [{{ count($selectedItemPolygonsOSMfr['coordinates'] ?? [], COUNT_RECURSIVE) }}
-                                        points]
+                                        <div>
+                                            @if ($selectedItemPolygonsOSMfr['type'] !== 'GeometryCollection')
+                                                [{{ count($selectedItemPolygonsOSMfr['coordinates'] ?? [], COUNT_RECURSIVE) }}
+                                                points]
+                                            @endif
+                                        </div>
                                     </h3>
                                     <div class="mt-2 text-sm text-gray-500">
                                         <div class="flex w-full flex-col space-y-2">
