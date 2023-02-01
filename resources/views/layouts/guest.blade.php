@@ -37,7 +37,7 @@
     <div
         class="flex min-h-screen flex-col items-center justify-center bg-gray-100 pt-2 dark:bg-gray-900 sm:pt-6 sm:pt-0">
         <div
-            class="my-2 w-full max-w-screen-2xl bg-white px-1 py-4 shadow-md dark:bg-gray-800 sm:my-6 sm:rounded-lg sm:px-6">
+            class="my-2 w-full max-w-screen-2xl bg-white px-1 py-4 shadow-md dark:bg-gray-700 sm:my-6 sm:rounded-lg sm:px-6">
             {{ $slot }}
         </div>
     </div>

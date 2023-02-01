@@ -3,7 +3,6 @@
 ## Description
 
 With this tool you can easily find OSM relations and create simplified GeoJSON polygons. This is a Laravel application.
-You can start the tool with Laravel Sail and Docker.
 
 [Hosted-Version](https://geojson.easify.de)
 
@@ -13,7 +12,8 @@ You can start the tool with Laravel Sail and Docker.
 
 ### Requirements
 
--   PHP >= 8.0 ([Ubuntu](https://www.digitalocean.com/community/tutorials/how-to-install-php-8-1-and-set-up-a-local-development-environment-on-ubuntu-22-04), [Windows](https://php.tutorials24x7.com/blog/how-to-install-php-8-on-windows))
+-   PHP >=
+    8.0 ([Ubuntu](https://www.digitalocean.com/community/tutorials/how-to-install-php-8-1-and-set-up-a-local-development-environment-on-ubuntu-22-04), [Windows](https://php.tutorials24x7.com/blog/how-to-install-php-8-on-windows))
 -   Composer ([Website](https://getcomposer.org/download/))
 -   port 8000 free
 -   Node.js >= 16.0 ([Website](https://nodejs.org/en/download/))
@@ -31,11 +31,21 @@ yarn install
 yarn serve
 ```
 
-In your terminal you will see the URL to the application. Open it in your browser and start using the tool http://localhost:8000.
+Open it in your browser and start using the tool http://127.0.0.1:8000
+
+> http://localhost:8000 will not work with ViteJs websocket server
 
 #### Other commands
 
 `yarn format` will run Prettier and Pint for code formatting.
+
+#### Used software
+
+-   [Mapshaper](https://github.com/mbloch/mapshaper)
+-   [OpenStreetMap](https://www.openstreetmap.org/)
+-   [Nominatim](https://nominatim.org/)
+-   [osm-boundaries.com](https://osm-boundaries.com/)
+-   [polygons.openstreetmap.fr](https://polygons.openstreetmap.fr/)
 
 ## Security Vulnerabilities
 

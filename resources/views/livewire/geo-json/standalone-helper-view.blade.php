@@ -1,36 +1,12 @@
 <div>
-    <div class="fixed top-1 right-1 z-50 sm:top-10 sm:right-10" x-data="{
-        init() {
-                if (window.localStorage.getItem('theme') === null) {
-                    window.localStorage.setItem('theme', 'dark');
-                }
-                if (window.localStorage.getItem('theme') === 'dark') {
-                    document.body.classList.add('dark');
-                }
-            },
-            darkMode() {
-                return window.localStorage.getItem('theme') === 'dark' ? 'light mode' : 'dark mode';
-            },
-            toggleDark() {
-                if (window.localStorage.getItem('theme') === 'dark') {
-                    window.localStorage.setItem('theme', 'light');
-                    document.body.classList.remove('dark');
-                    this.darkMode = 'dark mode';
-                } else {
-                    window.localStorage.setItem('theme', 'dark');
-                    document.body.classList.add('dark');
-                    this.darkMode = 'light mode';
-                }
-            }
-    }">
-        <x-button primary @click="toggleDark" x-text="darkMode" />
-    </div>
+    {{-- DARK-MODE BTN --}}
+    <x-dark-mode-btn />
     <div class="w-full p-0 lg:p-6" wire:loading.class="opacity-50 pointer-events-none cursor-not-allowed">
         <div class="flex max-w-none flex-col space-y-4 text-black">
-            <div class="rounded-lg bg-white shadow dark:bg-gray-700">
 
+            {{-- SEARCH PANEL --}}
+            <div class="rounded-lg bg-white shadow dark:bg-gray-800">
                 <div class="grid grid-cols-1 lg:grid-cols-2">
-
                     <div class="px-4 py-5 lg:p-6">
                         <h3 class="text-lg font-medium leading-6 text-gray-900 dark:text-gray-100">Search for an area
                         </h3>
@@ -57,7 +33,7 @@
                                             <div class="px-2 py-2 sm:px-4 sm:py-5 sm:px-6">
                                                 <h3
                                                     class="text-lg font-medium leading-6 text-gray-900 dark:text-gray-200">
-                                                    {{ $selectedItem['display_name'] }}
+                                                    {{ $selectedItemOSMPolygons['display_name'] }}
                                                 </h3>
                                                 <p class="mt-1 max-w-2xl text-sm text-gray-500 dark:text-gray-300">
 
@@ -69,14 +45,65 @@
                                                         class="py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-4 sm:py-5 sm:px-6">
                                                         <dt
                                                             class="text-sm font-medium text-gray-500 dark:text-gray-300">
-                                                            <x-badge blue>{{ $selectedItem['type'] }}</x-badge>
+                                                            <x-badge
+                                                                blue>{{ $selectedItemOSMPolygons['type'] }}</x-badge>
                                                         </dt>
                                                         <dd
                                                             class="mt-1 text-sm text-gray-900 dark:text-gray-300 sm:col-span-2 sm:mt-0">
-                                                            OSM ID: {{ $selectedItem['osm_id'] }}
+                                                            OSM ID: {{ $selectedItemOSMPolygons['osm_id'] }}
                                                         </dd>
                                                     </div>
                                                 </dl>
+                                            </div>
+                                        </div>
+                                        <div class="overflow-hidden bg-white shadow dark:bg-gray-900 sm:rounded-lg">
+                                            <div class="px-2 py-2 sm:px-4 sm:py-5 sm:px-6">
+                                                <div class="mt-1 max-w-2xl text-sm text-gray-500 dark:text-gray-300">
+                                                    <x-toggle red lg
+                                                        label="Fetch water boundaries from https://osm-boundaries.com"
+                                                        wire:model="OSMBoundaries" />
+                                                </div>
+                                                <div x-data="{
+                                                    show: @entangle('polygonsOSMfr')
+                                                }"
+                                                    class="mt-2 max-w-2xl text-sm text-gray-500 dark:text-gray-300">
+                                                    <x-toggle red lg
+                                                        label="Fetch polygons from https://polygons.openstreetmap.fr"
+                                                        wire:model="polygonsOSMfr" />
+                                                    <div class="mt-2 flex flex-row items-end space-x-2" x-show="show">
+                                                        <x-input max="1" label="X"
+                                                            wire:model.defer="polygonsOSMfrX" />
+                                                        <x-input max="1" label="Y"
+                                                            wire:model.defer="polygonsOSMfrY" />
+                                                        <x-input max="1" label="Z"
+                                                            wire:model.defer="polygonsOSMfrZ" />
+                                                    </div>
+                                                    <div class="mt-4 font-mono text-sm" x-show="show">
+                                                        <p>
+                                                            X, Y, Z are parameters for the following postgis equation.
+                                                            The default values are chosen according to the size of the
+                                                            original geometry to give a slighty bigger geometry, without
+                                                            too many nodes.
+
+                                                        </p>
+                                                        <p class="mt-4">Note that:</p>
+                                                        <p>
+                                                            X > 0 will give a polygon bigger than the original geometry,
+                                                            and guaranteed to contain it.
+                                                        </p>
+                                                        <p>
+                                                            X = 0 will give a polygon similar to the original geometry.
+                                                        </p>
+                                                        <p>
+                                                            X < 0 will give a polygon smaller than the original
+                                                                geometry, and guaranteed to be smaller. </p>
+                                                    </div>
+                                                    <div x-show="show" class="mt-2">
+                                                        <x-button primary xs
+                                                            label="Submit and load polygons.openstreetmap.fr polygons"
+                                                            wire:click="submitPolygonsOSM" />
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -92,7 +119,7 @@
 
                         </div>
                     </div>
-                    <div class="px-4 py-5 lg:p-6">
+                    <div class="overflow-y-auto px-4 py-5 lg:p-6">
                         @if ($search)
                             <h3 class="text-lg font-medium leading-6 text-gray-900 dark:text-gray-100">
                                 Search: {{ $search }}
@@ -100,57 +127,56 @@
                         @endif
                         <div class="mt-2 text-sm text-gray-500">
 
-                            <div class="flex max-h-[200px] flex-col space-y-4 overflow-y-auto">
+                            <div class="flex max-h-[400px] flex-col space-y-4">
+                                <div class="mt-6 flow-root">
+                                    <ul role="list" class="-my-5 divide-y divide-gray-200">
 
-                                <div>
-                                    <div class="mt-6 flow-root">
-                                        <ul role="list" class="-my-5 divide-y divide-gray-200">
+                                        @foreach ($osmSearchResults as $item)
+                                            @php
+                                                $currentClass = $item['osm_id'] === $osm_id ? 'bg-amber-400 dark:bg-amber-900' : '';
+                                            @endphp
 
-                                            @foreach ($osmSearchResults as $item)
-                                                @php
-                                                    $currentClass = $item['osm_id'] === $osm_id ? 'bg-amber-400 dark:bg-amber-900' : '';
-                                                @endphp
-
-                                                <li class="{{ $currentClass }} cursor-pointer py-4 px-2 hover:bg-amber-400 dark:hover:bg-amber-800"
-                                                    wire:key="osmItem_{{ $loop->index }}"
-                                                    wire:click="selectItem({{ $loop->index }})">
-                                                    <div class="flex items-center space-x-4">
-                                                        <div class="min-w-0 flex-1">
-                                                            <p
-                                                                class="truncate text-sm font-medium text-gray-900 dark:text-gray-200">
-                                                                {{ $item['display_name'] }}</p>
-                                                            <p class="truncate text-sm text-gray-500">
-                                                                <x-badge
-                                                                    amber>{{ count($item['geojson']['coordinates'], COUNT_RECURSIVE) }}
-                                                                    points
-                                                                </x-badge>
-                                                            </p>
-                                                        </div>
-                                                        <div>
-                                                            <x-badge blue>{{ $item['type'] }}</x-badge>
-                                                        </div>
+                                            <li class="{{ $currentClass }} cursor-pointer py-4 px-2 hover:bg-amber-400 dark:hover:bg-amber-800"
+                                                wire:key="osmItem_{{ $loop->index }}"
+                                                wire:click="selectItem({{ $loop->index }})">
+                                                <div class="flex items-center space-x-4">
+                                                    <div class="min-w-0 flex-1">
+                                                        <p
+                                                            class="truncate text-sm font-medium text-gray-900 dark:text-gray-200">
+                                                            {{ $item['display_name'] }}</p>
+                                                        <p class="truncate text-sm text-gray-500">
+                                                            <x-badge amber>
+                                                                {{ count($item['geojson']['coordinates'], COUNT_RECURSIVE) }}
+                                                                points
+                                                            </x-badge>
+                                                        </p>
                                                     </div>
-                                                </li>
-                                            @endforeach
-                                        </ul>
-                                    </div>
+                                                    <div>
+                                                        <x-badge blue>{{ $item['type'] }}</x-badge>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        @endforeach
+                                    </ul>
                                 </div>
                             </div>
 
                         </div>
                     </div>
-
                 </div>
             </div>
-            @if ($selectedItem)
-                <div class="rounded-lg bg-white shadow dark:bg-gray-700">
+
+            {{-- GeoJSON simplification --}}
+            @if ($selectedItemOSMPolygons)
+                <div class="rounded-lg bg-white shadow dark:bg-gray-800">
                     <div class="px-4 py-5 lg:p-6">
                         <div class="flex items-center space-x-4">
-                            <h3 class="text-lg font-medium leading-6 text-green-800 dark:text-green-400">
-                                GeoJSON created
+                            <h3 class="text-lg font-medium leading-6 text-blue-500">
+                                Mapshaper simplification of <span class="text-[#FFA500]">OSM GeoJSON
+                                    [{{ count($selectedItemOSMPolygons['geojson']['coordinates'], COUNT_RECURSIVE) }}
+                                    points]</span> to
+                                {{ count($model->simplified_geojson['coordinates'], COUNT_RECURSIVE) }} points
                             </h3>
-                            <x-toggle lg label="Fetch water boundaries from https://osm-boundaries.com"
-                                wire:model="water" />
                         </div>
                         <div class="mt-2 text-sm text-gray-500 dark:text-gray-200">
                             <div class="flex flex-col space-y-2">
@@ -159,10 +185,10 @@
                                 </h1>
                                 <div class="flex hidden space-x-2 overflow-auto lg:block">
                                     @php
-                                        $btnClassLeft = 'relative inline-flex items-center rounded-l-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 dark:bg-gray-600 dark:hover:bg-amber-800 hover:bg-amber-400 focus:z-10 focus:border-amber-500 dark:focus:border-amber-700 focus:outline-none focus:ring-1 focus:ring-amber-500 dark:focus:ring-amber-700';
-                                        $btnClassRight = 'relative -ml-px inline-flex items-center rounded-r-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 dark:bg-gray-600 dark:hover:bg-amber-800 hover:bg-amber-400 focus:z-10 focus:border-amber-500 dark:focus:border-amber-700 focus:outline-none focus:ring-1 focus:ring-amber-500 dark:focus:ring-amber-700';
-                                        $btnClassCenter = 'relative -ml-px inline-flex items-center border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 dark:bg-gray-600 dark:hover:bg-amber-800 hover:bg-amber-400 focus:z-10 focus:border-amber-500 dark:focus:border-amber-700 focus:outline-none focus:ring-1 focus:ring-amber-500 dark:focus:ring-amber-700';
-                                        $currentClass = 'bg-amber-500 dark:bg-amber-700 text-white dark:text-gray-900';
+                                        $btnClassLeft = 'relative inline-flex items-center rounded-l-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 dark:bg-gray-600 dark:hover:bg-blue-800 hover:bg-blue-400 focus:z-10 focus:border-blue-500 dark:focus:border-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:focus:ring-blue-700';
+                                        $btnClassRight = 'relative -ml-px inline-flex items-center rounded-r-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 dark:bg-gray-600 dark:hover:bg-blue-800 hover:bg-blue-400 focus:z-10 focus:border-blue-500 dark:focus:border-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:focus:ring-blue-700';
+                                        $btnClassCenter = 'relative -ml-px inline-flex items-center border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 dark:bg-gray-600 dark:hover:bg-blue-800 hover:bg-blue-400 focus:z-10 focus:border-blue-500 dark:focus:border-blue-700 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:focus:ring-blue-700';
+                                        $currentClass = 'bg-blue-500 dark:bg-blue-700 text-white dark:text-gray-900';
                                     @endphp
                                     <div class="isolate inline-flex rounded-md shadow-sm">
                                         @foreach ($percentages as $percentage)
@@ -188,16 +214,18 @@
                 </div>
             @endif
 
+            {{-- GeoJSON data --}}
             <div>
                 @if ($model?->simplified_geojson)
-                    <div class="rounded-lg bg-white shadow dark:bg-gray-700">
+                    <div class="rounded-lg bg-white shadow dark:bg-gray-800">
                         <div class="grid grid-cols-1 gap-4 px-4 py-5 lg:grid-cols-2 lg:p-6">
                             <div>
                                 @php
-                                    $jsonEncodedSelectedItem = json_encode($selectedItem['geojson'], JSON_THROW_ON_ERROR);
+                                    $jsonEncodedSelectedItem = json_encode($selectedItemOSMPolygons['geojson'], JSON_THROW_ON_ERROR);
                                 @endphp
                                 <h3 class="text-lg font-medium leading-6 text-[#FFA500]">
-                                    OSM GeoJSON [{{ count($selectedItem['geojson']['coordinates'], COUNT_RECURSIVE) }}
+                                    OSM GeoJSON
+                                    [{{ count($selectedItemOSMPolygons['geojson']['coordinates'], COUNT_RECURSIVE) }}
                                     points]
                                 </h3>
                                 <div class="mt-2 text-sm text-gray-500">
@@ -205,7 +233,7 @@
                                         <pre class="overflow-x-auto py-3 text-[#FFA500]">{{ $jsonEncodedSelectedItem }}</pre>
                                         <div>
                                             <x-button x-data="{
-                                                textToCopy: @entangle('selectedItem.geojson')
+                                                textToCopy: @entangle('selectedItemOSMPolygons.geojson')
                                             }"
                                                 @click.prevent="window.navigator.clipboard.writeText(JSON.stringify(textToCopy));window.$wireui.notify({title:'{{ __('Copied!') }}',icon:'success'});"
                                                 lg amber>
@@ -238,13 +266,14 @@
                                     </div>
                                 </div>
                             </div>
-                            @if ($selectedItemWater)
+                            @if ($selectedItemOSMBoundaries)
                                 <div>
                                     @php
-                                        $jsonEncodedGeoJsonWater = json_encode($selectedItemWater, JSON_THROW_ON_ERROR);
+                                        $jsonEncodedGeoJsonWater = json_encode($selectedItemOSMBoundaries, JSON_THROW_ON_ERROR);
                                     @endphp
                                     <h3 class="text-lg font-medium leading-6 text-[#FF0084]">
-                                        Water GeoJSON [{{ count($selectedItemWater['coordinates'], COUNT_RECURSIVE) }}
+                                        https://osm-boundaries.com water GeoJSON
+                                        [{{ count($selectedItemOSMBoundaries['coordinates'], COUNT_RECURSIVE) }}
                                         points]
                                     </h3>
                                     <div class="mt-2 text-sm text-gray-500">
@@ -252,10 +281,36 @@
                                             <pre class="overflow-x-auto py-3 text-[#FF0084]">{{ $jsonEncodedGeoJsonWater }}</pre>
                                             <div>
                                                 <x-button x-data="{
-                                                    textToCopy: '{{ $jsonEncodedGeoJsonWater }}',
+                                                    textToCopy: @entangle('selectedItemOSMBoundaries')
                                                 }"
-                                                    @click.prevent="window.navigator.clipboard.writeText(textToCopy);window.$wireui.notify({title:'{{ __('Copied!') }}',icon:'success'});"
+                                                    @click.prevent="window.navigator.clipboard.writeText(JSON.stringify(textToCopy));window.$wireui.notify({title:'{{ __('Copied!') }}',icon:'success'});"
                                                     lg pink>
+                                                    Copy to clipboard
+                                                </x-button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
+                            @if ($selectedItemPolygonsOSMfr)
+                                <div>
+                                    @php
+                                        $jsonEncodedGeoJsonOSMFr = json_encode($selectedItemPolygonsOSMfr, JSON_THROW_ON_ERROR);
+                                    @endphp
+                                    <h3 class="text-lg font-medium leading-6 text-rose-500">
+                                        https://polygons.openstreetmap.fr GeoJSON
+                                        [{{ count($selectedItemPolygonsOSMfr['coordinates'] ?? [], COUNT_RECURSIVE) }}
+                                        points]
+                                    </h3>
+                                    <div class="mt-2 text-sm text-gray-500">
+                                        <div class="flex w-full flex-col space-y-2">
+                                            <pre class="overflow-x-auto py-3 text-rose-500">{{ $jsonEncodedGeoJsonOSMFr }}</pre>
+                                            <div>
+                                                <x-button x-data="{
+                                                    textToCopy: @entangle('selectedItemPolygonsOSMfr')
+                                                }"
+                                                    @click.prevent="window.navigator.clipboard.writeText(JSON.stringify(textToCopy));window.$wireui.notify({title:'{{ __('Copied!') }}',icon:'success'});"
+                                                    lg rose>
                                                     Copy to clipboard
                                                 </x-button>
                                             </div>
@@ -272,9 +327,10 @@
                                         GeoJSON preview
                                     </h1>
                                     <div wire:ignore class="my-4" x-data="{
-                                        geojson: @entangle('selectedItem.geojson'),
+                                        geojson: @entangle('selectedItemOSMPolygons.geojson'),
                                         simplifiedGeojson: @entangle('model.simplified_geojson'),
-                                        geojsonWater: @entangle('selectedItemWater'),
+                                        geojsonWater: @entangle('selectedItemOSMBoundaries'),
+                                        geojsonOSMfr: @entangle('selectedItemPolygonsOSMfr'),
                                         init() {
                                             const map = L.map($refs.map)
                                                 .setView([0, 0], 13);
@@ -310,8 +366,13 @@
                                                     'type': 'Feature',
                                                     'geometry': this.geojsonWater
                                                 };
+                                                const geojsonOSMfrFeature = {
+                                                    'type': 'Feature',
+                                                    'geometry': this.geojsonOSMfr
+                                                };
                                                 L.geoJson(geojsonFeature, { style: { color: '#FFA500', fillColor: '#FFA500', fillOpacity: 0.3 } }).addTo(map);
                                                 L.geoJson(geojsonWaterFeature, { style: { color: '#FF0084', fillColor: '#FF0084', fillOpacity: 0.2 } }).addTo(map);
+                                                L.geoJson(geojsonOSMfrFeature, { style: { color: '#F43F5E', fillColor: '#F43F5E', fillOpacity: 0.2 } }).addTo(map);
                                                 let simplifiedGeoJSON = L.geoJson(simplifiedGeojsonFeature, { style: { fillOpacity: 0.5 } }).addTo(map);
                                                 map.fitBounds(simplifiedGeoJSON.getBounds(), { padding: [50, 50] });
                                             });
@@ -325,8 +386,10 @@
                     </div>
                 @endif
             </div>
+
+            {{-- Wikipedia Links --}}
             @if ($search)
-                <div class='rounded-lg bg-white px-4 py-5 shadow dark:bg-gray-700 lg:p-6'>
+                <div class='rounded-lg bg-white px-4 py-5 shadow dark:bg-gray-800 lg:p-6'>
                     <h1 class='dark:text-gray-100'>Wikipedia search <span
                             class='text-sm text-gray-500 dark:text-gray-400'>(for population data)</span></h1>
                     <div class="flex flex-wrap gap-2">
