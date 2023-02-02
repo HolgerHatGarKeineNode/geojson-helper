@@ -29,7 +29,7 @@
                                                 Reset
                                             </x-badge>
                                         </a>
-                                        <div class="overflow-hidden bg-white shadow dark:bg-gray-900 sm:rounded-lg">
+                                        <div class="overflow-hidden rounded-lg bg-white shadow dark:bg-gray-900">
                                             <div class="px-2 py-2 sm:px-4 sm:py-5 sm:px-6">
                                                 <h3
                                                     class="text-lg font-medium leading-6 text-gray-900 dark:text-gray-200">
@@ -41,22 +41,20 @@
                                             </div>
                                             <div class="border-t border-gray-200 px-2 py-2 sm:p-0 sm:px-4 sm:py-5">
                                                 <dl class="sm:divide-y sm:divide-gray-200">
-                                                    <div
-                                                        class="py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-4 sm:py-5 sm:px-6">
+                                                    <div class="space-y-1 py-2 sm:py-4 sm:py-5">
                                                         <dt
                                                             class="text-sm font-medium text-gray-500 dark:text-gray-300">
                                                             <x-badge
                                                                 blue>{{ $selectedItemOSMPolygons['type'] }}</x-badge>
                                                         </dt>
-                                                        <dd
-                                                            class="mt-1 text-sm text-gray-900 dark:text-gray-300 sm:col-span-2 sm:mt-0">
+                                                        <dd class="text-sm text-gray-900 dark:text-gray-300">
                                                             OSM ID: {{ $selectedItemOSMPolygons['osm_id'] }}
                                                         </dd>
                                                     </div>
                                                 </dl>
                                             </div>
                                         </div>
-                                        <div class="overflow-hidden bg-white shadow dark:bg-gray-900 sm:rounded-lg">
+                                        <div class="overflow-hidden rounded-lg bg-white shadow dark:bg-gray-900">
                                             <div class="px-2 py-2 sm:px-4 sm:py-5 sm:px-6">
                                                 <div class="mt-1 max-w-2xl text-sm text-gray-500 dark:text-gray-300">
                                                     <x-toggle red lg
@@ -80,7 +78,7 @@
                                                     </div>
                                                     <div class="mt-4 font-mono text-sm" x-show="show">
                                                         <p>
-                                                            X, Y, Z are parameters for the following postgis equation.
+                                                            X, Y, Z are parameters for the following PostGIS equation.
                                                             The default values are chosen according to the size of the
                                                             original geometry to give a slighty bigger geometry, without
                                                             too many nodes.
@@ -98,9 +96,8 @@
                                                             X < 0 will give a polygon smaller than the original
                                                                 geometry, and guaranteed to be smaller. </p>
                                                     </div>
-                                                    <div x-show="show" class="mt-2">
-                                                        <x-button emerald xs
-                                                            label="Submit and load polygons.openstreetmap.fr polygons"
+                                                    <div x-show="show" class="mt-2 font-semibold">
+                                                        <x-button emerald label="Submit and load polygons"
                                                             wire:click="submitPolygonsOSM" />
                                                     </div>
                                                 </div>
@@ -231,7 +228,7 @@
                                 <div class="mt-2 text-sm text-gray-500">
                                     <div class="flex w-full flex-col space-y-2">
                                         <pre class="overflow-x-auto py-3 text-[#FFA500]">{{ $jsonEncodedSelectedItem }}</pre>
-                                        <div>
+                                        <div class='font-semibold'>
                                             <x-button x-data="{
                                                 textToCopy: @entangle('selectedItemOSMPolygons.geojson')
                                             }"
@@ -254,7 +251,7 @@
                                 <div class="mt-2 text-sm text-gray-500">
                                     <div class="flex w-full flex-col space-y-2">
                                         <pre class="overflow-x-auto py-3 text-blue-500">{{ $jsonEncodedSimplifiedGeoJson }}</pre>
-                                        <div>
+                                        <div class='font-semibold'>
                                             <x-button x-data="{
                                                 textToCopy: @entangle('model.simplified_geojson')
                                             }"
@@ -279,7 +276,7 @@
                                     <div class="mt-2 text-sm text-gray-500">
                                         <div class="flex w-full flex-col space-y-2">
                                             <pre class="overflow-x-auto py-3 text-[#FF0084]">{{ $jsonEncodedGeoJsonWater }}</pre>
-                                            <div>
+                                            <div class='font-semibold'>
                                                 <x-button x-data="{
                                                     textToCopy: @entangle('selectedItemOSMBoundaries')
                                                 }"
@@ -309,7 +306,7 @@
                                     <div class="mt-2 text-sm text-gray-500">
                                         <div class="flex w-full flex-col space-y-2">
                                             <pre class="overflow-x-auto py-3 text-emerald-500">{{ $jsonEncodedGeoJsonOSMFr }}</pre>
-                                            <div>
+                                            <div class='font-semibold'>
                                                 <x-button x-data="{
                                                     textToCopy: @entangle('selectedItemPolygonsOSMfr')
                                                 }"
@@ -394,7 +391,7 @@
             {{-- Wikipedia Links --}}
             @if ($search)
                 <div class='rounded-lg bg-white px-4 py-5 shadow dark:bg-gray-800 lg:p-6'>
-                    <h1 class='dark:text-gray-100'>Wikipedia search <span
+                    <h1 class='font-semibold dark:text-gray-100'>Wikipedia search <span
                             class='text-sm text-gray-500 dark:text-gray-400'>(for population data)</span></h1>
                     <div class="flex flex-wrap gap-2">
                         <a target="_blank" class="text-amber-500 underline"
@@ -423,7 +420,8 @@
                         target="_blank">GeoJSON helper</a> is maintained by <a
                         href="https://github.com/HolgerHatGarKeineNode" target="_blank"
                         class="text-amber-500">HolgerHatGarKeineNode</a> [<span
-                        class="font-mono">npub1pt0kw36ue3w2g4haxq3wgm6a2fhtptmzsjlc2j2vphtcgle72qesgpjyc6</span>]. This
+                        class="break-all font-mono">npub1pt0kw36ue3w2g4haxq3wgm6a2fhtptmzsjlc2j2vphtcgle72qesgpjyc6</span>].
+                    This
                     software is open-sourced software
                     licensed under the <a href="https://opensource.org/licenses/MIT" target="_blank"
                         class="underline">MIT license</a>.

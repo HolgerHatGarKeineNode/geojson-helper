@@ -33,7 +33,7 @@
 </head>
 
 <body class="font-sans text-gray-900 antialiased">
-    <x-notifications z-index="z-50" blur="md" align="center" />
+    <x-notifications z-index="z-[75]" blur="md" align="center" />
     <div
         class="flex min-h-screen flex-col items-center justify-center bg-gray-100 pt-2 dark:bg-gray-900 sm:pt-6 sm:pt-0">
         <div
