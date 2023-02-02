@@ -1,4 +1,4 @@
-<div {{ $attributes->class(['fixed top-1 right-1 z-50 sm:top-10 sm:right-10']) }} x-data="{
+<div {{ $attributes->class(['fixed top-1 right-1 z-50 sm:top-10 sm:right-10 font-semibold']) }} x-data="{
     init() {
             if (window.localStorage.getItem('theme') === null) {
                 window.localStorage.setItem('theme', 'dark');
