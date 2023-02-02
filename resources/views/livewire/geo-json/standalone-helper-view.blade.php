@@ -19,7 +19,7 @@
                                             <x-input wire:model.defer="search" />
                                         </div>
                                         <div>
-                                            <x-button type="submit" class='w-full'>Search</x-button>
+                                            <x-button type="submit" class='w-full font-semibold'>Search</x-button>
                                         </div>
                                     </div>
                                 @else
