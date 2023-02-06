@@ -12,10 +12,6 @@ With this tool you can easily find OSM relations and create simplified GeoJSON p
 
 ### Requirements
 
--   PHP >=
-    8.0 ([Ubuntu](https://www.digitalocean.com/community/tutorials/how-to-install-php-8-1-and-set-up-a-local-development-environment-on-ubuntu-22-04), [Windows](https://php.tutorials24x7.com/blog/how-to-install-php-8-on-windows))
--   PHP extensions: `php-xml`, `php-mbstring`, `php-zip`, `php-curl`, `php-gd`, `php-bcmath`
--   Composer ([Website](https://getcomposer.org/download/))
 -   Docker ([Website](https://docs.docker.com/get-docker/))
 
 ### Starting the application
@@ -23,7 +19,12 @@ With this tool you can easily find OSM relations and create simplified GeoJSON p
 Install the dependencies with composer and start the dev server.
 
 ```bash
-composer install
+docker run --rm \
+    -u "$(id -u):$(id -g)" \
+    -v $(pwd):/var/www/html \
+    -w /var/www/html \
+    laravelsail/php81-composer:latest \
+    composer install --ignore-platform-reqs
 
 ./vendor/bin/sail up -d
 
