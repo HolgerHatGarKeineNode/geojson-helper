@@ -1,10 +1,10 @@
-[![Hosted](https://img.shields.io/endpoint?url=https%3A%2F%2Fforge.laravel.com%2Fsite-badges%2Fd0c6685b-061b-43f1-988f-294924d06686%3Fdate%3D1%26commit%3D1&style=plastic)](https://geojson.easify.de) [![Hosted](https://img.shields.io/static/v1?label=Hosted&message=https://geojson.easify.de&style=plastic)](https://geojson.easify.de)
+[![Hosted](https://img.shields.io/endpoint?url=https%3A%2F%2Fforge.laravel.com%2Fsite-badges%2Fd0c6685b-061b-43f1-988f-294924d06686%3Fdate%3D1%26commit%3D1&style=plastic)](https://geojson.codingarena.de) [![Hosted](https://img.shields.io/static/v1?label=Hosted&message=https://geojson.codingarena.de&style=plastic)](https://geojson.codingarena.de)
 
 ## Description
 
 With this tool you can easily find OSM relations and create simplified GeoJSON polygons. This is a Laravel application.
 
-[Hosted-Version](https://geojson.easify.de)
+[Hosted-Version](https://geojson.codingarena.de)
 
 ![screenshot](https://user-images.githubusercontent.com/85003930/215837556-f8076e6e-5ad2-4fe2-8223-94dd69878d12.png)
 

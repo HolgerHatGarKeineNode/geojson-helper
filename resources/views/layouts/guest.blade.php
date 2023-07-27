@@ -10,12 +10,12 @@
     <meta property="og:type" content="website" />
     <meta name="description"
         content="With this tool you can easily find OSM relations and create simplified geojson polygons." />
-    <meta property="og:image" content="https://geojson.easify.de/images/screenshot.png" />
+    <meta property="og:image" content="https://geojson.codingarena.de/images/screenshot.png" />
     <meta property="twitter:card" content="summary_large_image" />
     <meta property="twitter:title" content="GeoJSON Helper" />
     <meta property="twitter:description"
         content="With this tool you can easily find OSM relations and create simplified geojson polygons." />
-    <meta property="twitter:image" content="https://geojson.easify.de/images/screenshot.png" />
+    <meta property="twitter:image" content="https://geojson.codingarena.de/images/screenshot.png" />
 
     <title>GeoJSON Helper</title>
 
