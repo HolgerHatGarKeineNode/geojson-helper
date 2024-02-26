@@ -4,7 +4,7 @@
 
 With this tool you can easily find OSM relations and create simplified GeoJSON polygons. This is a Laravel application.
 
-[Hosted-Version](https://geojson.codingarena.de)
+[Hosted-Version](https://geojson.codingarena.top)
 
 ![screenshot](https://user-images.githubusercontent.com/85003930/215837556-f8076e6e-5ad2-4fe2-8223-94dd69878d12.png)
 
