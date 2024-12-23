@@ -1,6 +1,6 @@
 <div>
     {{-- DARK-MODE BTN --}}
-    <x-dark-mode-btn />
+    <x-dark-mode-btn/>
     <div class="w-full p-0 lg:p-6" wire:loading.class="opacity-50 pointer-events-none cursor-not-allowed">
         <div class="flex max-w-none flex-col space-y-4 text-black">
 
@@ -16,7 +16,7 @@
                                 @if (!$model?->simplified_geojson)
                                     <div class="flex flex-col space-y-2 lg:flex-row lg:space-y-0 lg:space-x-2">
                                         <div>
-                                            <x-input wire:model.defer="search" />
+                                            <x-input wire:model.defer="search"/>
                                         </div>
                                         <div>
                                             <x-button type="submit" class='w-full font-semibold'>Search</x-button>
@@ -58,23 +58,21 @@
                                             <div class="px-2 py-2 sm:px-4 sm:py-5 sm:px-6">
                                                 <div class="mt-1 max-w-2xl text-sm text-gray-500 dark:text-gray-300">
                                                     <x-toggle red lg
-                                                        label="Fetch water boundaries from https://osm-boundaries.com"
-                                                        wire:model="OSMBoundaries" />
+                                                              label="Fetch water boundaries from https://osm-boundaries.com"
+                                                              wire:model="OSMBoundaries"/>
                                                 </div>
-                                                <div x-data="{
-                                                    show: @entangle('polygonsOSMfr')
-                                                }"
-                                                    class="mt-2 max-w-2xl text-sm text-gray-500 dark:text-gray-300">
+                                                <div x-data="{show: @entangle('polygonsOSMfr')}"
+                                                     class="mt-2 max-w-2xl text-sm text-gray-500 dark:text-gray-300">
                                                     <x-toggle red lg
-                                                        label="Fetch polygons from https://polygons.openstreetmap.fr"
-                                                        wire:model="polygonsOSMfr" />
+                                                              label="Fetch polygons from https://polygons.openstreetmap.fr"
+                                                              wire:model="polygonsOSMfr"/>
                                                     <div class="mt-2 flex flex-row items-end space-x-2" x-show="show">
                                                         <x-input max="1" label="X"
-                                                            wire:model.defer="polygonsOSMfrX" />
+                                                                 wire:model.defer="polygonsOSMfrX"/>
                                                         <x-input max="1" label="Y"
-                                                            wire:model.defer="polygonsOSMfrY" />
+                                                                 wire:model.defer="polygonsOSMfrY"/>
                                                         <x-input max="1" label="Z"
-                                                            wire:model.defer="polygonsOSMfrZ" />
+                                                                 wire:model.defer="polygonsOSMfrZ"/>
                                                     </div>
                                                     <div class="mt-4 font-mono text-sm" x-show="show">
                                                         <p>
@@ -94,11 +92,11 @@
                                                         </p>
                                                         <p>
                                                             X < 0 will give a polygon smaller than the original
-                                                                geometry, and guaranteed to be smaller. </p>
+                                                            geometry, and guaranteed to be smaller. </p>
                                                     </div>
                                                     <div x-show="show" class="mt-2 font-semibold">
                                                         <x-button emerald label="Submit and load polygons"
-                                                            wire:click="submitPolygonsOSM" />
+                                                                  wire:click="submitPolygonsOSM"/>
                                                     </div>
                                                 </div>
                                             </div>
@@ -193,8 +191,8 @@
                                                 $btnClass = $loop->first ? $btnClassLeft : ($loop->last ? $btnClassRight : $btnClassCenter);
                                             @endphp
                                             <button wire:key="percentage_{{ $loop->index }}" type="button"
-                                                wire:click="setPercentage({{ $percentage }})"
-                                                class="{{ $btnClass }} {{ $currentPercentage === $percentage ? $currentClass : '' }}">
+                                                    wire:click="setPercentage({{ $percentage }})"
+                                                    class="{{ $btnClass }} {{ $currentPercentage === $percentage ? $currentClass : '' }}">
                                                 {{ $percentage }}%
                                             </button>
                                         @endforeach
@@ -202,7 +200,7 @@
                                 </div>
                                 <div class="block lg:hidden">
                                     <x-native-select label="Select percentage" placeholder="Select percentage"
-                                        :options="$percentages" wire:model="currentPercentage" />
+                                                     :options="$percentages" wire:model="currentPercentage"/>
                                 </div>
                             </div>
 
@@ -227,15 +225,15 @@
                                 </h3>
                                 <div class="mt-2 text-sm text-gray-500">
                                     <div class="flex w-full flex-col space-y-2">
-                                        <pre class="overflow-x-auto py-3 text-[#FFA500]">{{ $jsonEncodedSelectedItem }}</pre>
+                                        <pre
+                                            class="selectable overflow-x-auto py-3 text-[#FFA500]">{{ $jsonEncodedSelectedItem }}</pre>
                                         <div class='font-semibold'>
-                                            <x-button x-data="{
-                                                textToCopy: @entangle('selectedItemOSMPolygons.geojson')
-                                            }"
+                                            {{--<x-button
+                                                x-data="{textToCopy: @js($selectedItemOSMPolygons['geojson'])}"
                                                 @click.prevent="window.navigator.clipboard.writeText(JSON.stringify(textToCopy));window.$wireui.notify({title:'{{ __('Copied!') }}',icon:'success'});"
                                                 lg amber>
                                                 Copy to clipboard
-                                            </x-button>
+                                            </x-button>--}}
                                         </div>
                                     </div>
                                 </div>
@@ -250,15 +248,14 @@
                                 </h3>
                                 <div class="mt-2 text-sm text-gray-500">
                                     <div class="flex w-full flex-col space-y-2">
-                                        <pre class="overflow-x-auto py-3 text-blue-500">{{ $jsonEncodedSimplifiedGeoJson }}</pre>
+                                        <pre
+                                            class="selectable overflow-x-auto py-3 text-blue-500">{{ $jsonEncodedSimplifiedGeoJson }}</pre>
                                         <div class='font-semibold'>
-                                            <x-button x-data="{
-                                                textToCopy: @entangle('model.simplified_geojson')
-                                            }"
-                                                @click.prevent="window.navigator.clipboard.writeText(JSON.stringify(textToCopy));window.$wireui.notify({title:'{{ __('Copied!') }}',icon:'success'});"
-                                                lg blue>
+                                            {{--<x-button x-data="{textToCopy: @entangle('model.simplified_geojson')}"
+                                                      @click.prevent="window.navigator.clipboard.writeText(JSON.stringify(textToCopy));window.$wireui.notify({title:'{{ __('Copied!') }}',icon:'success'});"
+                                                      lg blue>
                                                 Copy to clipboard
-                                            </x-button>
+                                            </x-button>--}}
                                         </div>
                                     </div>
                                 </div>
@@ -275,15 +272,14 @@
                                     </h3>
                                     <div class="mt-2 text-sm text-gray-500">
                                         <div class="flex w-full flex-col space-y-2">
-                                            <pre class="overflow-x-auto py-3 text-[#FF0084]">{{ $jsonEncodedGeoJsonWater }}</pre>
+                                            <pre
+                                                class="selectable overflow-x-auto py-3 text-[#FF0084]">{{ $jsonEncodedGeoJsonWater }}</pre>
                                             <div class='font-semibold'>
-                                                <x-button x-data="{
-                                                    textToCopy: @entangle('selectedItemOSMBoundaries')
-                                                }"
-                                                    @click.prevent="window.navigator.clipboard.writeText(JSON.stringify(textToCopy));window.$wireui.notify({title:'{{ __('Copied!') }}',icon:'success'});"
-                                                    lg pink>
+                                                {{--<x-button x-data="{textToCopy: @entangle('selectedItemOSMBoundaries')}"
+                                                          @click.prevent="window.navigator.clipboard.writeText(JSON.stringify(textToCopy));window.$wireui.notify({title:'{{ __('Copied!') }}',icon:'success'});"
+                                                          lg pink>
                                                     Copy to clipboard
-                                                </x-button>
+                                                </x-button>--}}
                                             </div>
                                         </div>
                                     </div>
@@ -305,15 +301,14 @@
                                     </h3>
                                     <div class="mt-2 text-sm text-gray-500">
                                         <div class="flex w-full flex-col space-y-2">
-                                            <pre class="overflow-x-auto py-3 text-emerald-500">{{ $jsonEncodedGeoJsonOSMFr }}</pre>
+                                            <pre
+                                                class="selectable overflow-x-auto py-3 text-emerald-500">{{ $jsonEncodedGeoJsonOSMFr }}</pre>
                                             <div class='font-semibold'>
-                                                <x-button x-data="{
-                                                    textToCopy: @entangle('selectedItemPolygonsOSMfr')
-                                                }"
-                                                    @click.prevent="window.navigator.clipboard.writeText(JSON.stringify(textToCopy));window.$wireui.notify({title:'{{ __('Copied!') }}',icon:'success'});"
-                                                    lg emerald>
+                                                {{--<x-button x-data="{textToCopy: @entangle('selectedItemPolygonsOSMfr')}"
+                                                          @click.prevent="window.navigator.clipboard.writeText(JSON.stringify(textToCopy));window.$wireui.notify({title:'{{ __('Copied!') }}',icon:'success'});"
+                                                          lg emerald>
                                                     Copy to clipboard
-                                                </x-button>
+                                                </x-button>--}}
                                             </div>
                                         </div>
                                     </div>
@@ -335,9 +330,9 @@
                                         init() {
                                             const map = L.map($refs.map)
                                                 .setView([0, 0], 13);
-                                    
+
                                             L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png?{foo}', { foo: 'bar', attribution: '&copy; <a href=\'https://www.openstreetmap.org/copyright\'>OpenStreetMap</a> contributors' }).addTo(map);
-                                    
+
                                             const geojsonFeature = {
                                                 'type': 'Feature',
                                                 'geometry': this.geojson
@@ -349,7 +344,7 @@
                                             L.geoJson(geojsonFeature, { style: { color: '#FFA500', fillColor: '#FFA500', fillOpacity: 0.3 } }).addTo(map);
                                             let simplifiedGeoJSON = L.geoJson(simplifiedGeojsonFeature, { style: { fillOpacity: 0.5 } }).addTo(map);
                                             map.fitBounds(simplifiedGeoJSON.getBounds(), { padding: [50, 50] });
-                                    
+
                                             $wire.on('geoJsonUpdated', () => {
                                                 map.eachLayer((layer) => {
                                                     layer.remove();
@@ -395,19 +390,19 @@
                             class='text-sm text-gray-500 dark:text-gray-400'>(for population data)</span></h1>
                     <div class="flex flex-wrap gap-2">
                         <a target="_blank" class="text-amber-500 underline"
-                            href="https://en.wikipedia.org/wiki/{{ urlencode(str($search)->replace(' ', '_')->toString()) }}">Wikipedia
+                           href="https://en.wikipedia.org/wiki/{{ urlencode(str($search)->replace(' ', '_')->toString()) }}">Wikipedia
                             EN:
                             {{ $search }}</a>
                         <a target="_blank" class="text-amber-500 underline"
-                            href="https://de.wikipedia.org/wiki/{{ urlencode(str($search)->replace(' ', '_')->toString()) }}">Wikipedia
+                           href="https://de.wikipedia.org/wiki/{{ urlencode(str($search)->replace(' ', '_')->toString()) }}">Wikipedia
                             DE:
                             {{ $search }}</a>
                         <a target="_blank" class="text-amber-500 underline"
-                            href="https://fr.wikipedia.org/wiki/{{ urlencode(str($search)->replace(' ', '_')->toString()) }}">Wikipedia
+                           href="https://fr.wikipedia.org/wiki/{{ urlencode(str($search)->replace(' ', '_')->toString()) }}">Wikipedia
                             FR:
                             {{ $search }}</a>
                         <a target="_blank" class="text-amber-500 underline"
-                            href="https://es.wikipedia.org/wiki/{{ urlencode(str($search)->replace(' ', '_')->toString()) }}">Wikipedia
+                           href="https://es.wikipedia.org/wiki/{{ urlencode(str($search)->replace(' ', '_')->toString()) }}">Wikipedia
                             ES:
                             {{ $search }}</a>
                     </div>
@@ -417,18 +412,30 @@
             <div class='rounded-lg bg-white px-4 py-5 shadow dark:bg-gray-800 lg:p-6'>
                 <p class="mt-8 text-xs leading-5 text-gray-400 md:order-1 md:mt-0">
                     <a class="text-blue-500" href="https://github.com/HolgerHatGarKeineNode/geojson-helper"
-                        target="_blank">GeoJSON helper</a> is maintained by <a
+                       target="_blank">GeoJSON helper</a> is maintained by <a
                         href="https://github.com/HolgerHatGarKeineNode" target="_blank"
                         class="text-amber-500">HolgerHatGarKeineNode</a> [<span
                         class="break-all font-mono">npub1pt0kw36ue3w2g4haxq3wgm6a2fhtptmzsjlc2j2vphtcgle72qesgpjyc6</span>].
                     This
                     software is open-sourced software
                     licensed under the <a href="https://opensource.org/licenses/MIT" target="_blank"
-                        class="underline">MIT license</a>.
+                                          class="underline">MIT license</a>.
                 </p>
             </div>
         </div>
     </div>
+
+    <script>
+        document.querySelectorAll('.selectable').forEach(pre => {
+            pre.addEventListener('click', function() {
+                const range = document.createRange();
+                range.selectNodeContents(this);
+                const selection = window.getSelection();
+                selection.removeAllRanges();
+                selection.addRange(range);
+            });
+        });
+    </script>
 
     <style>
         .leaflet-attribution-flag {
