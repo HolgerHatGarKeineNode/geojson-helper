@@ -63,8 +63,8 @@ class StandaloneHelperView extends Component
 
     public function mount(): void
     {
+        $this->model = new CommunityModel;
         if ($this->search !== '') {
-            $this->model = new CommunityModel;
             $this->getSearchResults();
             if ($this->osm_id) {
                 $this->selectedItemOSMPolygons = collect($this->osmSearchResults)
