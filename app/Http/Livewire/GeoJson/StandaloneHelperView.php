@@ -63,12 +63,14 @@ class StandaloneHelperView extends Component
 
     public function mount(): void
     {
-        $this->model = new CommunityModel;
-        $this->getSearchResults();
-        if ($this->osm_id) {
-            $this->selectedItemOSMPolygons = collect($this->osmSearchResults)
-                ->firstWhere('osm_id', $this->osm_id);
-            $this->executeMapshaper($this->currentPercentage);
+        if ($this->search !== '') {
+            $this->model = new CommunityModel;
+            $this->getSearchResults();
+            if ($this->osm_id) {
+                $this->selectedItemOSMPolygons = collect($this->osmSearchResults)
+                    ->firstWhere('osm_id', $this->osm_id);
+                $this->executeMapshaper($this->currentPercentage);
+            }
         }
     }
 
