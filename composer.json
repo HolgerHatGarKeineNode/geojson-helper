@@ -60,6 +60,19 @@
         ],
         "post-create-project-cmd": [
             "@php artisan key:generate --ansi"
+        ],
+        "test": [
+            "Composer\\Config::disableProcessTimeout",
+            "@php artisan config:clear --ansi",
+            "@php artisan test"
+        ],
+        "test:feature": [
+            "Composer\\Config::disableProcessTimeout",
+            "@php artisan test tests/Feature"
+        ],
+        "test:unit": [
+            "Composer\\Config::disableProcessTimeout",
+            "@php artisan test tests/Unit"
         ]
     },
     "extra": {
