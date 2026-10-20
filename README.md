@@ -1,4 +1,4 @@
-[![Hosted](https://img.shields.io/endpoint?url=https%3A%2F%2Fforge.laravel.com%2Fsite-badges%2Fd0c6685b-061b-43f1-988f-294924d06686%3Fdate%3D1%26commit%3D1&style=plastic)](https://geojson.codingarena.de) [![Hosted](https://img.shields.io/static/v1?label=Hosted&message=https://geojson.codingarena.de&style=plastic)](https://geojson.codingarena.de)
+> **Archived.** This project is no longer maintained or deployed; geojson.codingarena.de is offline. The code stays available for reference only.
 
 ## Description
 
